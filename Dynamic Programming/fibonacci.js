@@ -11,7 +11,7 @@ function fibonacci(n, map){
     }
 }
 
-console.log(fibonacci(9, {}));
+console.log(fibonacci(5, {}));
 
 function exists(n, map){
     return (Object.keys(map).indexOf(n.toString()) > -1);

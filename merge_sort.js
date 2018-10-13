@@ -1,4 +1,4 @@
-function mergesort(...arr){
+function mergesort(arr){
     if(arr.length == 1){
         return arr;
     }
@@ -7,7 +7,7 @@ function mergesort(...arr){
     const left = arr.slice(0, middle);
     const right = arr.slice(middle);
 
-    return merge(mergesort(...left), mergesort(...right));
+    return merge(mergesort(left), mergesort(right));
 }
 
 function merge(left, right){
@@ -21,9 +21,14 @@ function merge(left, right){
             results.push(right.shift());            
         }
     }
+    while(left.length){
+        results.push(left.shift());
+    }
+    while(right.length) {
+        results.push(right.shift());
+    }
 
-    console.log([...results, ...left, ...right]);
-    return [...results, ...left, ...right];
+    return results;
 }
 
-mergesort(8,4,0,1,99,4,88);
+console.log(mergesort([8,4,0,1,99,4,88]));
