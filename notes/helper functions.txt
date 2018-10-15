@@ -1,0 +1,31 @@
+.substsr(start_index, length) -> will return string from start_index to number of characters in length
+				does not alter original string
+				if start_index is negative, then it will start from back but will still go in forward direction
+
+.slice(start_index, end_index) -> will return a subarray, staring from start_till end_index(not including it)
+					does not alter original array
+ 
+.splice(start_index, length, item1, item2,....)  -> will insert item1, itemm2... at the start index,
+							if length is not zero then first it will delete that many elements starting from start_index and then all specifies elements
+							if only start_index and length is given, then it will return an array of elements starting from start_index till length
+
+
+.reverse() -> reverses array or string[will alter original array but not original string(strings are immutable)]
+
+.sort((a,b) => {return a>b}) -> will sort array,	
+				2 elements 'a' and 'b' will be compared, if condition in return statement is true then it will swap those elements
+				nott stable
+
+Array.from(arr_name, (a) => {return a*a}) -> will create another array from existing array, 2nd param is optional and is used if along copying, we have to make certain changes to array elements also
+						does not change original array
+
+.filter((a) => {return a>5} -> will create another array from existing array but will copy only those elements to new array that satisfy the condition in return statement(in this case, elements that are greater than 5)
+				does not change original array
+
+.map((a) => {return a>5} -> like filter but instead of creating new array with the values that passed the test, it places true in the new array and false for the values that does not 				    pass the test
+				does not change original array
+
+.forEach((e) => {sum += a}) -> perform operation on every element of array
+				can not change original array as it only provides value of element in paramater, we can not manupilate the element, we can use its value
+
+.indexOf(elem) -> will retturn index of element in array or string if it is present else return -1
