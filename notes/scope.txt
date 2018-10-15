@@ -1,0 +1,12 @@
+var name = "arpit";          //global variable
+
+function example(){
+    var name = "arpit";         //local variable
+
+    number = 9999999999;        //global variable(As not declared with var keyword)
+}
+
+1. If name of global and local variables are same, preference will be given to local variable
+
+2. Global variable should be used very carefully, global variables can be accessed by other scripts
+   included in the page(user defined or libraries) and hence can cause problems.

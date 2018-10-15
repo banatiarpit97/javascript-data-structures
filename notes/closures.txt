@@ -1,0 +1,97 @@
+closures are functions inside functions such that inner function has access to local variables
+and paramters of outer functions (even after the outer function has returned)
+
+///////////////////////////////////////////////////////////////////////////
+
+function outer(){
+    var name = "arpit";
+
+    function inner(){
+        console.log(name);  //arpit
+    }
+
+    inner();
+}
+outer();
+
+inner()  //Reference error(can not call inner function from outside the outer function)
+
+/////////////////////////////////////////////////////////////////////////////
+
+if we want to execute the inner function from outside, we need to return it:
+function outer(){
+    var name = "arpit";
+
+    return function inner(){
+        console.log(name);
+    }
+}
+var my = outer();
+my();         //will execute inner and "arpit" will be printed
+
+/////////////////////////////////////////////////////////////////////////////
+function outer(name){
+
+    return function inner(){
+        console.log(name);
+    }
+}
+var a = outer("arpit);      //child function remembers the environment it was created in
+var b = outer("banati);     //even after the function has returned
+a();         //will execute inner and "arpit" will be printed
+b();         //will execute inner and "banati" will be printed
+
+///////////////////////////////////////////////////////////////////////////
+inner function can also take arguements
+function outer(first){
+
+    return function inner(second){
+        console.log(first+second);
+    }
+}
+var a = outer("arpit);      
+a("banati);         //Logs arpitbanati
+
+///////////////////////////////////////////////////////////////////////////
+Actual use of closures - FUNCTION FACTORIES
+i.e. to create function from functions.
+
+function defineConversion(multiplier){
+    return function(input){
+        return input*multiplier;
+    }
+}
+var KgToPounds = defineConversion(2.204);
+KgToPounds(22);     //can call any number of types with other arguements
+
+var FeetToMeters = defineConversion(0.304);
+FeetToMeters(44);    //can call any number of types with other arguements
+
+hence we are creating different conversion functions from outer functions.
+we don't need to write function for every conversion.
+
+////////////////////////////////////////////////////////////////////////////
+We can nest as many levels as we want
+
+function outer(name){
+    return function inner(){
+        return function another(){
+            console.log(name);
+        }
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////
+We can also nest IIFE
+
+var multiply = (function(a){
+    return (function(b){
+        return (function(c){
+            return a*b*c;
+        })(3)
+    })(5)
+})(2)
+
+multiply()   //logs 30
+
+////////////////////////////////////////////////////////////////////////////

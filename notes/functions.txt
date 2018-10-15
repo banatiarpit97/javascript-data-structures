@@ -1,0 +1,38 @@
+function declaration :
+
+    function name(){ }
+    we can nest functions inside function:
+        function name(){
+            function class(){ }
+        }
+    
+
+function expression :
+    var name = function(){ }
+    var name = function hi(){ }  //can give name to functions but it is of no use
+                                 //still can not call function using 'hi', have to call using 'name' only
+
+arrow function :
+    var name = () => { }
+
+IIFE:
+    (function(){       //These are functions that are called immediately but can not be called again
+
+    })();
+    
+    (function(a,b){    //passing arguements to iife
+
+    })('a', 'b');
+
+1. funtion expressions and arrow functions are not hoisted unlike declaration
+
+2. function declaration can become function expression if declaration
+is neither top level nor inside other functions.
+    if(a>5){
+        function name() { }   -> will be treated as expression
+    }
+
+    function name(){
+        function class(){ }   -> will be treated as declaration
+    }
+

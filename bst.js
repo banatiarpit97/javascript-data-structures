@@ -1017,11 +1017,11 @@ class BST{
             return;
         }
 
-        if(node.data < key){
+        if(node.data < key){    //when there is no left subtree
             predecessor = node;
             this.inorder_predecessor_successor_of_key(node.right, successor, predecessor, key)
         }
-        else{
+        else {                   //when there is no right subtree
             successor = node;
             this.inorder_predecessor_successor_of_key(node.left, successor, predecessor, key)
         }
@@ -2053,6 +2053,596 @@ class BST{
         }
     }
 
+    max_consec_path_length(prev, current, len){
+        if(!current){
+            return len;
+        }
+        else if(prev.data != current.data -1){
+            len = 0;
+        }
+        let l = this.max_consec_path_length(current, current.left, len+1);
+        let r = this.max_consec_path_length(current, current.right, len + 1);
+
+        return Math.max(l,r);
+    }
+
+    remove_nodes_not_lying_in_path_with_sum_greater_than_k(current, sum){
+        if(!current){
+            return false;
+        }
+        if (!current.left && !current.right) {
+            if (current.data < sum) {
+                current.data = 0;
+                return false;
+            }
+            else{
+                return true;
+            }
+        }
+        
+        let bool1 = this.remove_nodes_not_lying_in_path_with_sum_greater_than_k(current.left, sum-current.data)
+        let bool2 = this.remove_nodes_not_lying_in_path_with_sum_greater_than_k(current.right, sum - current.data)
+
+        if(!bool1 && !bool2){
+            current.data = 0;
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    remove_nodes_not_lying_in_path_with_length_greater_than_k(current, cur_len, k) {
+        if (!current) {
+            return false;
+        }
+        if (!current.left && !current.right) {
+            console.log(cur_len)
+            if (cur_len <= k) {
+                current.data = 0;
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+
+        let bool1 = this.remove_nodes_not_lying_in_path_with_length_greater_than_k(current.left, cur_len+1, k)
+        let bool2 = this.remove_nodes_not_lying_in_path_with_length_greater_than_k(current.right, cur_len+1, k)
+
+        if (!bool1 && !bool2) {
+            current.data = 0;
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    max_path_sum(current, res){ //check
+        //max sum might or might not contain root node
+        if(!current){
+            return null;
+        }
+        let l = this.max_path_sum(current.left, res);
+        let r = this.max_path_sum(current.right, res);
+
+        //m1 include atmost 1 child
+        //m2 is sum when no ancestor of current is in maxsum path
+        //and current is the root of max sum path
+        let m1 = Math.max(Math.max(l,r)+current.data, current.data);
+        let m2 = Math.max(m1, l+r+current.data);
+
+        res = Math.max(res, m2);
+
+        return res;
+    }
+
+    remove_all_leaf_nodes(node){
+        if(!node){
+            return false;
+        }
+
+        let l = this.remove_all_leaf_nodes(node.left);
+        let r = this.remove_all_leaf_nodes(node.right);
+
+        if(!l && !r){
+            node.data = null;
+        }
+        return true;
+    }
+
+    remove_leaf_node_with_value_x(node, x) {
+        if (!node) {
+            return false;
+        }
+
+        let l = this.remove_leaf_node_with_value_x(node.left, x);
+        let r = this.remove_leaf_node_with_value_x(node.right, x);
+
+        if ((!l) && (!r) && (node.data == x)) {
+            node.data = null;
+        }
+        return true;
+    }
+
+    second_largest_element(node){
+        let prev;
+        while(node.right){
+            prev = node;
+            node = node.right;
+        }
+
+        if(node.left){
+            console.log(node.left.data);
+        }
+        else{
+            console.log(prev.data)
+        }
+    }
+
+    replace_node_with_depth(node, depth){
+        if(!node){
+            return 0;
+        }
+
+        node.data = depth;
+        this.replace_node_with_depth(node.left, depth+1)
+        this.replace_node_with_depth(node.right, depth + 1)
+
+        return true;
+    }
+
+    sum_of_nodes_at_kth_level(str, k){
+        let sum = 0, level=0;
+        for(let i of str){
+            if(i == "("){
+                level++;
+            }
+            else if(i == ")"){
+                level--;
+            }
+            else{
+                if(level == k){
+                    sum += Number(i)
+                }
+            }
+        }
+        console.log(sum)
+    }
+
+    sum_of_all_nodes(node){
+        if(!node){
+            return 0;
+        }
+
+        let sum = this.sum_of_all_nodes(node.left)+this.sum_of_all_nodes(node.right);
+        return (sum+node.data);
+    }
+
+
+    print_extreme_node_in_alternate_order(root){
+        let q = new queue();
+        q.enqueue(root);
+        q.enqueue(new Node("marker"))
+        let flag = 0;
+        let prev, cur;
+        cur = new Node("marker");
+
+        while(!q.isEmpty()){
+            prev = cur;
+            cur = q.dequeue();
+            if(prev.data == "marker" && flag){
+                console.log(cur.data);
+            }
+            else if(cur.data == "marker"){
+                if(!flag){
+                    console.log(prev.data)
+                } 
+                flag = !flag;
+                if(!q.isEmpty()){
+                    q.enqueue(new Node("marker"))
+                }
+                else{
+                    return;
+                }
+            }
+            if (cur.left) {
+                q.enqueue(cur.left)
+            }
+            if (cur.right) {
+                q.enqueue(cur.right)
+            }
+        }
+    }
+
+    outer_to_inner_level_order_traversal(root) {
+        let q = new queue();
+        let arr = [];
+        q.enqueue(root);
+        q.enqueue(new Node("marker"))
+        let prev, cur;
+        cur = new Node("marker");
+        let flag = false;
+
+        while (!q.isEmpty()) {
+            prev = cur;
+            cur = q.dequeue();
+            if (prev.data == "marker") {
+                console.log(cur.data);
+                flag = true;
+            }
+            else if (cur.data == "marker") {
+                if (arr.length) {
+                    console.log(arr.pop())
+                }
+                let start = true;
+                while (arr.length != 0) {
+                    if (start) {
+                        console.log(arr.shift());
+                    }
+                    else {
+                        console.log(arr.pop());
+                    }
+                    start = !start;
+                }
+                flag = false;
+                if (!q.isEmpty()) {
+                    q.enqueue(new Node("marker"))
+                }
+                else {
+                    return;
+                }
+            }
+            else {
+                arr.push(cur.data)
+            }
+            if (cur.left) {
+                q.enqueue(cur.left)
+            }
+            if (cur.right) {
+                q.enqueue(cur.right)
+            }
+        }
+    }
+
+    outer_to_inner_level_order_traversal_from_last_level(root){
+        let s1 = new stack();
+        let s2 = new stack();
+        let q = new queue();
+        let arr = [];
+        q.enqueue(root);
+        q.enqueue(new Node("marker"))
+        let prev, cur;
+        cur = new Node("marker");
+        let flag = false;
+
+        while (!q.isEmpty()) {
+            prev = cur;
+            cur = q.dequeue();
+            if (prev.data == "marker") {
+                s1.push(cur.data)
+                flag = true;
+            }
+            else if (cur.data == "marker") {
+                if (arr.length) {
+                    s1.push(arr.pop());
+                }
+                let start = true;
+                while(arr.length != 0){
+                    if(start){
+                        s1.push(arr.shift());
+                    }
+                    else{
+                        s1.push(arr.pop());
+                    }
+                    start = !start;
+                }
+                flag = false;
+                if (!q.isEmpty()) {
+                    while(!s1.isEmpty()){
+                        s2.push(s1.pop())
+                    }
+                    q.enqueue(new Node("marker"))
+                }
+                else {
+                    while (!s1.isEmpty()) {
+                        s2.push(s1.pop())
+                    }
+                    while (!s2.isEmpty()) {
+                        console.log(s2.pop())
+                    }
+                    return;
+                }
+            }
+            else{
+                arr.push(cur.data)
+            }
+            if (cur.left) {
+                q.enqueue(cur.left)
+            }
+            if (cur.right) {
+                q.enqueue(cur.right)
+            }
+        }
+    }
+
+    determine_if_binary_tree_is_height_balanced(root){
+        if(!root){
+            return 1;
+        }
+
+        let l = this.recursive_height_of_binary_tree(root.left);
+        let r = this.recursive_height_of_binary_tree(root.right);
+
+        if(Math.abs(l-r) > 1){
+            return 0;
+        }
+        else{
+            if(this.determine_if_binary_tree_is_height_balanced(root.left) &&
+                this.determine_if_binary_tree_is_height_balanced(root.right)){
+                return 1;
+            }
+            else{
+                return 0;
+            }
+        }
+    }
+
+    count_non_leaf_nodes(node){
+        if(!node){
+            return 0;
+        }
+
+        if(!node.left && !node.right){
+            return 0;
+        }
+
+        let l = this.count_non_leaf_nodes(node.left)
+        let r = this.count_non_leaf_nodes(node.right)
+        
+        return (l+r+1);
+    }
+
+    diagonal_level_traversal(root){
+        let q = new queue();
+        q.enqueue(root);
+        q.enqueue(new Node("marker"));
+
+        while(!q.isEmpty()){
+            let temp = q.dequeue();
+            if(temp.data == "marker"){
+                if(q.isEmpty()){
+                    console.log(q.items)
+                    return;
+                }
+                else{
+                    q.enqueue(new Node("marker"));
+                }
+            }
+            else{
+                while(temp){
+                    if(temp.left){
+                        q.enqueue(temp.left);
+                    }
+                    temp = temp.right;
+                }
+            }
+        }
+    }
+
+    print_leaf_nodes_left_to_right(node){   //not necessarily level wise
+        if(!node){
+            return;
+        }
+        if(!node.left && !node.right){
+            console.log(node.data);
+            return;
+        }
+        this.print_leaf_nodes_left_to_right(node.left);
+        this.print_leaf_nodes_left_to_right(node.right);
+
+        return;
+    }
+
+    largest_value_in_each_level(root){
+        let q = new queue();
+        q.enqueue(root);
+        q.enqueue("marker");
+        let max = Number.NEGATIVE_INFINITY;
+
+        while(!q.isEmpty()){
+            let temp = q.dequeue();
+            if(temp == "marker"){
+                console.log(max)
+                max = Number.NEGATIVE_INFINITY;
+                if(q.isEmpty()){
+                    return;
+                }
+                q.enqueue("marker");
+            }
+            else{
+                if(temp.data > max){
+                    max = temp.data;
+                }
+                if(temp.left){
+                    q.enqueue(temp.left)
+                }
+                if (temp.right) {
+                    q.enqueue(temp.right)
+                }
+            }
+        }
+    }
+
+    deepest_left_leaf_node(node){
+        if(!node){
+            return;
+        }
+        if(!node.left && !node.right){
+            console.log(node.data);
+            return 1;
+        }
+        let l = this.deepest_left_leaf_node(node.left);
+        if(!l){
+            let r = this.deepest_left_leaf_node(node.right);
+        }
+        if(l || r){
+            return 1;
+        }
+        else{
+            return 0;
+        }
+    }
+
+    count_nodes_that_lie_in_given_range(node, low, high){
+        if(!node){
+            return 0;
+        }
+        let l=0, r=0;
+        if(node.data < low){
+            r = this.count_nodes_that_lie_in_given_range(node.right, low, high);
+        }
+        else if (node.data > high) {
+            l = this.count_nodes_that_lie_in_given_range(node.left, low, high);
+        }
+        else{
+            l = this.count_nodes_that_lie_in_given_range(node.left, low, high);
+            r = this.count_nodes_that_lie_in_given_range(node.right, low, high);
+            return (l+r+1);          
+        }
+        return (l+r)
+    }
+
+    check_if_binary_tree_has_suplicate_values(root){
+        let map = {};
+        let q = new queue();
+        q.enqueue(root);
+
+        while (!q.isEmpty()) {
+            let temp = q.dequeue();
+            if(map[temp.data]){
+                console.log('yes');
+                return;
+            }
+            map[temp.data] = 1;
+            if (temp.left) {
+                q.enqueue(temp.left)
+            }
+            if (temp.right) {
+                q.enqueue(temp.right)
+            }
+        }
+    }
+
+    sorted_level_order_traversal_of_binary_tree(root){
+        //in bst -> level order is already sorted
+        let q = new queue();
+        q.enqueue(root);
+        q.enqueue("marker");
+        let arr = [];
+
+        while (!q.isEmpty()) {
+            let temp = q.dequeue();
+            if (temp == "marker") {
+                arr.sort((a,b) => {return a-b;})
+                for(let i of arr){
+                    console.log(i)
+                }
+                arr = [];
+                if (q.isEmpty()) {
+                    return;
+                }
+                q.enqueue("marker");
+            }
+            else {
+                arr.push(temp.data)
+                if (temp.left) {
+                    q.enqueue(temp.left)
+                }
+                if (temp.right) {
+                    q.enqueue(temp.right)
+                }
+            }
+        }
+    }
+
+    top_three_elements(node, first=Number.NEGATIVE_INFINITY,
+        second = Number.NEGATIVE_INFINITY,
+        third = Number.NEGATIVE_INFINITY){
+        if(!node){
+            return;
+        }
+        if(node.data > first){
+            third = second;
+            second = first;
+            first = node.data
+        }
+        else if(node.data > second){
+            third = second;
+            second = node.data;
+        }
+        else if (node.data > third) {
+            third = node.data;
+        }
+        this.top_three_elements(node.left, first, second, third)
+        this.top_three_elements(node.right, first, second, third)
+
+        console.log([first, second, third]);
+    }
+
+    height_of_tree_considering_even_level_leaves_only(root){
+        //Find the height of the binary tree given that only the nodes
+        //on the even levels are considered as the valid leaf nodes.
+
+        let q = new queue();
+        q.enqueue(root);
+        q.enqueue("marker");
+        let level = 1;
+        let max;
+
+        while (!q.isEmpty()) {
+            let temp = q.dequeue();
+            if (temp == "marker") {
+                level++;
+                if (q.isEmpty()) {
+                    console.log(max)
+                    return;
+                }
+                q.enqueue("marker");
+            }
+            else {
+                if(!temp.left && !temp.right && (level%2 == 0)){
+                    max = level;
+                }
+                if (temp.left) {
+                    q.enqueue(temp.left)
+                }
+                if (temp.right) {
+                    q.enqueue(temp.right)
+                }
+            }
+        }
+    }
+
+    bst_to_greater_sum_tree(node, sum){
+        //Given a BST, transform it into greater sum tree 
+        //where each node contains sum of all nodes greater 
+        //than that node.
+
+        if(!node){
+            return;
+        }
+        this.bst_to_greater_sum_tree(node.right, sum);
+        
+        sum += node.data;
+        node.data = sum-node.data;
+
+        this.bst_to_greater_sum_tree(node.left, sum)
+    }
+
+    
+
 }
 
 function convert_sorted_array_to_bst(a, start, end){
@@ -2090,8 +2680,8 @@ bst.insert(84)
 bst.insert(58)
 bst.insert(57)
 bst.insert(59)
-// bst.insert(10)
-// bst.insert(1)
+// bst.insert(24)
+// bst.insert(23)
 
 // bst.insert(5)
 // bst.insert(6)
@@ -2126,13 +2716,39 @@ bst1.insert(20)
 bst1.insert(15)
 bst1.insert(25)
 
-bst.sink_all_odd_nodes(bst.root);
+bst.bst_to_greater_sum_tree(bst.root, 0);
+// bst.height_of_tree_considering_even_level_leaves_only(bst.root)
+// bst.top_three_elements(bst.root)
+// bst.sorted_level_order_traversal(bst.root)
+// console.log(bst.count_nodes_that_lie_in_given_range(bst.root, 60, 100))
+// bst.deepest_left_leaf_node(bst.root)
+// bst.largest_value_in_each_level(bst.root)
+// bst.print_leaf_nodes_left_to_right(bst.root)
+// bst.diagonal_level_traversal(bst.root)
+// console.log(bst.count_non_leaf_nodes(bst.root))
+// console.log(bst.determine_if_binary_tree_is_height_balanced(bst.root))
+// bst.outer_to_inner_level_order_traversal_from_last_level(bst.root)
+// bst.outer_to_inner_level_order_traversal(bst.root)
+// bst.print_extreme_node_in_alternate_order(bst.root)
+// console.log(bst.sum_of_all_nodes(bst.root))
+// bst.sum_of_nodes_at_kth_level("(0(5(6()())(4()(9()())))(7(1()())(3()())))", 3)
+// bst.replace_node_with_depth(bst.root, 0)
+// bst.second_largest_element(bst.root)
+// bst.remove_leaf_node_with_value_x(bst.root, 84)
+// bst.remove_all_leaf_nodes(bst.root)
+// console.log(bst.max_path_sum(bst.root, Number.NEGATIVE_INFINITY));
+// bst.remove_nodes_not_lying_in_path_with_length_greater_than_k(bst.root, 1, 3)
+// bst.remove_nodes_not_lying_in_path_with_sum_greater_than_k(bst.root, 200)
+// console.log(bst.max_consec_path_length(bst.root, bst.root, 1))
+// bst.sink_all_odd_nodes(bst.root);
 // console.log(bst.flip_binary_tree_to_right_side(bst.root))
 // bst.max_path_sum_between_2_leaves(bst.root, 0)
 // bst.convert_binary_tree_to_tree_with_children_sum_property(bst.root)
 // bst.convert_left_right_tree_to_down_right_tree(bst.root)
 // bst.convert_to_sum_tree(bst.root)
+
 console.log(bst.root)
+
 // bst.binary_tree_to_threaded_binary_tree()
 // bst.depth_of_deepest_odd_level_leaf()
 // bst2.binary_tree_that_holds_logical_and_operation(bst2.root)
