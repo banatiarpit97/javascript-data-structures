@@ -1,0 +1,26 @@
+Even if objects/arrays have same elements in them ,they will not be equal to another object/array.
+
+var a = new String('abc')
+var b = new String('abc')
+a == b; //return false as these are string objects
+
+a = 'abc'
+b = 'abc'
+a == b; //return true as these are string literals 
+
+///////////////////////////////////////////////////////////////////////////////////
+
+'12' > '2'
+false as strings are compared character by character, so '1'<'2'
+///////////////////////////////////////////////////////////////////////////////////
+
+10 == 10.0 //true
+10 === 10.0 //true
+10 == 10.1 //false
+///////////////////////////////////////////////////////////////////////////////////
+
+switch uses === to compare variable to its cases.
+if one case is matched in switch then all the cases after that will be executed until break is found
+it does not matter whether the cases after that are matched or not, if switch founds true then it does
+not test any case after that.But if any of cases is found true then, default will not be executed(even if
+no break is present before default)

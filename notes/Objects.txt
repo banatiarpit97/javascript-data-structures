@@ -1,0 +1,55 @@
+Creating objects : 
+
+var a = { }  or 
+var a =  new Object();
+
+////////////////////////////////////////////////////////////////////////////
+
+Objects can also contain functions :
+
+var a = {
+    prop: "string",
+    name : function(){
+        return this.prop;
+    }
+    age : function(n){
+        return n;
+    }
+}
+a.name();       //parenthesis to call the function
+a.age(21);
+
+////////////////////////////////////////////////////////////////////////////
+
+We can add properties/functions to objects dynamically:
+a.new1 = "hello"
+a.new2 = function(){return a};
+
+////////////////////////////////////////////////////////////////////////////
+
+Accessing properties :
+
+a.name or 
+a["name"]   
+
+Second one has an advantage that we can use dynamic variables that hold property names:
+var w = "name";
+a[w] -> will calculate a["name"];
+
+////////////////////////////////////////////////////////////////////////////
+
+Objects are passed by refernce :
+var a = {name: "arpit"};
+var b = a;
+b.name = "yoyo";
+a.name -> will give "yoyo"
+
+to create copy of objects and not aliases :
+var b = Object.create(a);
+
+////////////////////////////////////////////////////////////////////////////
+
+Everything in js is objects like int, string, etc thats why we can invoke functions using '.' notation
+string.length, string.toUppercase() etc
+
+////////////////////////////////////////////////////////////////////////////

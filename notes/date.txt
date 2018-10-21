@@ -1,0 +1,37 @@
+new Date();     //gives current date
+
+create a particular date :
+    new Date(year, month, day, hrs, min, sec, milisec)      //most appropriate way
+        //only first 2 params are required
+    new Date(86400000)
+    new Date("25 Mar, 2018")
+    new Date("1999-02-15")
+    new Date("8 August 2018 18:05:20")
+    
+Month start from 0 till 11 -> 0 is January, 11 is December
+Day start from 0 till 6 -> 0 is Sunday, 6 is Saturday
+
+Functions :
+
+getTime()
+getDay()
+GetDate()
+getMonth()
+getFullYear()
+getHours()
+getMinutes()
+getSeconds()
+getMilliSeconds()
+
+above methods get local date and time, to get universal append UTC to above methods
+getUTCDay()...
+
+above methods get date and time, to set replace get by set in above functions:
+setDay(n)...
+
+convert :
+toDateString()
+toTimeString()
+toISOString()
+toUTCString()
+

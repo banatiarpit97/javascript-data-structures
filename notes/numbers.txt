@@ -1,0 +1,21 @@
+var a = 123;    
+var a = new Number(123)     //created an object
+
+num.toFixed(len)        //len is the number of decimal places that will be present in the resulting number
+num.toPrecision(len)    //len is the total number of digits present in resulting number(including digits
+                            at the left and right side of decimal)
+
+
+Number Object :
+    Number.isFinite(n)
+    Number.isInteger(n)
+    Number.isNaN(n)
+    Number.MAX_VALUE
+    Number.MIN_VALUE
+    Number.POSITIVE_INFINITY
+    Number.NEGATIVE_INFINITY
+
+
+parseFloat(n)   //converts string/integer to float
+parseInt(n, base)   //converts string/float to integer(base is optional, default = 10)
+parseInt(101, 2)    //converts binary to decimal(outputs 5)

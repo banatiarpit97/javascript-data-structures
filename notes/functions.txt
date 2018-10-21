@@ -24,6 +24,10 @@ IIFE:
 
     })('a', 'b');
 
+Using new :
+    var name = new Function("console.log('hh)");
+    name();
+
 1. funtion expressions and arrow functions are not hoisted unlike declaration
 
 2. function declaration can become function expression if declaration
@@ -35,4 +39,14 @@ is neither top level nor inside other functions.
     function name(){
         function class(){ }   -> will be treated as declaration
     }
+
+3. Every function has an object called 'arguements' which is like an array of parameters passed.
+
+4. Spread operator :
+        extra arguements can be accomodated by spread operator(needs to be last parameter)
+        function spread(a, b, ...c){
+            console.log(c);     //will print an array -> [3,4,5,6];
+        }
+        spread(1,2,3,4,5,6);
+
 

@@ -1,0 +1,48 @@
+Constructor functions - Functions used to create objects based on some predefined structure
+
+function food(name, color, weight){
+    this.name = name;
+    this.color = color;
+    this.weight = weight;
+
+    this.details = function(){
+        return `${this.name} is of ${this.color} color`;
+    }
+}
+
+var f1 = new food('apple', 'red', 90)
+var f2 = new food('mango', 'yellow', 100)
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+Classes - syntactical sugar(Not like classes of java, c++)
+Introduction of classes does not define new inheritance model in js, it still uses prototypical 
+inheritance
+Classes are just a new way to create constructor functions.
+
+class food{
+    constructor(name, color, weight){
+        this.name = name;
+        this.color = color;
+        this.weight = weight;
+    }
+    details(){
+        return `${this.name} is of ${this.color} color`;
+    }
+
+    get name(){             //getter function
+        return this.name;
+    }
+
+    set name(name){         //setter function
+        this.name = name;
+    }   
+}
+
+var f = new food('apple', 'red', 100);
+f.name              //used as a property and not as a function
+f.name = "mango"    //used as a property and not as a function
+
+
+SUPER keyword can be used to call constructor of parent class, property of parent class, method of
+parent class from within the child class.

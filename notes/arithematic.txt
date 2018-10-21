@@ -1,0 +1,43 @@
+** -> exponential
+2**3 = 8
+
+5+7 = 12
+"5"+7 = 57
+"5"+"7" = 57
+"abc"+7 = abc7
+"abc"+"def" = abcdef
+"abc"-9 " NaN
+"abc"-"def" = NaN
+"5"-7 = -2
+[1,2]+[3,4] = "1,23,4"
+
+true+true = 2
+true-false = 0
+//true is treated 1 and false as 0 in arithematic operations
+
+MATH OBJECT :
+
+Math.E = 2.718..
+Math.PI = 3.14..
+Math.SQRT2 = 1.414
+
+Math.round(n)   //round to nearest integer
+Math.ceil(n)
+Math.floor(n)
+Math.random()   //from 0 to 1
+Math.min(n1, n2, n3..)
+Math.max(n1, n2, n3..)
+Math.abs(n)
+Math.sign(n)    //1 if n is positive or 0, -1 if negative
+Math.trunc(n)   //removes decimal digts(without rounding)
+Math.sqrt(n)
+Math.cbrt(n)
+Math.pow(n, m)  //n raise to the power of max(m has to be integer)
+Math.exp(n)
+Math.log(n)
+Math.log2(n)    //log of base 2
+Math.log10(n)
+
+
+
+

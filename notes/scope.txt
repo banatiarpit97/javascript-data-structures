@@ -10,3 +10,20 @@ function example(){
 
 2. Global variable should be used very carefully, global variables can be accessed by other scripts
    included in the page(user defined or libraries) and hence can cause problems.
+
+3. Global variables are properties of window object, we can use them using var_name or window.var_name
+
+4. let and const are block scoped(and are not hoisted)
+
+5. declaring multiple varibales in a line, 
+        var a = "red", b = 1, c;
+
+6. redeclaring variable does not alter its value or cause an error
+    var a = "red"
+    var a;
+    a //still red
+
+7. Variable declarations are hoisted but not assignments or definations.
+    food    //undefined(no error because of hoisting)
+    var food = "apple";
+    food    //apple

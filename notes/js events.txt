@@ -1,0 +1,61 @@
+adding events to elements :
+    1. elem.addEventListener("event", func_name);   //no brackets after func_name
+    2. elem.event = func_name;
+    3. <button onlcick = "func_name()">
+
+instead of func_name, we can define complete anonymous function or arrow function
+Advantage of using 1st instead of 2nd, is that if we define 2 listeners for same event using 1st, then 
+listener for that event is combined of all but in case 2nd latest listener overrides previous ones
+3rd should not be used as we should not include js in html
+
+removing events :
+    elem.removeEventListener("event", func_name);
+
+Event object :
+elem.addEventListener("click", (e) => {
+    console.log(e)          //event object
+    e.preventDefault();     //prevent default behavious like submitting a form, redirect using a link
+    e.stopPropogation       //stop event bubbling
+    //bubbling is set to true by default which means, that an event looks for listener in parent elements
+        also
+})
+
+Common Events :
+
+load
+click
+dblclick
+contextmenu     //right mouse btn clicked
+select          //content selected
+wheel           //mouse wheel is rotated
+mouseenter
+mouseleave
+mousedown
+mouseup
+mousemove
+keypress
+keydown
+keyup
+cut
+copy
+paste
+drag
+dragstart
+dragend
+drop
+dragenter
+dragover
+dragleave
+resize
+scroll
+submit
+focus
+blur
+online      //browser has become online
+offline     //browser lost internet connection
+play        //media started playing
+pause
+ended
+volumechanged
+timeupdate
+ratechange

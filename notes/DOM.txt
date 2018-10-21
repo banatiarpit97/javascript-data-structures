@@ -1,0 +1,64 @@
+DOM contains HTML document in a tree structure of nodes, where each node usually represents 
+an HTML element or text.
+DOM is used by js to query or manupilate HTML
+Topmost element is html then it has 2 children head and body and so on
+
+To query html :
+querySelector("selector")
+querySelectorAll("selector")
+getElementById(id)
+getElementsByClassName(class)
+getElementsByTagName(tag)
+
+attributes:
+querySelector("selector").getAttribute("attr")
+querySelector("selector").setAttribute("attr", "value"
+)
+
+content :
+querySelector("selector").textContent = "<i>Hello</i>   //will print even html as text
+querySelector("selector").innerHTML = "<i>Hello</i>     //will parse html
+
+Create elements :
+document.createElement("tag_name")
+document.createTextNode("text");
+
+Adding elems to aldready existing elems :
+elem1.appendChild(elem2);
+if we use appendChild to an already existing element(i.e. elem2 is not created dynamically, its is already
+present in DOM, then we move the elem2 instead of adding a new element);
+
+elem1.insertBefore(elem2, elem3)    //adds elem3 to elem1 just before elem2
+elem1.insertAfter(elem2, elem3)    //adds elem3 to elem1 just after elem2
+
+Remove :
+elem1.removeChild(elem2);
+elem2.remove();
+
+References :
+elem1.parentNode  //gives parent of elem1
+elem1.children    //gives an array of children of elem1
+
+///////////////////////////////////////////////////////////////////////////////////////////
+CSS :
+elem.style.prop        //gives value of prop for elem(CAN ONLY ACCESS INLINE STYLES)
+elem.style.prop = "vale"        //assign 'value' to prop for elem(AS INLINE STYLES)
+
+for properties consisting of more than 2 letters, use camel getElementsByClassName
+elem.style.backgroundColor
+(properties that return colors always return rgb values, colors are handled as rgb internally)
+
+to get all the styles for an element(inline+external+style tag)
+    var s = window.getComputedStyle(elem);  return an object containing prop:value pair for each style
+    s.fontSize;   
+
+to access external stylesheets only:
+    document.styleSheets    //returns array of all loaded stylesheets
+    document.styleSheets[0].rules   //return array of all css rules in 1st stylesheets
+    document.styleSheets[0].rules[0].cssText    //return complete css rule as string
+    document.styleSheets.rules[0].selectorText  //return selector of rule as string
+    document.styleSheets.rules[0].style     //all individual css styles in css rule
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+
+

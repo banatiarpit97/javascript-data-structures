@@ -1,0 +1,100 @@
+javascript is prototype based language.
+Most languages like c++, java have class-based inheritance.
+Javascript has prototype-based inheritance.
+
+Every object has a prototype from which it inherits properties and methods.The prototype is also an
+object and hence inherits from another prototype and so on.this is prototype chain.
+At the top of properties chain is Object.prototype which is initialised when a js program starts
+executing.This prototype has methods like sort(), toString() etc.
+Object.prototype inherits from null.(i.e. prototype of Object.prototype is null)
+
+So prototype is just an object that contains properties and methods that the object it is bounded
+to can have.An object has properties and methods equal to properties and methods present in the
+object itself and what it inherits from its prototype and what its prototype inherits from parent
+prototype and so on.
+When we invoke property/method from an object, javascript first searches it in the object itself and
+if not found, it tries searching in its prototype and then its prototype's property....
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+new Array():    //built in
+Array -> Array.prototype -> Object.prototype -> null
+
+new Food();     //not built in
+Food -> Food.prototype -> Object.prototype -> null
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+Manipulating prototype of newly created constructor functions
+
+function food(name, color, weight){
+    this.name = name;
+    this.color = color;
+    this.weight = weight;
+}
+food.prototype.details = function(){    
+        return `${this.name} is of ${this.color} color`;
+}
+//this adds details method to food's prototype, which means that every food object will have access
+to details method.
+We should add methods to prototype instead of directly adding it to constructor function.
+If we define methods in constructor function, then it will be created every time a new object is created.
+Whereas if we define them in prototype, method are not created every time, instead they are just inherited.
+This causes big performance issues.
+
+object_name.hasOwnPropert(prop_name) -> return true if prop is defined in object, return false if prop
+is defined in its prototype or any other pppppppppppppppppparent prototype
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+Manipulating prototype of built in objects
+Array.prototype.midElem = function(){
+    return this[this.length/2];
+}
+
+now every array created will have this midElem method
+Though it is not a good practice to do this, instead we should use a separate function for this
+It is used when we want older versions of js to have new functions(backward compatibility)
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+Extending the prototype chain :
+
+function circle(radius){
+    this.radius = radius;
+}
+circle.prototype.diameter = function(){
+    return this.radius*2;
+}
+
+function semicircle(radius){
+    Circle.call(this, radius);
+    //call is used to access property or method of another object but with context of current one.
+}
+semicircle.prototype = Object.create(circle.prototype); 
+//now semicircle inherits from prototype of circle i.e. we made semicircle a child of circle.[inheritance]
+semicircle.property.constructor;  //will give circle which is a problem
+semicircle.property.constructor = semicircle  //to solve the above problem
+
+var sc = new semicircle(15);
+Object.getPrototypeOf(sc) -> will give cirle
+Now semicircle will have access to radius and diameter
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+Using class keywords to extend prototype chain :
+
+class circle{
+    constructor(radius){
+        this.radius = radius;
+    }
+
+    diameter(){
+        return this.radius*2;
+    }
+}
+
+class semicircle{
+    constructor(radius){
+        super(radius)   //call constructor of parent class
+    }
+}
+var sc = new semicircle(15);
+sc.diameter()   //diamter fucntion is available as its parent class has this method.
+//////////////////////////////////////////////////////////////////////////////////////////////
+
