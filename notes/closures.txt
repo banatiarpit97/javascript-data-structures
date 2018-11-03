@@ -1,6 +1,8 @@
 closures are functions inside functions such that inner function has access to local variables
 and paramters of outer functions (even after the outer function has returned)
 
+because of closures, we can pass functions as paramters, we can have functions in setTimeout, event handlers...
+so closure is a necessity in js
 ///////////////////////////////////////////////////////////////////////////
 
 function outer(){
@@ -28,6 +30,10 @@ function outer(){
 }
 var my = outer();
 my();         //will execute inner and "arpit" will be printed
+
+or :
+
+outer()();  //as outer function returns inner function
 
 /////////////////////////////////////////////////////////////////////////////
 function outer(name){
@@ -73,10 +79,13 @@ we don't need to write function for every conversion.
 ////////////////////////////////////////////////////////////////////////////
 We can nest as many levels as we want
 
-function outer(name){
+function outer(name="name"){
+    var first = 1;
     return function inner(){
+        var second = 2;
         return function another(){
-            console.log(name);
+            console.log(name, first, second);   //name,1,2   
+            //inner function has access to all the functions it is nested in
         }
     }
 }
@@ -95,3 +104,84 @@ var multiply = (function(a){
 multiply()   //logs 30
 
 ////////////////////////////////////////////////////////////////////////////
+closures can also be defined as when a function remembers its lexical scope even when 
+the function is executed outside that lexical scope.
+scope of outer function is retained until there is atleast one inner function that needs to access it,
+after that variables of outer scope can be garbage collected.
+
+function foo(){
+    var bar = "bar";
+    function baz(){
+        console.log(bar);
+    }
+    bam(baz);
+}
+function bam(baz){
+    baz();      //prints bar
+}
+foo();
+////////////////////////////////////////////////////////////////////////////
+all the inner functions have same scope i.e. of the outer function.
+for(var i=1;i<=5;i++){
+    setTimeout(function(){
+        console.log(i);
+    }, i*1000)
+}
+// we would expect this to print 1 after 1 sec, 2 after 2 sec...but it prints 6 every time.
+//this is because, this behaves as 5 setTimeouts one after the other and every setTimeout has same scope.
+//to behave as we want, we use IIFE as it creates its own scope.
+for(var i=1;i<=5;i++){
+    (function(i){
+        setTimeout(function(){
+            console.log(i);
+        }, i*1000)
+    })(i);
+}
+//or we can use let instead of var because let has a special feature when used inside for loop parenthesis
+//let keyword declares that variable for every iteration of loop
+for(let i=1;i<=5;i++){
+    setTimeout(function(){
+        console.log(i);
+    }, i*1000)
+}
+////////////////////////////////////////////////////////////////////////////
+MODULE PATTERN USING closures i.e. creating modules, creating private, public memebers(abstraction):
+Characterstics of module pattern :
+1. there must be an outer enclosing function
+2. outer function must return atleast one inner function.
+
+var foo = (function(){
+    var o = {bar:"bar"};    //private property
+
+    return function(){      //public function(public API) that can access private property
+        console.log(o.bar);
+    }
+})
+foo();  //prints bar
+
+//to return more than 1 inner function create an object that contains those functions and return the object.
+//everything inside an iife is private unless returned
+var foo = (function(){
+    var o = {bar:"bar"};    //private property
+    var k = {bar:"bar1"};    //private property
+
+    return{
+        baz:function(){      //public function(public API) that can access private property
+                console.log(o.bar);
+            }
+        baz1:function(){
+            console.log(k.bar)
+        }
+    } 
+})
+foo.baz();  //prints bar
+foo.baz1();  //prints bar1
+
+ES6 makes it easy for creating the module pattern as now we don't need the outer function.The file works as outer function
+    var o = {bar:"bar"};    //private property
+    export function bar(){
+        return o.bar;
+    }
+//we can have as many export statements as needed, and all of them will be exported.
+//they can be omported in other file like:
+    import {bar} from file_name;

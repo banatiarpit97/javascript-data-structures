@@ -65,3 +65,20 @@ is neither top level nor inside other functions.
 
 5. We can pass less, equal or more arguements to a function than actuaaly required
     no error will be shown.
+
+6. Function can be passed as parameters and can be executed there
+    function foo(){
+        var bar = "bar";
+        function baz(){
+            console.log(bar);
+        }
+        bam(baz);       //passing function as parameter
+    }
+    function bam(baz){
+        baz();          //executing the passed function
+        //prints bar
+    }
+    foo();
+
+7. if we want to return more than 1 thing from a function, put those things in an array or object
+    and then return that array/object.
