@@ -1,9 +1,12 @@
 var name = "arpit";          //global variable
+name = "arpit"              //will be global when declared inside or outside function
 
 function example(){
     var name = "arpit";         //local variable
 
     number = 9999999999;        //global variable(As not declared with var keyword)
+    (even if this is done inside closure function,
+    then also it will create global variable)
 }
 
 1. If name of global and local variables are same, preference will be given to local variable
@@ -12,18 +15,109 @@ function example(){
    included in the page(user defined or libraries) and hence can cause problems.
 
 3. Global variables are properties of window object, we can use them using var_name or window.var_name
+    all global varibales are properties of 'window' in browser 
+    and 'global' in node('root' also works in node but is deprecated)
+    (thats how we can access global variables from the function if there is
+    a local variable with same name.)
 
-4. let and const are block scoped(and are not hoisted)
+4. let and const are block scoped(remain inside if, for...)
+    (and are not hoisted)
 
 5. declaring multiple varibales in a line, 
         var a = "red", b = 1, c;
 
 6. redeclaring variable does not alter its value or cause an error
     var a = "red"
-    var a;
+    var a;      //is ignored
     a //still red
+
+    but this is not the case with function, functin are overriden if declared again
+    function a(){
+        console.log("arpit")
+    }
+
+    function a() {
+        console.log("banati")
+    }
+
+    a()     //will print 'banati'
 
 7. Variable declarations are hoisted but not assignments or definations.
     food    //undefined(no error because of hoisting)
     var food = "apple";
     food    //apple
+
+8.  var a = 10;
+    var a;                  //a still remains 10(this line is ignored)
+    console.log(a);         //prints 10
+    (function(){            //IIFE
+        console.log(a);     //undefined as a is hoisted but not its value and local a takes preference over global one
+        var a = 5;
+        console.log(a)      //prints 5
+    })();
+
+9. parameters of a function are also local variables
+
+10. var a = "1";
+    function abc(){
+        var a = "2";
+        function b(){
+            console.log(a);     //print 2(if local var not present, then starts going up the scope)
+            console.log(window.a)   //print 1
+        }
+        b();
+    }
+
+11. var a = "1"
+    function foo(str){
+        eval(str);          //eval takes a string and converts it to js code and then execute it
+        console.log(a);     prints 42
+    }
+    foo("var a=42");
+
+12. var obj = {a:1, b:2, c:3};
+    obj.a = obj.b = obj.c;
+    obj.c = obj.b - obj.a;
+
+    can be done using
+
+    with(obj){
+        //now variables of obj can be used directly
+        a=b+c;
+        c=b-a;
+        d = 3    //problem with 'with' blocks, creates d as global var instead
+                    //of creating d property of obj
+    }
+
+    eval and with should be avoided as it messes up the scope and js engine
+    is not able to optimize our code and code runs very slowly.
+
+13. Catch has its own scope, so if you ever want to create a separate scope
+    try(throw void 0)catch
+        (foo){
+            foo = "foo";
+            console.log(foo)    //foo
+        }
+    console.log(foo)    //error  
+
+14. New scope can also be created using curly braces and let keyword :
+    {
+        let foo = "foo";
+        console.log(foo)    //foo
+    }
+    console.log(foo)    //error  
+
+15. functions are hoisted above variables
+    console.log(foo)    //prints 2
+
+    var foo=2;
+    function foo(){console.log(1)}
+    function foo(){console.log(2)}
+
+    will become after hoisting :
+
+    console.log(foo)    //prints 2
+    function foo(){console.log(1)}
+    function foo(){console.log(2)}      //overrides prev one
+    var foo;        //is ignored because redacalaration
+    foo=2;

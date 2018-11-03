@@ -8,9 +8,13 @@ function declaration :
     
 
 function expression :
-    var name = function(){ }
-    var name = function hi(){ }  //can give name to functions but it is of no use
-                                 //still can not call function using 'hi', have to call using 'name' only
+    var name = function(){ }        //anonymous function expression
+    var name = function hi(){ }     //named function expression
+    //can give name to functions
+    //still can not call function using 'hi', have to call using 'name' only
+    //we should always use named function expression instead of anonymous function expression
+    //because it would let us perform recursion
+    //and it help in debugging -> instead of giving error for anonymous function, it would give name of function
 
 arrow function :
     var name = () => { }
@@ -23,6 +27,16 @@ IIFE:
     (function(a,b){    //passing arguements to iife
 
     })('a', 'b');
+
+the basic idea behind iife is to separate the function from global
+scope so that it could not be called from outside that function.
+iife can be named (function iife(){})();
+
+we can wrap the calling parenthesis also in top level parenthesis like
+(
+    function iife()
+    {}()
+)
 
 Using new :
     var name = new Function("console.log('hh)");
@@ -49,4 +63,5 @@ is neither top level nor inside other functions.
         }
         spread(1,2,3,4,5,6);
 
-
+5. We can pass less, equal or more arguements to a function than actuaaly required
+    no error will be shown.

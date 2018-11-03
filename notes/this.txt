@@ -1,0 +1,102 @@
+Every function, while executing, has a refernce to its current execution context called this.
+This in javascript is very different from this in java, c++.
+Binding of 'this' is dynamic and is determined on runtime.
+To get the value of ;this', we need to look at call site :
+    1. how the function is called   
+    2. from where the function is called
+    3. when the function is called
+
+To know the value of 'this', we need to check 4 rules, and see which one satisfies
+start checking from 1 to 4
+
+1. When an object is created using 'new' keyword, then the function/class after the 
+    new keyword will be bound to 'this'.
+
+2. Explicit/hard binding - When we use functions like call, apply, bind.
+    should be used in callback functions/event handlers
+    Whatever arguement is passed to the call, apply... will be made the 'this' arguement
+    but if the function definition itself has the hard binding, then the innermost binding
+    will be considered.
+
+3. Implicit binding - If an object calls a function(does not matter where the function was defined)
+    then 'this' will point to the object that called the function.
+
+4. Default binding - Because none of the above 3 rules apply
+    this will have the default value.Default value of 'this' id global object(window, global) in non strict mode
+    and undefined in strict mode(function definition should be in strict mode)
+
+//////////////////////////////////////////////////
+function foo(){
+    console.log(this.bar);
+}
+var bar = "bar1"
+var o2 = {bar:"bar2", foo:foo};
+var o3 = {bar:"bar3", foo:foo};
+
+foo();      //print bar1(this points to global acc to rule 4)
+o2.foo;     //print bar2(this points to o2 acc to rule 3)
+o3.foo();   //print bar3(this points to o3 acc to rule 3)
+//////////////////////////////////////////////////
+
+var o1 = {
+    bar:"bar1",
+    foo:function(){
+        console.log(this.bar);
+    }
+};
+var o2 = {bar:"bar2", foo:o1.foo};
+var bar = "bar3";
+var foo = o1.foo;
+o1.foo()    //bar1
+o2.foo()    //bar2(does  not matter where the function was defined)
+foo()       //bar3
+//////////////////////////////////////////////////
+
+function foo(){
+    console.log(this.bar);
+}
+var bar = "bar1";
+var obj = {bar:"bar2"}
+
+foo();  //bar1
+foo.call(obj);  //bar2('this' will be obj)
+//////////////////////////////////////////////////
+
+function foo(){
+    console.log(this.bar);
+}
+
+var obj = {bar:"bar"};
+var obj2 = {bar:"bar2"};
+
+var orig = foo;
+foo = function(){
+    orig.call(obj); //hard binding(innermost binding, hence this will be final)
+}
+
+foo();  //bar
+foo.call(obj2); //bar('this' is obj)
+//////////////////////////////////////////////////
+
+Whenever new keyword is put in front of any function call
+then the function call becomes constructor call.
+So any function can be used to create an object using the new keyword, 
+it will continue its default behaviour but now will create o bjects too.
+4 things that happen when new keyword is used :
+
+1. new empty object is created.
+2. this empty object gets linked to other object(prototype)
+3. this empty object is bound to the 'this' keyword
+4. If the function does not return anything, then statement 
+    'return this' will be inserted after the last line of the function 
+//////////////////////////////////////////////////
+
+CALL, APPLY, BIND :
+
+function_name.call(thisArg, arguement...);  //thisArg is bound to 'this' keyword
+function_name.apply(thisArg, [arguement...]);  //thisArg is bound to 'this' keyword
+
+difference between call and apply is that call takes arguements separately whereas apply takes arguements as array 
+
+function_name.bind(thisArg, arguement...);  //thisArg is bound to 'this' keyword
+//////////////////////////////////////////////////

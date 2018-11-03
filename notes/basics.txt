@@ -1,0 +1,18 @@
+JIT - just in time compiler.It defers the compilation.
+        if it encounters a function definition, it will not compile the function right away.
+        it just stores function in memory.
+        function will be compiled when it is called the first time.
+
+Javascript compiler takes 2 passes to run the source code.
+in first pass, it does things as declaration, hoisting of var, function etc...
+and in seconds pass, it executes each line like an interpreter and does work like initialization, execution.
+The difference from other interpreted languages is that,
+in second pass js already knows what will come in next line or after that.
+
+var a = "Arpit" is treated as 2 lines while compilation.
+Firstly declaration(registering of variables) takes place and after that 
+initialization.
+
+Actually hoisting does not happen, its just a concept to understand 2 passes
+of compiler.In first pass, all vars are registered and that is what when
+call hoisting

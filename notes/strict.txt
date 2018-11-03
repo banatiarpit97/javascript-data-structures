@@ -1,0 +1,15 @@
+use 'strict'
+at the top of page.
+
+1. function example(){
+    var name = "arpit";         //local variable
+
+    number = 9999999999;        //will not create global variable   
+                                //reference error
+}
+
+2. eval created whole new scope instead of changing the global scope.
+
+3. 'with' keyword/scope is not allowed.
+
+4. Default value of 'this' is undefined.
