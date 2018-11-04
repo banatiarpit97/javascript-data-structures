@@ -99,4 +99,12 @@ function_name.apply(thisArg, [arguement...]);  //thisArg is bound to 'this' keyw
 difference between call and apply is that call takes arguements separately whereas apply takes arguements as array 
 
 function_name.bind(thisArg, arguement...);  //thisArg is bound to 'this' keyword
+
+we can change the context of any function by just appending the bind(thisArg) to the function call or function definition
+a.bind(thisArg)     
+elem.addEventListener('click', 
+    function(){
+        console.log('clicked')
+    }.bind(thisArg);               //if we don't bind, 'this' wll refer to elem. but now it will be thisArg
+)
 //////////////////////////////////////////////////

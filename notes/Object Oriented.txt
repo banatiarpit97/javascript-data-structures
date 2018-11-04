@@ -1,5 +1,26 @@
 Constructor functions - Functions used to create objects based on some predefined structure
+Every object is built by a constructor function
 
+Whenever we create objects in c++, java, the objects have a copy of all the vars, functions present
+in its class and then object and class are separated from each other, but when we create an object in js,
+we link that object to its prototype and it will always be linked to it.
+Even when we inherit a class, all the methods/props of parent class are COPIED to child class
+but in js, we link objects to prototype(no copying is done)
+
+Even before forst line of our code is executed, sevaral things happen :
+a function named 'Object' is called and is linked to an object with the linkage '.prototype'
+this object contains methods like toString, sort etc.
+
+When a new function is created, an empty object is also created for it that can accessed by the linkage
+'.prototype'.The empty object can access the function using the linkage '.constructor'
+
+When we create a new object using 'new' keyword, an empty object is created that has a linkage to
+the prototype object of the constructor function used to create the object with the linkage
+[[Prototype]]
+So, linkage from constructor function to its prototype is .prototype and linkage from newly created
+object to its function's prototype(parent heirarchy) is [[Prototype]].
+//////////////////////////////////////////////////////////////////////////////////////////
+CONSTRUCTOR FUNCTION
 function food(name, color, weight){
     this.name = name;
     this.color = color;
@@ -18,6 +39,8 @@ var f2 = new food('mango', 'yellow', 100)
 Classes - syntactical sugar(Not like classes of java, c++)
 Introduction of classes does not define new inheritance model in js, it still uses prototypical 
 inheritance
+Actually using the word 'prototypical inheritance' is also wrong, inheritance means copying, but in js
+copying does not happen, only linkage takes place.Hence we should call it Behaviour Delegation.
 Classes are just a new way to create constructor functions.
 
 class food{
