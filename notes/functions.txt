@@ -82,3 +82,23 @@ is neither top level nor inside other functions.
 
 7. if we want to return more than 1 thing from a function, put those things in an array or object
     and then return that array/object.
+
+8. Functions are treated as objects only :
+    function name(first){
+        this.firstname = first;
+    }
+    name.lastname = null;       //can dynamically add properties to functions
+
+9. Higher order functions are functions that either take other function as params or return other functions
+    function mapForEach(arr, fn) {              //receive function's name(without parenthesis)
+        const newArray = [];
+        for(let i = 0; i < arr.length; i++) {
+            newArray.push(fn(arr[i]));          //call the function with name and parenthesis(or params)
+        }
+        return newArray;
+    }
+        const lenArray = mapForEach(strArray, function(item) {
+        return item.length;
+        });
+        // prints [ 10, 6, 3, 4, 1 ]
+        console.log(lenArray);
