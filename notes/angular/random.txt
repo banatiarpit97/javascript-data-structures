@@ -1,0 +1,6 @@
+1. Subject/Behavior subject is used as an observable when a large amnt of data or many subscribers are present.
+	if we are using a shared service and a componenet makes some changes to service variables, how would other components get to know about	
+	the change -> we create that property/variable as a Subject and emit next().All components should subscribe to this subject, so that they
+	know of any changes emitted by it.
+	Componenets should unsubscribe from these changes when going out of memeory otherwise memory leakage would happen, use .unsubscribe method
+	on Subject in ngOnDestroy() method.

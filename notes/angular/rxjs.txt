@@ -1,0 +1,75 @@
+RxJS is JavaScript library for transforming, composing and querying asynchronous streams of data.
+RxJS can be used both in the browser or in the server-side using Node.js.
+
+Reactive programming is a programming paradigm for writing code, 
+mainly concerned with asynchronous data streams.
+Just a different way of building software applications which will “react” to changes 
+that happen instead of the typical way of writing software where we explicitly 
+write code (aka “imperative” programming) to handle those changes.
+
+types of async operations:
+DOM events - mouse, keyboard, touch, form
+Animations
+ajax
+sockets...
+
+Observables provide support for passing messages between publishers and subscribers in your application.
+
+const button = document.querySelector("button");
+    const observer = {          //error and complete are optional
+      next: function(value) {
+        console.log(value);
+      },
+      error: function(err) {
+        console.error(err);
+      },
+      complete: function() {
+        console.log("Completed");
+      }
+    };
+
+    const observable = Rx.Observable.fromEvent(button, "click");
+    observable.subscribe(observer);
+
+OPERATORS :
+Operators are functions that build on the Observables foundation to enable 
+sophisticated manipulation of collections.
+
+An Operator is essentially a pure function which takes one Observable as input 
+and generates another Observable as output.
+
+Operators pass each value from one operator to the next before proceeding to the next
+value in the set. This is different from array operators (map and filter) which will 
+process the entire array at each step.
+
+types:
+Creation - from, fromPromise, fromEvent, of
+Combination - combineLatest, concat, merge, startWith, withLatestFrom, zip
+Filtering - debounceTime, distinctUntilChange, filter, take, takeUntil
+Transformation - bufferTime, concatMap, map, mergeMap, scan, switchMap
+Utility - tap
+Multicasting - share
+
+RxJS Subject is a special type of Observable that allows values to be multicasted to many Observers.
+While plain Observables are unicast (each subscribed Observer owns an independent execution
+of the Observable), Subjects are multicast.
+A subject in RxJS is a special hybrid that can act as both an Observable 
+and an Observer at the same time.
+
+    const subject = new Rx.Subject();
+
+    subject.subscribe({
+        next: v => console.log("observerA: " + v)
+        });
+        subject.subscribe({
+        next: v => console.log("observerB: " + v)
+    });
+
+    subject.next(1);
+    subject.next(2);
+
+    // output
+        // observerA: 1
+        // observerB: 1
+        // observerA: 2
+        // observerB: 2

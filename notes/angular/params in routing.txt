@@ -1,0 +1,17 @@
+<a [routerLink] = "/countries"></a>			//if there is no parameter, then array is optional.
+<a [routerLink] = "['/countries', 'IN']"></a>		//if we want to pass paramters, then 1st elem of array is route and other elems are paramters to be passed.
+
+////////////////////////////////////////////////////////////////////////////////////////
+Defining route :
+
+{path : countries/:code, component:CountryComponent}
+////////////////////////////////////////////////////////////////////////////////////////
+Accessing params from url :
+
+import { ActivatedRoute } from '@angular/router';
+
+constructor(private route:ActivatedRoute){
+	this.route.params.subscribe((params) => {
+		console.log(params['code']);
+	}
+////////////////////////////////////////////////////////////////////////////////////////

@@ -1,0 +1,40 @@
+Generate App
+  ng new {{name}} --routing --service-worker
+
+Generate a component
+   ng generate component {{name}}
+
+generate routing module
+   ng generate module app-routing --flat --module=app
+   empty contents of app-routing-module.ts and paste the following
+       import { NgModule } from '@angular/core';
+       import { RouterModule, Routes } from '@angular/router';
+
+       @NgModule({
+       exports: [ RouterModule ]
+       })
+       export class AppRoutingModule {
+         
+       }
+
+   add <router-outlet></router-outlet> in app.component.html where we want to present the view of  each component
+   create object of all the routes at the top just after all the imports and before the @NgModule in app-routing-module.ts
+       const routes: Routes = [
+         { path: '', redirectTo: '/dashboard', pathMatch: 'full' },  //default case
+         { path: 'dashboard', component: DashboardComponent },
+         { path: 'detail/:id', component: HeroDetailComponent },
+         { path: 'heroes', component: HeroesComponent }
+       ];
+   add in app-routing-module.ts in @NgModule
+       imports: [ RouterModule.forRoot(routes) ]
+   link to the routes
+       <a routerLink="/heroes">Heroes</a>
+
+run app
+  ng serve --open
+
+build app
+  ng build --prod
+
+
+
