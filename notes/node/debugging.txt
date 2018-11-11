@@ -1,0 +1,25 @@
+to start debugger :
+node inspect file_name
+nodemon inspect file_name
+
+the debugger will stop just before executing the first line
+type 'n' -> to execute next line and stop again
+type 'c' -> to execute statements till 'debugger' or till the end.
+type 'repl' -> to go into testing mode, after repl, type name of any variable in console to 
+                get its value at that particular time.
+                ctrl-c to get out of repl(back to debugger)
+type 'ctrl-c' to get out of debugger
+
+use 'debugger' in code anywhere to stop the execution when 'c' is typed.
+
+
+To debug from code :
+
+node --inspect-brk file_name
+open chrome://inspect
+open 'Open dedicated DevTools for Node'
+
+click on any line to add debugger statement before it
+click on green arrow, which will work as 'c'
+type name of any variable in console to get its current value
+

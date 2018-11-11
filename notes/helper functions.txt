@@ -19,13 +19,34 @@
 Array.from(arr_name, (a) => {return a*a}) -> will create another array from existing array, 2nd param is optional and is used if along copying, we have to make certain changes to array elements also
 						does not change original array
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
 .filter((a) => {return a>5} -> will create another array from existing array but will copy only those elements to new array that satisfy the condition in return statement(in this case, elements that are greater than 5)
 				does not change original array
+				new array can only contain the elements present in original array i.e. we can only copy
+				elements, we can not manipulate and then copy.
 
-.map((a) => {return a>5} -> like filter but instead of creating new array with the values that passed the test, it places true in the new array and false for the values that does not 				    pass the test
+.map((a) => {return a>5} -> has 2 functions.
+				1. (if a condition is presnt in return statement)
+					like filter but instead of creating new array with the values that passed the test, 
+					it places true in the new array and false for the values that does not pass the test
+				2. When a computational statement is present in return
+					original elements are first modified according to the computational statement and
+					then copied to new array.
 				does not change original array
 
+				var a = [1,2,3];
+				var b = a.map((a) => {
+					return a>1;
+				})					//b will be [false, true, true]
+
+				var b = a.map((a) => {
+					return a*2;			
+				})					//b will be [2,4,6]
+////////////////////////////////////////////////////////////////////////////////////////////////////
 .forEach((e) => {sum += a}) -> perform operation on every element of array
 				can not change original array as it only provides value of element in paramater, we can not manupilate the element, we can use its value
 
 .indexOf(elem) -> will retturn index of element in array or string if it is present else return -1
+
+encodeURIComponent(string) -> converts string to URL(like replacing space with %20 etc)
+decodeURIComponent(url) -> converts URL to string(like replacing %20 with space etc)

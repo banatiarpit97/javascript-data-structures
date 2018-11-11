@@ -53,3 +53,22 @@ Everything in js is objects like int, string, etc thats why we can invoke functi
 string.length, string.toUppercase() etc
 
 ////////////////////////////////////////////////////////////////////////////
+Object destructuring in ES6
+to create new variables from properties of existing objects
+
+var user = {
+    name:"arpit",
+    age:21
+}
+
+var {name} = user;
+console.log(name)   //prints arpit
+////////////////////////////////////////////////////////////////////////////
+
+in ES6, if name and value of property of object is same, we can emit colon and property
+
+var text = "hello"
+
+var obj = {text:text}
+is same as
+var obj = {text}

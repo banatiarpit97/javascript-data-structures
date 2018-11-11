@@ -17,7 +17,28 @@ function expression :
     //and it help in debugging -> instead of giving error for anonymous function, it would give name of function
 
 arrow function :
-    var name = () => { }
+    var name = (firstname) => { return "hello"+name;}
+
+    if ony 1 params -> no need of parenthesis
+    if only 1 statement in function definition, no need of return statement and curly braces
+
+    var name = firstname => "hello"+name
+
+    downside of arrow functions :
+        1. Arrow functions does not have a this binding, if it is used inside a global object, 
+        then it would have a this equal to global.
+            var user = {
+                name:"arpit",
+                hi: () => {
+                    console.log('hi', this.name);
+                }
+                function hi1(){
+                    console.log('hi', this.name);
+                }
+            }
+            user.hi();      //prints hi undefined
+            user.hi1();      //prints hi arpit
+        2. Does not have 'arguements' object of its own, takes it from the global or outer function
 
 IIFE:
     (function(){       //These are functions that are called immediately but can not be called again
@@ -102,3 +123,9 @@ is neither top level nor inside other functions.
         });
         // prints [ 10, 6, 3, 4, 1 ]
         console.log(lenArray);
+
+10. If we don't return anything from a function then 'undefined' is returned automatically
+
+11. Every functions has its own 'this' and 'arguements' keyword by default.
+    this -> refers to the function/object itself
+    arguements -> an object that contains all the arguements passed to the function in key-value form

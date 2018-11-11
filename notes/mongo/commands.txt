@@ -1,0 +1,38 @@
+insert a document:
+db.collections('coll_name').insertOne({name:"Arpit", age:21})
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+find document:
+db.collections('coll_name').find({name:"Arpit"})
+will return a cursor, to get results we need to convert it to array
+
+db.collections('coll_name').find({name:"Arpit"}).toArray().then((res) => {
+    console.log(res)
+})
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+delete document:
+db.collections('coll_name').deleteOne({name:"Arpit"})
+db.collections('coll_name').deleteMany({name:"Arpit"})
+
+to delete the document and also return the deleted document:
+db.collections('coll_name').findOneAndDelete({name:"Arpit"})
+
+all of the above methodsw return a promise and theoor result can be viewed by .then call
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+db.collections('coll_name').findOneAndUpdate(
+    {name:"Arpit"},         //to find 
+    $set:{                  //update is done using operators like set and inc
+        name:"Banati"
+    },
+    $inc:{
+        age:1
+    },
+    {                           //options
+        returnOriginal:false    
+        //by default it is true i.e would have returned original doc and not updated one
+    }
+)

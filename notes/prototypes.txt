@@ -2,8 +2,8 @@ javascript is prototype based language.
 Most languages like c++, java have class-based inheritance.
 Javascript has prototype-based inheritance.
 
-Every object has a prototype from which it inherits properties and methods.The prototype is also an
-object and hence inherits from another prototype and so on.this is prototype chain.
+Every js object(function, object..) has a prototype from which it inherits properties and methods.
+The prototype is also an object and hence inherits from another prototype and so on.this is prototype chain.
 At the top of properties chain is Object.prototype which is initialised when a js program starts
 executing.This prototype has methods like sort(), toString() etc.
 Object.prototype inherits from null.(i.e. prototype of Object.prototype is null)
@@ -18,6 +18,7 @@ so prototype chain works like scope chain
 
 THERE CAN BE ONLY ONE PROTOTYPE CHAIN, i.e. NO MULTIPLE INHERITANCE
 
+constructor functions are used to create prototypes
 //////////////////////////////////////////////////////////////////////////////////////////////
 new Array():    //built in
 Array -> Array.prototype -> Object.prototype -> null

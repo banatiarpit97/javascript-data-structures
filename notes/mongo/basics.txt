@@ -1,0 +1,17 @@
+in mysql set of records are stored in tables
+in nosql, set of records are stores in arrays which are called collections
+
+in mysql, every row is called records
+in nosql, every row is called document
+
+in mysql, there are columns
+in nosql, there are fields
+
+in mysql, every row in table will have same structure or schema
+in nosql, every document in collections need not have same schema
+//////////////////////////////////////////////////////////////////////
+
+There can be many collections in a databse.
+
+No need to create db or collections before, whenever first record is inserted
+into it, mongo created it automatically

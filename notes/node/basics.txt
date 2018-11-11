@@ -1,0 +1,24 @@
+in node window becomes global
+document becomes process
+
+non-blocking I/O - asynchronus operations
+
+the file we require executes the moment we include it in our file.
+
+'module' is an object that is available by default in node.
+module has a property 'exports' which is also an object.
+Whatever is present in module.exports can be accessed by any file that requires it.
+
+npm init - makes package.json for our project
+
+When we require a module, node first checks if there is core module(like fs, http) by that name,
+if not found then it checks in the 'node_modules' folder
+If we want to require our local files, we can't just give name of file even if it is same directory
+we need to give a relative path like './notes'
+
+passing command line args:
+node file_name arg1 arg2 ...        //separated by space
+
+process.argv -> array of command line arguements starting from 3rd elem
+1st elem is path of node
+2nd elem is name of the file

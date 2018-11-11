@@ -1,0 +1,71 @@
+npm install mongoose --save
+
+in node file:
+    const mongoose = require('mongoose');
+
+    mongoose.Promise = global.Promise;
+    mongoose.connect('mongodb://localhost:27017/db_name');
+
+    var User = mongoose.model('model_name', {
+        name: {
+            type:String,
+            required:true                            //validators
+            minLength:1,
+            trim: true                      //trin leading and ending whitespaces
+        },
+        age:{
+            type:age
+        },
+        authenticated:{
+            type:String,
+            default:null
+        }
+    });
+    var newUser = new User({
+        name:"Arpit"
+    });
+
+    newUser.save().then((doc) => {
+        console.log(doc)
+    }, (err) => {
+        console.log(err)
+    });
+
+////////////////////////////////////////////////////////////////////////////////////////////
+Mongoose commands :
+
+//User -> model
+User.find({_id:id}).then((docs) => {     //we can pass id as a string unline mongo
+    if(docs){
+        console.log(docs)                   //directly return an array unlike mongo(cursor)
+    }
+})
+
+User.findOne({_id:id}).then((docs) => {     //will get only one item
+    if(docs){
+        console.log(docs)          
+    }                 
+})
+
+User.findById(id).then((docs) => {     //we can pass id as a string unline mongo
+    if(docs){
+        console.log(docs)          
+    }                   
+})
+
+User.remove({_id:id})
+User.findOneAndRemove({_id:id})         //returns the deleted doc
+User.findByIdAndRemove(id)              //returns the deleted doc
+
+User.findByIdAndUpdate(id, 
+    {
+        $set:{
+            name:"arpit"
+        }
+    },
+    {                       //options
+        new:true            //will return updated doc and not the previous one
+    }
+).then((user) => {
+    console.log(user)
+})

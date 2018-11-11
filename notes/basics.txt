@@ -13,6 +13,27 @@ var a = "Arpit" is treated as 2 lines while compilation.
 Firstly declaration(registering of variables) takes place and after that 
 initialization.
 
+hoisting - variable and function declaration are moved to top of the current scope
+        the declaration part (var abc) is hoisted not the assignment part(=20).
+
 Actually hoisting does not happen, its just a concept to understand 2 passes
 of compiler.In first pass, all vars are registered and that is what when
 call hoisting
+
+Javascript is a single threaded language, it handles asynchronus calls using callback queue and event loop
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+MVC PATTERN :
+
+const view = (() => {
+
+})();
+
+const model = (() => {
+
+})();
+
+const controller = ((view, model) => {
+
+})(view, model);
+//generally, instead of wrapping view, model in iife, they are defined in separate files.

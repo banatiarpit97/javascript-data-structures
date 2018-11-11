@@ -1,0 +1,30 @@
+There are 3 components working behind the scene
+1. Call stack
+2. Browser/Node apis
+3. Callback queue
+
+Call stack can only execute one thing at a time.
+Only call stack can execute statements.
+
+Whenever compiler reaches to a line, it moves it into to call stack, if the statement is synchronus, it
+is executed immediately and removed from call stack.
+If it an api like, ajax, setTimeout, keyboard/mouse handler... then it is moved to apis component.
+statement waits there for a specified time in case of setTimeout or till the response arrives in an
+ajax request.
+When it is done, it is moved to the callback queue, where it waits for its execution.
+
+Event loop is the management system between call stack and callback queue.
+Whenever callback queue receives an item, event loop checks the call stack, if the call stack is
+empty, then event loop moves the statement from callback queue to call stack but if there is 
+something already present in call stack, we would have to wait until the call stack is empty and 
+only then the front of queue can be moved to call stack where it will be executed.
+
+So, setTimeout(() => {console.log("hello")}, time)
+    here time represents the time after which, statement/function will be moved from apis section
+    to callback queue.It does not mean that the statement inside setTimeout will be executed after
+    exactly the time mentioned.It can, but only if call stack is empty at that time otherwise it has
+    to wait for call stack to get empty.
+    So the time is the minimum time, after which the statements inside will execute.
+
+    That is why we sometime use setTimeout(() => {console.log("hello")}, 0)
+    to delay the execution.

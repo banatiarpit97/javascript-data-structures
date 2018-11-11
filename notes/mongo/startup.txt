@@ -1,0 +1,46 @@
+installation :(in terminal)
+    sudo apt install mongodb-server
+
+Start server :(in terminal)
+    mongod --dbpath ~/mongo-data
+    //because i have creatd folder mongo-data in home dir that will store all data
+    //if not starting, type 'sudo service mongod stop'
+    
+connect through terminal :(in other terminal)
+    mongo
+    //now everything typed in terminal will be executed by mongo
+
+////////////////////////////////////////////////////////////////////
+
+connect through node :
+    npm install mongodb --save
+
+    in node file :
+        const MongoClient = require('mongodb').MongoClient
+        MongoClient.connect(url, (err, client) => {
+            //url is url of databse we want to use
+            //for localhost - mongodb://localhost:27017/db_name
+
+            if(err){
+                console.log('error connecting to db')
+                return;
+            }
+            console.log('Connected')
+            db = client.db('db_name');
+
+            db.collection('coll_name').insertOne(
+                {
+                    text:"first one",
+                    completed:false
+                },
+                (err, result) => {
+                    if(err){
+                        console.log('unable to insert', err);
+                        return;
+                    }
+                    console.log(JSON.stringify(result.ops))
+                }
+            );
+
+            client.close();
+        })

@@ -3,6 +3,13 @@ and paramters of outer functions (even after the outer function has returned)
 
 because of closures, we can pass functions as paramters, we can have functions in setTimeout, event handlers...
 so closure is a necessity in js
+
+inner function has access to:
+    its local variables
+    parent function's local variable and paramters
+    global variables
+
+outer function can not access local variables of inner function
 ///////////////////////////////////////////////////////////////////////////
 
 function outer(){
@@ -178,10 +185,11 @@ foo.baz();  //prints bar
 foo.baz1();  //prints bar1
 
 ES6 makes it easy for creating the module pattern as now we don't need the outer function.The file works as outer function
+Our code in the file is automatically wrapped in an IIFE(can be seen in debugging mode)
     var o = {bar:"bar"};    //private property
     export function bar(){
         return o.bar;
     }
 //we can have as many export statements as needed, and all of them will be exported.
-//they can be omported in other file like:
+//they can be imported in other file like:
     import {bar} from file_name;

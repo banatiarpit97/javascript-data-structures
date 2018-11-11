@@ -1,0 +1,8 @@
+keys should be in double quotes(only strings allowed)
+
+values :
+strings -> double quotes
+boolean, integer, array, objects -> no quotes
+
+JSON.stringify(arr/object) -> returns json 
+JSON.parse(json) -> returns array/object

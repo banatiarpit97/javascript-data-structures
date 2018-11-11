@@ -1,0 +1,30 @@
+There is an '_id' field in every document inserted by mongo by default.
+The is unique for every document.
+
+The id(12 bytes) is made up of :
+    timestamp - first 4 bytes
+    machine id - 3 bytes
+    process id - 2 bytes
+    counter - 3 bytes
+
+to get timestamp from id - id.getTimestamp();
+this means that we don't need to store the time at which the document was inserted
+
+If we want to specify our own '_id', we can give that in the object while inserting it.
+
+Extracting ObjectId from mongodb :
+    const ObjectID = require('mongodb').ObjectID;
+    var id = new ObjectID() //will give a unique id
+
+if we need to find a document by id, we just can put that as a string
+because id is stored as onject in collections
+
+db.collections('coll_name').find({_id:"6tc6d76t374r"})                //will not work
+db.collections('coll_name').find({_id:new ObjectID("6tc6d76t374r")})       //will work
+
+convert string to Object -> new ObjectID("6tc6d76t374r")
+convert Object to string -> new ObjectID("6tc6d76t374r").toHexString();
+
+to check if id is valid or not:
+ObjectID.isValid(id);           //return true if valid otherwise false
+//id param is string not object
