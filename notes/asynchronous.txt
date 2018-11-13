@@ -186,9 +186,32 @@ If we have more than 1 promise, we want to wait for, we use Promise.all
     Promise.all([p1, p2, p3]).then(function(students) {
         console.log("All the students are here: " + students);
     });
+
+PROBLEMS IN PROMISES :
+    1. chaining of promises can be tedious
+    2. while chaining, then function would not have access to params of previous then
+        const fun1 = (id) => {
+            return fun2(id).then((user) => {        //'user' var
+                return fun3(id).then((grade) => {
+                    //we can not acces 'user' var here
+                })
+            })
+        }
+
+    we can solve the 2nd pt by making a local variable of function
+        const fun1 = (id) => {
+            var temp;
+            return fun2(id).then((user) => {        //'user' var
+                temp = user;
+                return fun3(id).then((grade) => {
+                    //use 'temp' here
+                })
+            })
+        }
 ////////////////////////////////////////////////////////////////////////////
 
 ASYNC-AWAIT functions(uses implicit promises):
+(solves problems of promises)
 
 async function asyncCall() {        //now this function will behave as async
   console.log('calling');
@@ -204,6 +227,54 @@ and returns the resolved value.
 
 Remember, the await keyword is only valid inside async functions. 
 If you use it outside of an async function's body, you will get a SyntaxError.
+
+if we add 'async' prefix to any function then that function would return promise only
+return statement is async function is same as reslve in Promise and will be handled using .then
+throw new Error(str) in async function is same is reject in Promise and will be handled by .catch
+
+chaining of promises can be replaced by sequence of await statements
+    const fun1 = async (id) => {
+        var user = await fun2(id);
+        var grade = await fun3(user);   //this line will execute only after prev line has resolved
+        //and that is why user variable will be available 
+
+        console.log(user, grade)    //both variables are available unlike promises
+    }
+
+assume fun2 return promise :
+    var user = fun2(id);    //without await
+    //user would contain a promise and to get actual value, we need to do user.then
+
+    var user = await fun2(id);  //with await
+    //user would contain actual value passed using resolve/reject and not promise(no need to call then) 
+
+async can be used with all types of function:
+    async function f1(){}           //normal
+    var f1 = async function(){}     //expression
+    var f1 = async () => {}         //arrow
+    function a(a, b, async (req, res) => {})    //callbacks  
+
+await statement can be used without a variable also:
+    const fun1 = async (id) => {
+        await fun2(id);
+        console.log('hello')
+    }
+
+error handling in async-await:
+    put asynchronus ir even synchronus statement in try catch block
+    const fun1 = async (id) => {
+        try{
+            var user = await fun2(id);
+            var grade = await fun3(user);
+            console.log(user, grade);
+        }
+        catch(e){
+            throw new Error("error")
+        }
+    }
+
+////////////////////////////////////////////////////////////////////////////
+callbacks(callback hell, inversion of control) -> Promises(chaining) -> async-await
 ////////////////////////////////////////////////////////////////////////////
 
 PROMISES VS OBSERVABLES :
