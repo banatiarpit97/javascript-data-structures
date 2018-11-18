@@ -1,7 +1,8 @@
 Creating objects : 
 
 var a = { }  or 
-var a =  new Object();
+
+var a =  new Object(); then a.prop = value;
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -72,3 +73,68 @@ var text = "hello"
 var obj = {text:text}
 is same as
 var obj = {text}
+////////////////////////////////////////////////////////////////////////////
+
+Property names can be a string or a number, but if the property name is a number,
+it has to be accessed with the bracket notation.
+
+var ageGroup = {30: "Children", 100:"Very Old"};
+console.log(ageGroup.30) // This will throw an error
+console.log(ageGroup["30"]); // Children
+////////////////////////////////////////////////////////////////////////////
+only objects and arrays are passed as refernce, number, string, booleans are passed by value
+////////////////////////////////////////////////////////////////////////////
+
+Each data property (object property that store data) has not only the name-value pair,
+but also 3 attributes (the three attributes are set to true by default):
+— Configurable Attribute: Specifies whether the property can be deleted or changed.
+— Enumerable: Specifies whether the property can be returned in a for/in loop.
+— Writable: Specifies whether the property can be changed.
+////////////////////////////////////////////////////////////////////////////
+
+While you can use some reserved word such as “for” as property names in your objects,
+it is wise to avoid this altogether.
+////////////////////////////////////////////////////////////////////////////
+
+console.log(prop in object)     //return true if prop exist in object or is inherited from any of prototype
+console.log(object.hasOwnProperty('prop'))  //return true only if prop exists on object itself     
+                            //will return false if inherited
+
+////////////////////////////////////////////////////////////////////////////
+for-in loop iterates over all enumerable properties(own and inherited)
+but properties inherited from Object.prototype are not Enumerable
+////////////////////////////////////////////////////////////////////////////
+To delete a property from an object, you use the delete operator. 
+Only properties that are defined in object itself and that defined in constructor function using this
+keyword can be deleted.(Props in constructor function are not inherited, they are created every time
+we create an object but props defined in proto are inherited)
+You cannot delete properties that were inherited(Defined in proto), nor can you delete properties with their
+attributes set to configurable. You must delete the inherited properties on the prototype object 
+(where the properties were defined). Also, you cannot delete properties of the global object, 
+which were declared with the var keyword.
+
+delete obj.prop;        //always returns true(whether prop deleted or not)
+
+////////////////////////////////////////////////////////////////////////////
+Borrowing methods from objects:
+
+    var first = {
+        scores  :[20, 34, 55, 46, 77],
+        avgScore:null,
+    }
+
+    var second = {
+        scores  :[900, 845, 809, 950],
+        avgScore:null,
+        avg :function () {
+            var sum;
+            this.scores.forEach((elem) => {
+                sum +=elem;
+            });
+            this.avgScore = sum/this.scores.length;
+        }
+    }
+    first.avgScore = second.avg();
+    //if we borrow method like above, 'this' will refer to 'second'
+
+    to correct -> first.avgScore = second.avg().bind(first);

@@ -17,7 +17,7 @@ hoisting - variable and function declaration are moved to top of the current sco
         the declaration part (var abc) is hoisted not the assignment part(=20).
 
 Actually hoisting does not happen, its just a concept to understand 2 passes
-of compiler.In first pass, all vars are registered and that is what when
+of compiler.In first pass, all vars are registered and that is what we
 call hoisting
 
 Javascript is a single threaded language, it handles asynchronus calls using callback queue and event loop

@@ -28,7 +28,7 @@ function example(){
 
 6. redeclaring variable does not alter its value or cause an error
     var a = "red"
-    var a;      //is ignored
+    var a;      //is ignored('var' is ignored, initialisation is not)
     a //still red
 
     but this is not the case with function, functin are overriden if declared again
@@ -121,3 +121,39 @@ function example(){
     function foo(){console.log(2)}      //overrides prev one
     var foo;        //is ignored because redacalaration
     foo=2;
+
+16. Note that all functions in setTimeout are executed in the global scope. 
+    This is a tricky bit; consider this:
+
+        var highValue = 200;
+        var myObj = {
+            highValue: 20,
+            calculateIt: function () {
+                setTimeout (function  () {
+                    console.log(this.highValue);        //prints 200
+                }, 2000);
+            }
+        }
+
+    The use of the "this" object inside the setTimeout function refers to the Window object, 
+    not to myObj
+
+17. function declaration takes precedence over variable declarations (but not over variable assignment).
+        var myName;
+        function myName () {
+            console.log ("Rich");
+        }
+
+        // The function declaration overrides the variable name
+        console.log(typeof myName); // function
+        /////////////////////////////////////////////////////////
+        var myName = "Richard"; 
+        // This is the variable assignment (initialization) that overrides the function declaration.
+        function myName () {
+            console.log ("Rich");
+        }
+
+        console.log(typeof myName); // string 
+
+        So function overrides a variable if not initialised but variable overrides function if variable
+        is initialised

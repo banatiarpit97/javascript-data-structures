@@ -3,6 +3,8 @@ an HTML element or text.
 DOM is used by js to query or manupilate HTML
 Topmost element is html then it has 2 children head and body and so on
 
+DOM elements are also objects, thats why 'this' is bound to the element in event listeners
+
 To query html :
 querySelector("selector")
 querySelectorAll("selector")

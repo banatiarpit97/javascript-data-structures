@@ -9,6 +9,11 @@ inner function has access to:
     parent function's local variable and paramters
     global variables
 
+inner function does not have access to:
+    'this' keyword of outer function
+    'arguements' keyword of outer function
+the above problems can be solved by making a variable of outer function and assigning this/arguements to it
+
 outer function can not access local variables of inner function
 ///////////////////////////////////////////////////////////////////////////
 
@@ -136,6 +141,10 @@ for(var i=1;i<=5;i++){
 }
 // we would expect this to print 1 after 1 sec, 2 after 2 sec...but it prints 6 every time.
 //this is because, this behaves as 5 setTimeouts one after the other and every setTimeout has same scope.
+//Because inner function(closures) has access to the updated value of outer variable.The value that closure gets
+depends upon when it was called.
+Since the inner function i.e. setTimeout will be called after the for loop is executed completely
+the value of 'i' inside setTimeout will be what 'i' is after the for loop.
 //to behave as we want, we use IIFE as it creates its own scope.
 for(var i=1;i<=5;i++){
     (function(i){
@@ -152,9 +161,9 @@ for(let i=1;i<=5;i++){
     }, i*1000)
 }
 ////////////////////////////////////////////////////////////////////////////
-MODULE PATTERN USING closures i.e. creating modules, creating private, public memebers(abstraction):
+MODULE PATTERN USING closures and iife i.e. creating modules, creating private, public memebers(abstraction):
 Characterstics of module pattern :
-1. there must be an outer enclosing function
+1. there must be an outer enclosing function(iife)
 2. outer function must return atleast one inner function.
 
 var foo = (function(){
@@ -193,3 +202,11 @@ Our code in the file is automatically wrapped in an IIFE(can be seen in debuggin
 //we can have as many export statements as needed, and all of them will be exported.
 //they can be imported in other file like:
     import {bar} from file_name;
+
+////////////////////////////////////////////////////////////////////////////
+
+When we pass a callback function as an argument to another function, the callback is executed
+at some point inside the containing function’s body just as if the callback were defined in the
+containing function. This means the callback is a closure.As we know, closures have access 
+to the containing function’s scope, so the callback function can access the containing functions’
+variables, and even the variables from the global scope.

@@ -13,3 +13,5 @@ at the top of page.
 3. 'with' keyword/scope is not allowed.
 
 4. Default value of 'this' is undefined.
+
+5. No hoisting is done, variables and functions need to be defined before they are used

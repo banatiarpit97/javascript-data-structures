@@ -53,6 +53,8 @@ and is invoked or executed inside the other function.
 
 setTimeout(cb, 1000);   //'setTimeout' is async code, 'while' is synchronus
 
+callbacks are used to refactor your code for Abstraction, Maintainability, and Readability.
+
 there are 2 problems with callbacks:
     1. callback hell - when there are nested callbacks i.e. a callback function to be executed when
         previous callback function is done and so on.
@@ -124,6 +126,9 @@ Methods on Promise:
 2. Promise.race(iterable)
 3. Promise.resolve(value)
 4. Promise.reject(reason)
+
+If we are certain about the result of promise and we don't need to do any processing, we can directly use
+function like Promise.reject() or Promise.resolve() without creating function like new Promise...
 
 Create a function that returns a promise(i.e. a function that executed async code):
 getUser(){

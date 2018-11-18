@@ -8,6 +8,31 @@ At the top of properties chain is Object.prototype which is initialised when a j
 executing.This prototype has methods like sort(), toString() etc.
 Object.prototype inherits from null.(i.e. prototype of Object.prototype is null)
 
+every JavaScript function has a prototype property (this property is empty by default)
+This prototype property is not enumerable; that is, it isn’t accessible in a for/in loop but can accessed
+by __proto__
+The second concept with prototype in JavaScript is the prototype attribute. 
+Think of the prototype attribute as a characteristic of the object; this characteristic tells us
+the object’s “parent”. In simple terms: An object’s prototype attribute points to the 
+object’s “parent”—the object it inherited its properties from. The prototype attribute is 
+normally referred to as the prototype object, and it is set automatically when you create a new object.
+To expound on this: Every object inherits properties from some other object, 
+and it is this other object that is the object’s prototype attribute or “parent.” 
+This prototype attribute can be accesses using __proto__
+So, when a function is created, a new prototype is made and is empty by default
+When we create an object, no new prototype is created, the object is just linked to already present
+prototype from which it inherits properties.
+all objects that inherit from another object also inherit a constructor property. 
+And this constructor property is simply a property (like any variable) that holds or 
+points to the constructor of the object.
+
+If an object is created with an object literal (var newObj = {}), it inherits properties 
+from Object.prototype and we say its prototype object (or prototype attribute) 
+is Object.prototype(constructor of created object is Object())
+An object created with new Fruit () will have Fruit.prototype as its prototype and constructor
+of object created is Fruit();
+
+
 So prototype is just an object that contains properties and methods that the object it is bounded
 to can have.An object has properties and methods equal to properties and methods present in the
 object itself and what it inherits from its prototype and what its prototype inherits from parent
@@ -26,15 +51,17 @@ Array -> Array.prototype -> Object.prototype -> null
 new Food();     //not built in
 Food -> Food.prototype -> Object.prototype -> null
 
+All built-in constructors (Array (), Number (), String (), etc.) were created from the 
+Object constructor, and as such their prototype is Object.prototype.
 //////////////////////////////////////////////////////////////////////////////////////////////
 Manipulating prototype of newly created constructor functions
 
 function food(name, color, weight){
-    this.name = name;
+    this.name = name;                   //1st method of adding props
     this.color = color;
     this.weight = weight;
 }
-food.prototype.details = function(){    
+food.prototype.details = function(){    //2nd method of adding props
         return `${this.name} is of ${this.color} color`;
 }
 //this adds details method to food's prototype, which means that every food object will have access
@@ -43,9 +70,13 @@ We should add methods to prototype instead of directly adding it to constructor 
 If we define methods in constructor function, then it will be created every time a new object is created.
 Whereas if we define them in prototype, method are not created every time, instead they are just inherited.
 This causes big performance issues.
+So, the properties should be defined in constructor function using 'this' keyword because it has to
+be unique for every object and should be created every time an object is created whereas functions/methods
+should be placed inside prototypes because we don;t want them to be vreated every time but it should
+be inherited by each object.
 
 object_name.hasOwnPropert(prop_name) -> return true if prop is defined in object, return false if prop
-is defined in its prototype or any other pppppppppppppppppparent prototype
+is defined in its prototype or any other parent prototype
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 Manipulating prototype of built in objects
@@ -136,3 +167,53 @@ constructor_function_name.prototype.method_name.call(obj);
  
 while going above the prototype chain, 'this' does not change, 
 it still remains what it was when first assigned
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+ways to add methods to prototype:
+    1.  Circle.prototype.diameter = function(){
+            return this.radius*2;
+        }
+    2.  Circle.prototype = {
+            constructor : Circle,
+            diameter : function(){
+                return this.radius*2;
+            }
+        }
+
+    in first one, we are adding methods to prototype
+    whereas in second one, we are completely overriding the prototype object i.e. already existing
+    methods on prototype will be deleted.
+    disadvantage of overwriting the prototype is that the constructor property no longer points
+    to the prototype, so we have to set it manually.
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+    Object.create = function (o) {
+        //It creates a temporary constructor F()
+    function F() { }
+        //And set the prototype of the this constructor to the parametric (passed-in) o object
+        //so that the F() constructor now inherits all the properties and methods of o
+    F.prototype = o;
+
+        //Then it returns a new, empty object (an instance of F())
+        //Note that this instance of F inherits from the passed-in (parametric object) o object. 
+        //Or you can say it copied all of the o object's properties and methods
+    return new F();
+    }
+
+    So Object.create is the way to use inheritance in js.
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+Everything inside the constructor function that is defined without 'this' keyword is a private 
+property and can not be accessed from outside or even from its object.
+//////////////////////////////////////////////////////////////////////////////////////////////
+properties of constructor function can not be accessed without creating an object
+    function obj (age){
+        this.age = 21;
+        yoyo = "banati";    //private property
+    }
+    var a = new obj(21);
+
+    console.log(obj.yoyo, obj.age);     //undefined, undefined
+    console.log(a.yoyo, a.age);     //undefined, 21
+
+//////////////////////////////////////////////////////////////////////////////////////////////
