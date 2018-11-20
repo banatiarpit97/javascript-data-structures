@@ -1,0 +1,26 @@
+REPL stands for Read Eval Print Loop and it represents a computer environment like a 
+Windows console or Unix/Linux shell where a command is entered and the system responds 
+with an output in an interactive mode. Node.js or Node comes bundled with a REPL environment. 
+It performs the following tasks −
+    Read − Reads user's input, parses the input into JavaScript data-structure, and stores in memory.
+    Eval − Takes and evaluates the data structure.
+    Print − Prints the result.
+    Loop − Loops the above command until the user presses ctrl-c twice.
+
+REPL can be started by simply running node on shell/console without any arguments as follows.
+
+You can make use variables to store values and print later like any conventional script. 
+If var keyword is not used, then the value is stored in the variable and printed. 
+Whereas if var keyword is used, then the value is stored but not printed. 
+You can print variables using console.log().
+
+Statements are not independent, present Statement know about vars and functions executed before it
+we can also import modules in it like we do in files.
+
+ou can use underscore (_) to get the last result
+
+ctrl + c − terminate the current command.
+ctrl + c twice − terminate the Node REPL.
+ctrl + d − terminate the Node REPL.
+.save filename − save the current Node REPL session to a file.
+.load filename − load file content in current Node REPL session.

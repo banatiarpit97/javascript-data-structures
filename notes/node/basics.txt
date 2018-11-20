@@ -1,3 +1,26 @@
+Node.js = Runtime Environment + JavaScript Library
+
+All APIs of Node.js library are asynchronous, that is, non-blocking. 
+It essentially means a Node.js based server never waits for an API to return data. 
+The server moves to the next API after calling it and a notification mechanism of Events of Node.js 
+helps the server to get a response from the previous API call.
+In Node Application, any async function accepts a callback as the last parameter and a 
+callback function accepts an error as the first parameter.
+
+Node.js uses a single threaded model with event looping. Event mechanism helps the server to 
+respond in a non-blocking way and makes the server highly scalable as opposed to traditional 
+servers which create limited threads to handle requests. Node.js uses a single threaded program 
+and the same program can provide service to a much larger number of requests than traditional 
+servers like Apache HTTP Server.
+
+Node.js applications never buffer any data. These applications simply output the data in chunks.
+
+The __filename represents the filename of the code being executed. 
+This is the resolved absolute path of this code file. For a main program, this is not necessarily
+the same filename used in the command line. The value inside a module is the path to that module file.
+
+The __dirname represents the name of the directory that the currently executing script resides in.
+
 in node window becomes global
 document becomes process
 
@@ -22,3 +45,44 @@ node file_name arg1 arg2 ...        //separated by space
 process.argv -> array of command line arguements starting from 3rd elem
 1st elem is path of node
 2nd elem is name of the file
+
+setting up server :
+    http.createServer(function (request, response) {
+    response.writeHead(200, {'Content-Type': 'text/plain'});
+    
+    response.end('Hello World\n');
+    }).listen(8081);
+
+//////////////////////////////////////////////////////////////////////////////////////
+can not write/append to response after calling res.end();
+//////////////////////////////////////////////////////////////////////////////////////
+
+routing using node:
+    http.createServer(function (request, response) {
+        if(req.url === '/' && req.method === 'GET'){
+            res.json({name:"arpit"})
+            return res.end();
+        }
+    }).listen(8081);
+
+//////////////////////////////////////////////////////////////////////////////////////
+Data is send to node server in chunks.Steams are used to send a part of data at a time so that
+we don't have to wait for complete data before start the processing.
+We can not directly access the chunk of data as it is not readable by us.
+Buffers are used to store the chunks of data :
+
+    const body = [];
+    req.on('data', (chunk) => {
+        body.push(chunk);
+    })
+    req.on('end', () => {
+        const parsedBody = Buffer.concat(body);
+        console.log(parsedBody);
+    })
+//////////////////////////////////////////////////////////////////////////////////////
+a request is interfered with another request because on each request a separate callback function
+is called and every function has its different scope.
+
+When we require a file/module, nodejs makes a cached copy of it.That means, if we change the 
+imported file, we change the cached file and not the original one.So the changes will stay 
+for that current session but will not be permanent.

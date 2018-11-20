@@ -20,6 +20,21 @@ var a = {
 a.name();       //parenthesis to call the function
 a.age(21);
 
+if we use arrow functions inside objects, then 'this' keyword would not work as expected.
+var a = {
+    prop: "string",
+    name : () => {
+        return this.prop;       //return undefined(as 'this' is global)
+    }
+}
+
+we can also use named functions(without key and function keyword)
+var a = {
+    prop: "string",
+    name(){
+        return this.prop;
+    }
+}
 ////////////////////////////////////////////////////////////////////////////
 
 We can add properties/functions to objects dynamically:
@@ -64,6 +79,17 @@ var user = {
 
 var {name} = user;
 console.log(name)   //prints arpit
+
+in function's parameters :
+    function a({name}){
+        console.log(name)   //'arpit'
+    }
+    a(user);
+
+We can also destructure arrays :(idea behind swapping vars)
+    var arr = [1,2];
+    var [n, m] = arr;
+    console.log(n, m)   //1 2
 ////////////////////////////////////////////////////////////////////////////
 
 in ES6, if name and value of property of object is same, we can emit colon and property

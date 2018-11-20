@@ -1,0 +1,94 @@
+The res object represents the HTTP response that an Express app sends when it gets an HTTP request.
+
+Response Object Properties
+Following is the list of few properties associated with response object.
+
+res.app
+    This property holds a reference to the instance of the express application that is using the middleware.
+
+res.headersSent
+    Boolean property that indicates if the app sent HTTP headers for the response.
+
+res.locals
+    An object that contains response local variables scoped to the request
+
+res.append(field [, value])
+    This method appends the specified value to the HTTP response header field.
+
+res.attachment([filename])
+    This method is used to send a file as an attachment in the HTTP response.
+
+res.cookie(name, value [, options])
+    This method is used to set cookie name to value. The value parameter may be a string or object converted to JSON.
+
+    res.cookie('name', 'tobi', { domain: '.example.com', path: '/admin', secure: true, maxAge: 900000 });
+
+res.clearCookie(name [, options])
+    This method is used to clear the cookie specified by name.
+    res.clearCookie('name', { path: '/admin' });
+
+res.download(path [, filename] [, fn])
+    This method is used to transfer the file at path as an "attachment". 
+    Typically, browsers will prompt the user for download.
+
+    res.download('/report-12345.pdf', 'report.pdf');
+
+res.end([data] [, encoding])
+    This method is used to end the response process.
+
+res.format(object)
+    This method is used to perform content-negotiation on the 
+    Accept HTTP header on the request object, when present.
+
+res.get(field)
+    This method is used to return the HTTP response header specified by field.
+
+    res.get('Content-Type');
+
+res.json([body])
+    This method is used to send a JSON response.
+
+res.jsonp([body])
+    This method is used to send a JSON response with JSONP support.
+
+res.links(links)
+    This method is used to join the links provided as properties of 
+    the parameter to populate the response’s Link HTTP header field.
+
+    res.links ({
+    next: 'http://api.example.com/users?page=2',
+    last: 'http://api.example.com/users?page=5'
+    });
+
+res.location(path)
+    This method is used to set the response Location HTTP header field based on the specified path parameter.
+
+res.redirect([status,] path)
+    This method is used to redirect to the URL dervied from the specified path, 
+    with specified HTTP status code status.
+
+res.render(view [, locals] [, callback])
+    This method is used to render a view and sends the rendered HTML string to the client.
+
+res.send([body])
+    This method is used to send the HTTP response.
+
+res.sendFile(path [, options] [, fn])
+    This method is used to transfer the file at the given path. Sets the Content-Type 
+    response HTTP header field based on the filename’s extension.
+
+res.sendStatus(statusCode)
+    This method is used to set the response HTTP status code to statusCode and 
+    send its string representation as the response body.
+
+res.set(field [, value])
+    This method is used to set the response’s HTTP header field to value.
+    res.set('Content-Type', 'text/plain');
+
+res.status(code)
+    This method is used to set the HTTP status for the response.
+
+res.type(type)
+    This method is used to set the Content-Type HTTP header to the MIME type.
+
+    res.type('.html');              // => 'text/html'

@@ -36,9 +36,29 @@ a.include(element)  return true or false
 
 Spread operator :
 a = [1,2,3]
-..a gives 1,2,3 separately and not as array
+...a gives 1,2,3 separately and not as array
 
 spread operator can be used to create copy of an array(not reference)	:
 	var a = [1,2,3];
 	var b = [...a];
 	now be is an independent array and modifications on b will not affect a(if we did b = a, then b would be reference of a)
+
+	same is true for objects
+	var a = {
+		name:"arpit"
+		age:21
+	}
+	var b = {...a};
+
+/////////////////////////////////////////////////////////////////////////////////////////
+Spread and rest operator are same syntax wise but are opposite in functionality
+
+spread - When we wantto extract each element from array/objects
+		var a = [1,2,3];
+		var b = [...a];
+
+rest - When we want to combine many elements in an array
+		function a(...arr){
+
+		}
+		a(1,2,4,5)

@@ -19,7 +19,7 @@ function expression :
 arrow function :
     var name = (firstname) => { return "hello"+name;}
 
-    if ony 1 params -> no need of parenthesis
+    if ony 1 params -> no need of parenthesis(if 0 params, then required)
     if only 1 statement in function definition, no need of return statement and curly braces
 
     var name = firstname => "hello"+name

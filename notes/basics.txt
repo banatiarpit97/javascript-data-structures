@@ -3,6 +3,9 @@ JIT - just in time compiler.It defers the compilation.
         it just stores function in memory.
         function will be compiled when it is called the first time.
 
+V8 takes Javascript code as input and compiles it to Machine code.
+V8 is written is c++;
+
 Javascript compiler takes 2 passes to run the source code.
 in first pass, it does things as declaration, hoisting of var, function etc...
 and in seconds pass, it executes each line like an interpreter and does work like initialization, execution.

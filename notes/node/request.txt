@@ -1,0 +1,84 @@
+The req object represents the HTTP request and has properties for the request query string, 
+parameters, body, HTTP headers, and so on.
+
+req.app
+    This property holds a reference to the instance of the express application that is using the middleware.
+
+req.baseUrl
+    The URL path on which a router instance was mounted.
+
+req.body
+    Contains key-value pairs of data submitted in the request body. 
+    By default, it is undefined, and is populated when you use body-parsing middleware such as body-parser
+
+req.cookies
+    When using cookie-parser middleware, this property is an object that contains cookies 
+    sent by the request.
+
+req.fresh
+    Indicates whether the request is "fresh." It is the opposite of req.stale.
+
+req.hostname
+    Contains the hostname from the "Host" HTTP header.
+
+req.ip
+    The remote IP address of the request.
+
+req.ips
+    When the trust proxy setting is true, this property contains an array of IP addresses 
+    specified in the “X-Forwarded-For” request header.
+
+req.originalUrl
+    This property is much like req.url; however, it retains the original request URL, 
+    allowing you to rewrite req.url freely for internal routing purposes.
+
+req.params
+    An object containing properties mapped to the named route “parameters”. 
+    For example, if you have the route /user/:name, then the "name" property is available as req.params.name. 
+    This object defaults to {}.
+
+req.path
+    Contains the path part of the request URL.
+
+req.protocol
+    The request protocol string, "http" or "https" when requested with TLS.
+
+req.query
+    An object containing a property for each query string parameter in the route.
+
+req.route
+    The currently-matched route, a string.
+
+req.secure
+    A Boolean that is true if a TLS connection is established.
+
+req.signedCookies
+    When using cookie-parser middleware, this property contains signed cookies sent by the 
+    request, unsigned and ready for use.
+
+req.stale
+    Indicates whether the request is "stale," and is the opposite of req.fresh.
+
+req.subdomains
+    An array of subdomains in the domain name of the request.
+
+req.xhr
+    A Boolean value that is true if the request’s "X-Requested-With" header field is “XMLHttpRequest”, indicating that the request was issued by a client library such as jQuery.
+
+req.accepts(types)
+    This method checks if the specified content types are acceptable, based on the 
+    request’s Accept HTTP header field.
+    req.accepts('html');
+
+req.get(field)
+    This method returns the specified HTTP request header field.
+    req.get('Content-Type');
+
+req.is(type)
+    This method returns true if the incoming request’s "Content-Type" HTTP header field matches 
+    the MIME type specified by the type parameter.
+    req.is('html');
+
+req.param(name [, defaultValue])
+    This method returns the value of param name when present.
+    req.param('name')

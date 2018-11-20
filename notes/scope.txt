@@ -22,6 +22,8 @@ function example(){
 
 4. let and const are block scoped(remain inside if, for...)
     (and are not hoisted)
+    we need to initialise const variable while declaring it.
+    if we try to change a const value, we get an error
 
 5. declaring multiple varibales in a line, 
         var a = "red", b = 1, c;
@@ -157,3 +159,6 @@ function example(){
 
         So function overrides a variable if not initialised but variable overrides function if variable
         is initialised
+
+18. const a = [1,2,3];
+    we can edit the array(add, edit, remove...) but er can change the variable(because declared with const)
