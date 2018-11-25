@@ -1,0 +1,17 @@
+using subscibe inside a subscibe is called flattening an observable just like we flatten a 2-d array into 
+1-d array :
+[
+    [1,2,3],
+    ['a','b','c']
+]
+converts to [1,2,3,'a','b','c'];
+
+////////////////////////////////////////////////////////////////////////////////////////////
+instead of using .map after another .map (still works though),
+    .map()
+        .map()
+we can use pipe operator:
+    .pipe(
+        map(),
+        map()
+    )

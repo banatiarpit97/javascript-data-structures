@@ -1,0 +1,244 @@
+send notifictions from js files(app.js, choose the file which is included in all the pages) :
+
+if ('Notification' in window) {                                                            //check if notifications is supported by browser or not
+  var enableNotificationsButton = document.querySelector('.enable-notifications')      
+  enableNotificationsButton.style.display = 'block';                                       //display the enable notifications button
+  enableNotificationsButtonaddEventListener('click', askForNotificationPermission);        
+}
+
+function askForNotificationPermission() {
+  Notification.requestPermission(function(result) {                                         //request permission to show notifications
+    console.log('User Choice', result);
+    if (result !== 'granted') {
+      console.log('No notification permission granted!');
+    } else {
+      displayConfirmNotification();
+    }
+  });
+}
+
+
+function displayConfirmNotification() {                                                     //to show notification, this part is not practical though as this will be handled through service worker
+  var options = {                                                                                because it runs in the background
+    body: 'You successfully subscribed to our Notification service!'
+  };
+  new Notification('Successfully subscribed!', options);
+}
+
+
+
+
+******************************************PRACTICAL CODE (MOVING ALL THE MEANINGFUL CODE TO SERVICE WORKER AND FETCHING/SENDONG THE DATA TO REAL BACKEND)*****************************************
+Cycle of push notifications : 
+
+  1) we get permission from user through our app.js or any other included js file
+  2) if user is already subscribed, we show the notification(if any available) otherwise create new subscription for the user
+  3) save that subsciption in our backed, to show him notification in the future
+  4) when any user sends data to our backend like create a new post, we save that post in database and send notification to every subscriber saved on backend
+  5) service worker reacts to the notification pushed by the backend and displays it to the user
+
+code in app.js :
+
+if ('Notification' in window && 'serviceWorker' in navigator) {
+  var enableNotificationsButton = document.querySelector('.enable-notifications')      
+  enableNotificationsButton.style.display = 'block';                                       //same as above
+  enableNotificationsButtonaddEventListener('click', askForNotificationPermission);   
+}
+
+function askForNotificationPermission() {
+  Notification.requestPermission(function(result) {                                         //same as above
+    console.log('User Choice', result);
+    if (result !== 'granted') {
+      console.log('No notification permission granted!');
+    } else {
+            configurePushSub();                                                              //change here to subscribe the user to push notification
+    }
+  });
+}
+
+function configurePushSub() {
+  if (!('serviceWorker' in navigator)) {                                                     //if service worker is not available in the browser, then do nothing
+    return;
+  }
+
+  var reg;
+  navigator.serviceWorker.ready
+    .then(function(swreg) {
+      reg = swreg;
+      return swreg.pushManager.getSubscription();                                             //check if user is already subscribed, if yes then return the subscription
+    })                                                                                        //(subscription is particular to a device and service worker, each device will have its own subscription)
+    .then(function(sub) {                                                                     //sub is subscription returned as parameter 
+      if (sub === null) {                                                                     //if not already subsdcribed, even then it will return something but it will be bull
+        var vapidPublicKey = ' ';                                                             // Create a new subscription with public key created using vapid
+        var convertedVapidPublicKey = urlBase64ToUint8Array(vapidPublicKey);                  //convert base64 key to Uint8 type, for which function is already provided by the webpush
+        return reg.pushManager.subscribe({                                                    //create new subscription
+          userVisibleOnly: true,                                                              //means only the user who receaves the notification can view it
+          applicationServerKey: convertedVapidPublicKey
+        });
+      } else {
+                                                                                              // We have a subscription
+      }
+    })
+    .then(function(newSub) {                                                                  //receive the newly created subscription as parameter in the promise
+      return fetch(' ', {                                                                     //save that subscription in the backend of your web app to send them notification in the future
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(newSub)                                                          //newSub is the subscription created and sent to backend(endpoint, public key, private key)
+      })
+    })
+    .then(function(res) {                                                                     //response we get from server/backend
+      if (res.ok) {
+        displayConfirmNotification();
+      }
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+}
+
+function displayConfirmNotification() {
+  if ('serviceWorker' in navigator) {
+    var options = {
+      body: 'You successfully subscribed to our Notification service!',                                //body of notification
+      icon: '/src/images/icons/app-icon-96x96.png',                                                    //icon of the notification(appears alongside the body)
+      image: '/src/images/sf-boat.jpg',                                                                //image can also be included in the body of notification(like inshorts)
+      dir: 'ltr',                                                                                      //direction
+      lang: 'en-US', // BCP 47,                                                                        //language
+      vibrate: [100, 50, 200],                                                                         //vibration pattern [vibrate pause vibrate pause....] vibration and pause both in seconds
+      badge: '/src/images/icons/app-icon-96x96.png',                                                   //icon that appears in the notification bar on android
+      tag: 'confirm-notification',                                                                     //like a primary key to the notification(if more than 1 notificatio with same tag then only one shown)
+      renotify: true,                                                                                  //would vibrate again if we have a previous notification not seen (if set to true)
+      actions: [                                                                                       //buttons or actions below notification to perform a certain action(implemented in sw)
+        { action: 'confirm', title: 'Okay', icon: '/src/images/icons/app-icon-96x96.png' },            //action to detect in sw, title is text shown on button, icon is image shown on button
+        { action: 'cancel', title: 'Cancel', icon: '/src/images/icons/app-icon-96x96.png' }
+      ]
+    };
+
+    navigator.serviceWorker.ready
+      .then(function(swreg) {
+        swreg.showNotification('Successfully subscribed!', options);                                    //display notification using service worker
+      });
+  }
+}
+
+//if any of the option is not supported by device ot browser, then it will simply ignore it and will not display an error
+
+
+function urlBase64ToUint8Array(base64String) {                                              //function to convert base64 to uint8
+  var padding = '='.repeat((4 - base64String.length % 4) % 4);
+  var base64 = (base64String + padding)
+    .replace(/\-/g, '+')
+    .replace(/_/g, '/');
+
+  var rawData = window.atob(base64);
+  var outputArray = new Uint8Array(rawData.length);
+
+  for (var i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
+
+//code in service worker(sw.js) :
+
+self.addEventListener('notificationclick', function(event) {                //event that fires when user clicks on the notification action button
+  var notification = event.notification;                                    //get the complete object of notification that user has clicked
+  var action = event.action;                                                //get the action button which user has clicked
+
+  console.log(notification);
+
+  if (action === 'confirm') {                                               //if action was confirm(action tag of notification has compared
+    console.log('Confirm was chosen');
+    notification.close();                                                   //close or dismiss the notification(by default on some devices)
+  } else {
+    console.log(action);
+    event.waitUntil(
+      clients.matchAll()
+        .then(function(clis) {
+          var client = clis.find(function(c) {                               //find the client on which notification was displayed
+            return c.visibilityState === 'visible';
+          });
+
+          if (client !== undefined) {                                        //if client is already on the web app
+            client.navigate(notification.data.url);                          //navigate to a particular url/route(url was embedded in the notification object at the backend before sending it to users)
+            client.focus();                                                   
+          } else {
+            clients.openWindow(notification.data.url);                       //if window is closed, then we will open a new tab with that url
+          }
+          notification.close();
+        })
+    );
+  }
+});
+
+
+self.addEventListener('notificationclose', function(event) {                 //this event is fired when user dismisses/swipes the notification i.e. ignores it - used for analytics purpose
+  console.log('Notification was closed', event);                             
+});
+
+
+self.addEventListener('push', function(event) {                              //this event is fored when our backend pushes a notification to the user, it goes through service worker
+  console.log('Push Notification received', event);
+
+  var data = {title: 'New!', content: 'Something new happened!', openUrl: '/'};   //dummy data, if backed is not able to send data for some reason
+
+  if (event.data) {
+    data = JSON.parse(event.data.text());                                         //if backed suceessfully sends data to service worker
+  }
+
+  var options = {                                                                 //creates options for notification
+    body: data.content,
+    icon: '/src/images/icons/app-icon-96x96.png',
+    badge: '/src/images/icons/app-icon-96x96.png',
+    data: {                                                                       //for any meta data like url to open on click etc
+      url: data.openUrl
+    }
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(data.title, options)                       //show notification
+  );
+});
+
+
+
+//////////////////////////////////////////GENERATE SUBSCRIPTION KEYS USING VAPID//////////////////////////////////////////////
+
+install web-push for the language using for backend(node, php..)
+
+for node - npm install --save web-push
+
+using web-push create public and private keys -> web-push generate-vapid-keys
+
+
+///////////////////////////////////////////CODE IN BACKEND(node with firebase)///////////////////////////////////////////////
+
+var webpush = require('web-push');
+
+while sending fetch response :
+
+webpush.setVapidDetails('{{any_email_id}}', '{{public_key}}', '{{private_key}}');                 //private key not stored on front end js as front end js can viewed by anyone
+        return admin.database().ref('subscriptions').once('value');
+        })
+      .then(function (subscriptions) {                                                            //get list of subscriptions stored on database
+        subscriptions.forEach(function (sub) {                                                    //for each subscription
+          var pushConfig = {
+            endpoint: sub.val().endpoint,                                                         //get the endpoint saved
+            keys: {
+              auth: sub.val().keys.auth,                                                          //get the public key saved
+              p256dh: sub.val().keys.p256dh                                                       //get the private key saved
+            }
+          };
+
+          webpush.sendNotification(pushConfig, JSON.stringify({                                   //send notification using webpush with the data
+            title: 'New Post',                                                                    //this is data to be sent in notification data
+            content: 'New Post added!',
+            openUrl: '/help'
+          }))
+            .catch(function (err) {                                                               //if notification not sent
+              console.log(err);
+            })

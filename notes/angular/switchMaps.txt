@@ -1,0 +1,21 @@
+when we need to unsubscribe from previous observable before subscribing to a new one.
+because if we don;t then we will getting items from both subscription
+
+const frameworks = Observable.from['backbone', 'angular'];
+let subscription;
+
+frameworks.pipe(
+    map(frameworkTweet => getAgency(frameworkTweet)),   
+    map(agency => agency.getRecruitsObservable())
+).subscribe(recruitsObservable => {
+    if(subscription) {subscription.unsubscribe();}
+    subscription = recruitsObservable.subscribe(recruit => console.log(recruit));
+})
+
+can be replace by :
+
+frameworks.pipe(
+    map(frameworkTweet => getAgency(frameworkTweet)),   
+    switchMap(agency => agency.getRecruitsObservable())
+).subscribe(recruit => console.log(recruit));
+})

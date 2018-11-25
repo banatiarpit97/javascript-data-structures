@@ -1,0 +1,144 @@
+// Cache-only
+ self.addEventListener('fetch', function (event) {                   //will try to find in cache, if not found then do nothing
+   event.respondWith(
+     caches.match(event.request)
+   );
+ });
+
+
+// Network-only
+ self.addEventListener('fetch', function (event) {                   //will try to fetch through internet, if not connected to internet, will not do anything
+   event.respondWith(
+     fetch(event.request)
+   );
+ });
+
+
+//cache the network
+self.addEventListener('fetch', function(event) {
+  event.respondWith(
+    caches.match(event.request)                                     //will try to find in cache first
+      .then(function(response) {
+        if (response) {
+          return response;
+        } else {                                                    //if not found
+          return fetch(event.request)                               //will try to fetch it over network
+            .then(function(res) {                                   //if found over network
+              return caches.open(CACHE_DYNAMIC_NAME)                //store it in dynamic cache
+                .then(function(cache) {
+                  cache.put(event.request.url, res.clone());
+                  return res;
+                })
+            })
+            .catch(function(err) {                                  //if neither in cache nor connected to network, show fallback/offline page
+              return caches.open(CACHE_STATIC_NAME)
+                .then(function(cache) {
+                  return cache.match('/offline.html');
+                });
+            });
+        }
+      })
+  );
+});
+
+
+
+//network then cache
+self.addEventListener('fetch', function(event) {                    //will try to fetch from network first
+  event.respondWith(
+    fetch(event.request)
+      .then(function(res) {                                         //if found, store in dynamic cache and return it to user to show it
+        return caches.open(CACHE_DYNAMIC_NAME)
+                .then(function(cache) {
+                  cache.put(event.request.url, res.clone());
+                  return res;
+                })
+      })
+      .catch(function(err) {                                        //if not connected to internet then search from cache
+        return caches.match(event.request);
+      })
+  );
+});
+
+
+//cache then network improved
+
+self.addEventListener('fetch', function (event) {
+
+  var url = 'https://pwagram-99adf.firebaseio.com/posts';
+  if (event.request.url.indexOf(url) > -1) {                    //if requested url is equal to the specified url [Handle special case][network only strategy with indexedDB]
+    event.respondWith(fetch(event.request)                      //fetch the request from network
+      .then(function (res) {                                   
+        var clonedRes = res.clone();                            //get response as parameter from promise, make a copy of it
+        clearAllData('posts')                                   //clear the indexedDB
+          .then(function () {
+            return clonedRes.json();
+          })
+          .then(function (data) {
+            for (var key in data) {
+              writeData('posts', data[key])                     //store fetched data to indexedDB(updated data)
+            }
+          });
+        return res;
+      })
+    );
+  } else if (isInArray(event.request.url, STATIC_FILES)) {      //if requested url is present in static cache(function defined below)[cache only startegy]
+    event.respondWith(
+      caches.match(event.request)                               //get the data from static cache
+    );
+  } else {
+    event.respondWith(                                          
+      caches.match(event.request)                               //check if present in cache(dynamic)
+        .then(function (response) {                             //if found then return to user to show it
+          if (response) {
+            return response;
+          } else {
+            return fetch(event.request)                         //if not found then fetch it from network
+              .then(function (res) {
+                return caches.open(CACHE_DYNAMIC_NAME)          //store in dynamic cache
+                  .then(function (cache) {
+                    // trimCache(CACHE_DYNAMIC_NAME, 3);
+                    cache.put(event.request.url, res.clone());
+                    return res;
+                  })
+              })
+              .catch(function (err) {                            //if not found in static cache, dynamic cache, and not connected to network
+                return caches.open(CACHE_STATIC_NAME)
+                  .then(function (cache) {
+                    if (event.request.headers.get('accept').includes('text/html')) {   //if page requested is html one then show fallback page
+                      return cache.match('/offline.html');
+                    }
+                  });
+              });
+          }
+        })
+    );
+  }
+});
+
+
+function isInArray(string, array) {
+  var cachePath;
+  if (string.indexOf(self.origin) === 0) { // request targets domain where we serve the page from (i.e. NOT a CDN)
+    console.log('matched ', string);
+    cachePath = string.substring(self.origin.length); // take the part of the URL AFTER the domain (e.g. after localhost:8080)
+  } else {
+    cachePath = string; // store the full request (for CDNs)
+  }
+  return array.indexOf(cachePath) > -1;
+}
+
+
+////////////////////////////////////TO STORE ONLY SPECIFIED NUMBER OF OBJECT IN CACHE(if max number of items exceeded, then delete items recursively until below the limit)/////////////////////////
+function trimCache(cacheName, maxItems) {
+  caches.open(cacheName)
+    .then(function (cache) {
+      return cache.keys()
+        .then(function (keys) {
+          if (keys.length > maxItems) {
+            cache.delete(keys[0])
+              .then(trimCache(cacheName, maxItems));
+          }
+        });
+    })
+}

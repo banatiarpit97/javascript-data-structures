@@ -1,0 +1,208 @@
+run ''npm install --save-dev workbox-cli'' in project directory
+
+run "workbox generate:sw" to create service worker from scratch
+
+run "workbox inject:manifest" to create a service worker from a base service worker defined by us.(have to run everytime we make changes to any file cached or base service worker)
+We can add normal service worker code(used in previous modules) to the basic service worker file, it is completely valid
+
+a workbox-cli-config file will be created by default which will look like :
+ 
+ module.exports = {
+  "globDirectory": "public/",                        //directory from which all the urls will be relative to in this file
+  "globPatterns": [                                  //define patterns to match files which will be included in cache
+    "**/*.{html,ico,json,css,js}",                   //match all the files with extension of html,ico,css,js(STATIC CACHING)
+    "src/images/*.{jpg,png}"                         //include images in src/images with extension of jpg/png(not used as above as we don't want to include icons)
+  ],
+  "swSrc": "public/sw-base.js",                      //this will be our base service worker using which the final service worker will be made
+  "swDest": "public/service-worker.js",              //this is where final service worker will be created with the specified name
+  "globIgnores": [
+    "../workbox-cli-config.js",                      //these files will not be included in the cache even if theses are included above in globPatterns
+    "help/**"
+  ]
+};
+
+
+sw-base.js(example) : 
+
+
+
+
+importScripts('workbox-sw.prod.v2.0.0.js');                  //this needs to be included so that workbox could work
+importScripts('/src/js/idb.js');                             //indexedDb db wrapper
+importScripts('/src/js/utility.js');                         //utilities function written by us
+
+const workboxSW = new self.WorkboxSW();                      //instantiiate workbox
+
+//DYNAMIC CACHING(by registering route to workbox)
+workboxSW.router.registerRoute(/.*(?:googleapis|gstatic)\.com.*$/, workboxSW.strategies.staleWhileRevalidate({       //will match fetched urls to the regex provided, if found will apply workbox strategies
+  cacheName: 'google-fonts',          //name of the cache in which these files will be stored                                // 'staleWhileRevalidate' is cache then network strtegy
+  cacheExpiration: {
+    maxEntries: 3,                    //max objects that can be stored in this cache
+    maxAgeSeconds: 60 * 60 * 24 * 30  //after how much time will these expires, and we will fetch the updated data again(in seconds)
+  }
+}));
+
+workboxSW.router.registerRoute('https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css', workboxSW.strategies.staleWhileRevalidate({
+  cacheName: 'material-css'                                                       //provided the exact url instead of regex
+}));
+
+workboxSW.router.registerRoute(/.*(?:firebasestorage\.googleapis)\.com.*$/, workboxSW.strategies.staleWhileRevalidate({
+  cacheName: 'post-images'
+}));
+
+
+//STORE IN INDEXEDDB
+workboxSW.router.registerRoute('https://pwagram-99adf.firebaseio.com/posts.json', function(args) {          //register route store post requests in indexedDB
+  return fetch(args.event.request)                                                                          //will return the fetched request from network first
+    .then(function (res) {                                                                                  //get the response as parameter in promise
+      var clonedRes = res.clone();                                                                          //make a copy of the response
+      clearAllData('posts')                                                                                 //clear the indexedDB 'posts' thread to avoid duplication
+        .then(function () {
+          return clonedRes.json();                                                                          //will return the response in json format
+        })
+        .then(function (data) {
+          for (var key in data) {                                                                           //loop through the json data
+            writeData('posts', data[key])                                                                   //write the data to indexedDB using function defined in utilities.js
+          }
+        });
+      return res;
+    });
+});
+
+
+//TO SHOW FALLBACK PAGE IF USER IS NOT CONNECTED TO NETWORK AND ENTERS A PAGE THAT IS NOT CACHED YET
+workboxSW.router.registerRoute(function (routeData) {                            //apart from reges and exact url, a function can also be used to match the fetch request
+  return (routeData.event.request.headers.get('accept').includes('text/html'));  //if there is a accept header in request that included text or html file
+}, function(args) {
+  return caches.match(args.event.request)                                        //we will try to return that page from cache first(cache the network strategy to decrease load time)
+    .then(function (response) {                                                  //will always return a response though it can be null(if not present)
+      if (response) {                                                            //if found in cache, we wil return it(show it to user)
+        return response;
+      } else {                                                                   //if response is null(not stored in cache)
+        return fetch(args.event.request)                                         //we will try to fetch it from network
+          .then(function (res) {                                                 //if found from network(i.e. connected to internet)
+            return caches.open('dynamic')                                        //open or create dynamic name cache
+              .then(function (cache) {                                           //will get that cache as parameter from promise
+                cache.put(args.event.request.url, res.clone());                  //store the response we got from network to cache using utilities function
+                return res;                                                      //return the response to user to show it
+              })
+          })
+          .catch(function (err) {                                                //if response not found(i.e. not connected to internet and also not present in cache)
+            return caches.match('/offline.html')                                 //we will return our fallback page 
+              .then(function (res) {                                             //will get that as paramter from promise
+                return res;                                                      //return it to user to show it
+              });
+          });
+      }
+    })
+});
+
+workboxSW.precache([]);                                                          //has to be defined for static cache
+
+
+//BACKGROUND-SYNC
+self.addEventListener('sync', function(event) {                                  //listen to the sync event
+  console.log('[Service Worker] Background syncing', event);
+  if (event.tag === 'sync-new-posts') {                                          //if we find a tag of specified name(used in app.js to store posts in this tag)
+    console.log('[Service Worker] Syncing new Posts');
+    event.waitUntil(                                                             //will not be asynchronus
+      readAllData('sync-posts')                                                  //read all data from indexedDB using utilities function
+        .then(function(data) {                                                   //receice that dat as paramter from promise
+          for (var dt of data) {                                                 //loop through the data as there may be more than 1 post
+            var postData = new FormData();                                       //use inbuilt function of js to send data to server
+            postData.append('id', dt.id);                                        //add data saved in indexedDB to the object to send it to backend
+            postData.append('title', dt.title);
+            postData.append('location', dt.location);
+            postData.append('rawLocationLat', dt.rawLocation.lat);
+            postData.append('rawLocationLng', dt.rawLocation.lng);
+            postData.append('file', dt.picture, dt.id + '.png');
+
+            fetch('https://us-central1-pwagram-99adf.cloudfunctions.net/storePostData', {         //send that form data to backend
+              method: 'POST',
+              body: postData
+            })
+              .then(function(res) {                                                               //iff data sent successfully
+                console.log('Sent data', res);
+                if (res.ok) {                                                                     //if status code is ok
+                  res.json()                                                                      //convert data to json
+                    .then(function(resData) {                                                     //get json data from promise as parameter
+                      deleteItemFromData('sync-posts', resData.id);                               //delete it from indexedDB(as we don't want it to be sent again) using utilities function
+                    });
+                }
+              })
+              .catch(function(err) {
+                console.log('Error while sending data', err);
+              });
+          }
+
+        })
+    );
+  }
+});
+
+//PUSH NOTIFICATIONS
+
+//to respond to click on shown notification
+self.addEventListener('notificationclick', function(event) {                //event that fires when user clicks on the notification action button
+  var notification = event.notification;                                    //get the complete object of notification that user has clicked
+  var action = event.action;                                                //get the action button which user has clicked
+
+  console.log(notification);
+
+  if (action === 'confirm') {                                               //if action was confirm(action tag of notification has compared
+    console.log('Confirm was chosen');
+    notification.close();                                                   //close or dismiss the notification(by default on some devices)
+  } else {
+    console.log(action);
+    event.waitUntil(
+      clients.matchAll()
+        .then(function(clis) {
+          var client = clis.find(function(c) {                               //find the client on which notification was displayed
+            return c.visibilityState === 'visible';
+          });
+
+          if (client !== undefined) {                                        //if client is already on the web app
+            client.navigate(notification.data.url);                          //navigate to a particular url/route(url was embedded in the notification object at the backend before sending it to users)
+            client.focus();                                                   
+          } else {
+            clients.openWindow(notification.data.url);                       //if window is closed, then we will open a new tab with that url
+          }
+          notification.close();
+        })
+    );
+  }
+});
+
+
+//to respond to closing of shown notification
+self.addEventListener('notificationclose', function(event) {                 //this event is fired when user dismisses/swipes the notification i.e. ignores it - used for analytics purpose
+  console.log('Notification was closed', event);                             
+});
+
+
+//to respond to push of notification
+self.addEventListener('push', function(event) {                              //this event is fored when our backend pushes a notification to the user, it goes through service worker
+  console.log('Push Notification received', event);
+
+  var data = {title: 'New!', content: 'Something new happened!', openUrl: '/'};   //dummy data, if backed is not able to send data for some reason
+
+  if (event.data) {
+    data = JSON.parse(event.data.text());                                         //if backed suceessfully sends data to service worker
+  }
+
+  var options = {                                                                 //creates options for notification
+    body: data.content,
+    icon: '/src/images/icons/app-icon-96x96.png',
+    badge: '/src/images/icons/app-icon-96x96.png',
+    data: {                                                                       //for any meta data like url to open on click etc
+      url: data.openUrl
+    }
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(data.title, options)                       //show notification
+  );
+});
+
+
+

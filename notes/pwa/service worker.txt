@@ -1,0 +1,46 @@
+serviceworker.js file can be named anything,
+it should be placed in the root directory(src or public) because default score of serviceworker is files/folders placed alongside it in the same folder.
+
+regsiter a service worker:
+   regsiter it in the main js file(app.js) only once.
+
+   if ('serviceWorker' in navigator) {                     // check if service workers are supported by browser or not
+     navigator.serviceWorker.register('/sw.js')            // register the servie worker with file name of service worker,
+                                                              an optional second parameter can also be passed to set the scope of service worker -> {scope: 'directory/file name'}
+                                                              remember scope can be into the directories where service worker is placed and not outside it, thats why we placed it it top directory
+       .then(function() {
+          console.log('Service worker registered!');
+       });
+   }
+
+
+registering event is the sw.js:
+
+   self.addEventListener('install', function(event) {                            // this event fires when service worker is installed
+     console.log('[Service Worker] Installing Service Worker ...', event);
+   });
+
+   self.addEventListener('activate', function(event) {                           // this event fires when service worker is activated
+     console.log('[Service Worker] Activating Service Worker ...', event);
+     return self.clients.claim();                                                // this is mandatory is this event
+   });
+
+   self.addEventListener('fetch', function(event) {                              // this event is fired when anything is fetched like a css,js file included in html page or any page(not ajax request)
+     console.log('[Service Worker] Fetching something ....', event);
+     event.respondWith(fetch(event.request));                                    // respondwith is used to interact or modisy the response from fetch api
+   });
+
+remember service worker will not install every time we open a website, it gets installed first time and everytime we change sw,js file.
+whenever sw.js file is chamged, to update the changes in the page, close all the tabs with that website and open it again because new service worker will not be activated until previous one is terminated.
+
+
+DELETING THE SERVICE WORKER :
+
+  if ('serviceWorker' in navigator) {  
+    navigator.serviceWorker.getRegistrations()                          //get all the registered service workers
+      .then(function(registrations) {                                   //get all the registrations
+        for (var i = 0; i < registrations.length; i++) {                //iterate through the registrations
+          registrations[i].unregister();                                //unregister them one by one
+        }
+      })
+  }

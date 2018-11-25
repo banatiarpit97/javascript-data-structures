@@ -1,0 +1,11 @@
+promise and fetch apis are supported by most browsers now but it does not work in the old browsers, 
+ to make that work 2 files need to be included in the project(prmoise.js and fetcf.js)
+
+include these 2 files in all the html files or index.html(in angular)
+we need to include them before any other js files we include
+first promise.js file is included and then the fetch.js as fetch also uses promise
+
+in app.js include the following code:
+   if(!window.Promise){                    //check if promise is supported by browser or not
+      window.Promise = Promise;            // if not then set it to Promise(defined in polyfills file included)
+   }

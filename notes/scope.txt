@@ -160,5 +160,35 @@ function example(){
         So function overrides a variable if not initialised but variable overrides function if variable
         is initialised
 
+        Just think of this in terms of compilation process :
+        in first case :
+            in compiler's first pass:
+                compiler registers myName variable
+                registers myName function(declaration and defination)
+                (hence overriden)
+
+        in second case :
+            in compiler's first pass:
+                compiler registers myName variable
+                compiler registers myName function(declaration and defination)
+            in compiler's second pass:
+                assigns myName = "Richard"(hence overriden)
+
 18. const a = [1,2,3];
     we can edit the array(add, edit, remove...) but er can change the variable(because declared with const)
+
+19. To check what value will be present in closure function of variable of outside function, follow the compilation
+    process of 2 phases:
+
+    function outer(){
+        var a;
+        function inner(){
+            console.log(a); 
+        }
+        inner();    //prints undefined;
+        a = "hi"
+        inner()     //prints hi
+    }
+
+    no matter the value, inner function will always have access to outer variables(even in case of iife)
+    because execution takes place in second phase and declaration takes place in forst phase of compilation

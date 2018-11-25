@@ -1,0 +1,79 @@
+HTML code :
+
+        <video id="player" autoplay style='display:none;'></video>             //camera video will be played in this element
+                                                               
+        <canvas id="canvas" width="320px" height="240px" style='display:none;'></canvas>             //captured image will be displayed in thi canvas
+        <button id="capture-btn" style='display:none;'>Capture</button>
+        <div id="pick-image" style='display:none;'>                                       //if camera is not supported by browser then user will be shown this option to manually sellect images from device
+          <h6>Pick an Image instead</h6>
+          <input type="file" accept="image/*" id="image-picker">               //to accept images only
+        </div>
+
+
+JS code in app.js or script file for that page :
+
+var videoPlayer = document.querySelector('#player');
+var canvasElement = document.querySelector('#canvas');
+var captureButton = document.querySelector('#capture-btn');
+var imagePicker = document.querySelector('#image-picker');
+var imagePickerArea = document.querySelector('#pick-image');
+
+
+
+function initializeMedia() {
+  if (!('mediaDevices' in navigator)) {                                    //if mediaDevice is supported by browser or not
+    navigator.mediaDevices = {};                                           //if not then assign a propert to navigator
+  }
+
+  if (!('getUserMedia' in navigator.mediaDevices)) {                     //check if getUserMedia function is present in mediaDevices(will not be if it is not supported as we declared it to be empty object)
+    navigator.mediaDevices.getUserMedia = function(constraints) {        //if not then we define a function for that
+      var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;            //defining function for safari and firefox(already supported in chrome)
+
+      if (!getUserMedia) {                                                           //if not safari,firefox
+        return Promise.reject(new Error('getUserMedia is not implemented!'));        //then reject promise to be cathced in .catch()
+      }
+
+      return new Promise(function(resolve, reject) {                                 //if safari,firefox etc for which getUserMedia is handled
+        getUserMedia.call(navigator, constraints, resolve, reject);                  //assign a promise to getUserMedia 
+      });
+    }
+  }                                                                                  //now it will work in chrome, forefox,safari etc
+
+  navigator.mediaDevices.getUserMedia({video: true})                                 //calling the getUserMedia function and setting video to true(can also set audio to true for microphone with a comma)
+    .then(function(stream) {                                                         //will return promise with video stream
+      videoPlayer.srcObject = stream;                                                //set src of video element in html to the stream returned
+      videoPlayer.style.display = 'block';                                           //as video element was hidden by default, will now display it
+    })
+    .catch(function(err) {
+      imagePickerArea.style.display = 'block';                                       //if not able to display the video, show the image picker which was hidden by default
+    });
+}
+ 
+captureButton.addEventListener('click', function(event) {                            //when capture button clicked
+  canvasElement.style.display = 'block';                                             //display the canvas element of html(was hidden by default)
+  videoPlayer.style.display = 'none';                                                //hide the video element
+  captureButton.style.display = 'none';                                              //hide the capture button
+  var context = canvasElement.getContext('2d');                                      //set context of canvas to draw on it
+  context.drawImage(videoPlayer, 0, 0, canvas.width, videoPlayer.videoHeight / (videoPlayer.videoWidth / canvas.width));       //fit the image on canvas keeping the aspect ratio
+  videoPlayer.srcObject.getVideoTracks().forEach(function(track) {                   //get all the streams/tracks playing on video element
+    track.stop();                                                                    //stop all the streams/tracks in video element
+  });
+  picture = dataURItoBlob(canvasElement.toDataURL());                                //canvas element stores the image base64, if we want to convert it to a blob/file(function defined below)
+});                                                                                  //toDataURL() return base64 
+
+imagePicker.addEventListener('change', function(event) {                             //if file/image is picked using file picker
+  picture = event.target.files[0];                                                   //get the image picked
+});
+
+
+function dataURItoBlob(dataURI) {                                                    //function to convert base64 to blob/file
+  var byteString = atob(dataURI.split(',')[1]);
+  var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+  var ab = new ArrayBuffer(byteString.length);
+  var ia = new Uint8Array(ab);
+  for (var i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+  var blob = new Blob([ab], {type: mimeString});
+  return blob;
+}

@@ -164,3 +164,6 @@ Borrowing methods from objects:
     //if we borrow method like above, 'this' will refer to 'second'
 
     to correct -> first.avgScore = second.avg().bind(first);
+//////////////////////////////////////////////////////////////////////////////////////
+key in objects can or can not be in qoutes
+but if key contains '-', then it needs to be in quotes.

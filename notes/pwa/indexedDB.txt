@@ -1,0 +1,39 @@
+used to store response web get from the server in form of key-value pair
+JSON data should be stored in indexedDB instead of cache(can store data and files both)
+
+include a wrapper in index.html to use methods of indexedDB as promises afterpromises.js and fetch.js
+include utilies.js in index.html where all the functions of indexedDB are created after wrapper file
+
+code in app.js:
+
+fetch(url)                                //get data from server
+  .then(function(res) {
+    return res.json();                    //convert to json
+  })
+  .then(function(data) {
+    networkDataReceived = true;           
+    console.log('From web', data);
+    var dataArray = [];
+    for (var key in data) {
+      dataArray.push(data[key]);
+    }
+  });
+
+if ('indexedDB' in window) {             //check if indexedDB is supported by browser or not
+  readAllData('posts')                   //use function from utilties to read all data from indexeddb
+    .then(function(data) {
+      if (!networkDataReceived) {        //if we haven't yet received data from network or server, we use this data
+        console.log('From cache', data);
+      }
+    });
+}
+
+
+code in sw.js :
+
+importScripts('/src/js/idb.js');                       //import scripts 
+importScripts('/src/js/utility.js');
+
+we can call functions created in utilities.js normally like :
+  clearAllData('posts')     writeData('posts', data[key])      readAllData('sync-posts')
+

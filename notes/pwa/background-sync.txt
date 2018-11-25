@@ -1,0 +1,86 @@
+code in app.js : 
+
+form.addEventListener('submit', function(event) {
+  event.preventDefault();                                                //prevent sending data to server
+  if ('serviceWorker' in navigator && 'SyncManager' in window) {         //check if serviceworker and syncmanager api is present in browser or not            
+    navigator.serviceWorker.ready                                      //wait for service worker to get ready
+      .then(function(sw) {                                             //get service worker as parameter from promise, now we can use it in app.js
+        var post = {                                                   //create data to save
+          id: new Date().toISOString(),
+          title: titleInput.value,
+          location: locationInput.value
+        };
+        writeData('sync-posts', post)                                   //save data in indexedDB using function from utilities.js
+          .then(function() {
+            return sw.sync.register('sync-new-posts');                  //sync post with certain tag
+          })
+          .then(function() {
+            console.log(message: 'Your Post was saved for syncing!');
+          })
+          .catch(function(err) {
+            console.log(err);
+          });
+      });
+
+  } else {                                                              //if serviceworker and syncmanager api is not present in browser
+    fetch(' ', {                                                        //normally send data to server(will be successfull only if connected to network)
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify({
+      id: new Date().toISOString(),
+      title: titleInput.value,
+      location: locationInput.value,
+      image: ' '
+    })
+  })
+    .then(function(res) {
+      console.log('Sent data', res);
+      updateUI();
+    })
+  }
+
+
+code in sw.js :
+ 
+self.addEventListener('sync', function(event) {                                     //register sync event in service worker(will run if a post is created while ypu are online or when a post is saved in 
+  console.log('[Service Worker] Background syncing', event);                        //indexedDB and we get connection after some time)
+  if (event.tag === 'sync-new-posts') {                                             //sync events with only specified tag mentioned in app.js
+    console.log('[Service Worker] Syncing new Posts');
+    event.waitUntil(
+      readAllData('sync-posts')                                                     //read data from indexedDB using function from utilities.js
+        .then(function(data) {                                                      //get data as parameter from promise
+          for (var dt of data) {                                                    //loop through the data as there mey be more than 1 post saved
+            fetch(' ', {                                                            //send saved post to server
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              },
+              body: JSON.stringify({                                                 //create post from indexedDB
+                id: dt.id,
+                title: dt.title,
+                location: dt.location,
+                image: ' '
+              })
+            })
+              .then(function(res) {
+                console.log('Sent data', res);
+                if (res.ok) {                                                        //check status code from response
+                  res.json()                                                         //convert response to json
+                    .then(function(resData) {
+                      deleteItemFromData('sync-posts', resData.id);                  //if data sent to server, delete it from indexedDB
+                    });
+                }
+              })
+              .catch(function(err) {
+                console.log('Error while sending data', err);
+              });
+          }
+
+        })
+    );
+  }
+});

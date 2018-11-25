@@ -1,0 +1,31 @@
+will only work if there is a https connection and service worker is registered.
+
+to stop the 'add icon to home screen banner to pop up' :
+    
+    var deferredPrompt;
+    window.addEventListener('beforeinstallprompt', function(event) {          // this event fires just before browser is about to show the banner
+      console.log('beforeinstallprompt fired');
+      event.preventDefault();                                                 // to prevent default action i.e. not show the banner
+      deferredPrompt = event;                                                 // store event in a variable to use it in the future
+      return false;
+    });
+
+
+to show the banner at later stage:
+    
+    if (deferredPrompt) {                                                     // check if variable is set otherwise do nothing
+      deferredPrompt.prompt();                                                // show the banner
+    }
+
+to see what choice did user make(adds to home screen or dismisses banner):
+    
+    deferredPrompt.userChoice.then(function(choiceResult) {
+      console.log(choiceResult.outcome);
+
+      if (choiceResult.outcome === 'dismissed') {
+        console.log('User cancelled installation');
+      } else {
+        console.log('User added to home screen');
+      }
+    });
+    deferredPrompt = null;

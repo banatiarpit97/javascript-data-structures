@@ -58,6 +58,10 @@ we can wrap the calling parenthesis also in top level parenthesis like
     function iife()
     {}()
 )
+the wrapping parenthesis are to help the compiler to parse this correctly and also to escape this
+function from global scope.
+We can not call an iife from anywhere else.
+But iife has access to global variables and functions.
 
 Using new :
     var name = new Function("console.log('hh)");

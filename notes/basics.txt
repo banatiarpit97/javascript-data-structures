@@ -8,6 +8,9 @@ V8 is written is c++;
 
 Javascript compiler takes 2 passes to run the source code.
 in first pass, it does things as declaration, hoisting of var, function etc...
+in forst pass, it registers the variables(only declaration, no initialization) and 
+also registers function(declaration and definition, if a normal function and a function expression)
+
 and in seconds pass, it executes each line like an interpreter and does work like initialization, execution.
 The difference from other interpreted languages is that,
 in second pass js already knows what will come in next line or after that.
