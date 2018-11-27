@@ -1,0 +1,45 @@
+______________________________________INBUILT SET CLASS________________________________________
+
+var set = new Set();
+
+set.add(1);
+set.add(2);
+set.add(3);
+set.delete(2)
+console.log(set.has(2))
+console.log(set.size);
+console.log(set.values());
+set.clear();
+
+
+
+_____________________________________INBUILT MAP CLASS_________________________________________
+
+var map = new Map();
+map.set('name', 'arpit');
+map.set('stream', 'it');
+
+console.log(map.size);
+console.log(map.has('name'));
+console.log(map.delete('name'));
+console.log(map.get('name'));
+console.log(map.keys());
+console.log(map.values());
+console.log(map.clear())
+
+
+_____________________________________INBUILT WEAKMAP CLASS_________________________________________
+
+var map = new WeakMap();
+
+var ob1 = {'name':'arpit'};
+var ob2 = { 'name': 'ram' };
+var ob3 = { 'name': 'sham' };
+
+map.set(ob1, 'a@b.in');
+map.set(ob2, 'r@b.in');
+map.set(ob3, 's@b.in');
+
+console.log(map.has(ob1));
+console.log(map.delete(ob1));
+console.log(map.get(ob1));
