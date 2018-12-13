@@ -133,3 +133,12 @@ is neither top level nor inside other functions.
 11. Every functions has its own 'this' and 'arguements' keyword by default.
     this -> refers to the function/object itself
     arguements -> an object that contains all the arguements passed to the function in key-value form
+
+12. if we want to access the element from event listener, we can not use arrow functins as arrow functions does not have a 'this' binding
+	document.getElementById("").addEvenetListener('click', () => {
+		console.log(this)	//will NOT return the element
+	})
+
+	document.getElementById("").addEvenetListener('click', () => {
+		console.log(this)	//will return the element
+	})

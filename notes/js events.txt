@@ -19,6 +19,22 @@ elem.addEventListener("click", (e) => {
     //bubbling is set to true by default which means, that an event looks for listener in parent elements
         also
 })
+addEventListener can be called from a elem/selector that return a single elem
+can be applied on .querySelector and .getElelemntById
+can NOT be applied on .querySelectorAll and getElementsByClassName and getElementsByTagName
+
+all selector functions are properties of document. i.e. document.getElementById...
+
+to get the point(coords) of clicked poistion:
+	document.addEventListener('mousedown', (e) => {
+		console.log(e.clientX, e.clientY);
+	})
+
+to get key pressed on keyboard:
+	document.addEventListener('keydown', (e) => {
+		console.log(e.key)	//returns letter pressed like a,b,c,Alt,Control,Shift,ArrowUp,ArrowLeft
+	})
+
 
 Common Events :
 
