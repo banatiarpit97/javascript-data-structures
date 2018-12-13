@@ -1,0 +1,11 @@
+sprites are used to reuse the same background image and display different portions of it
+this reuces the http requests to images
+
+portions of images are selected using background-position property of css
+background-position : xpos, ypos;
+
+Additionally, instead of spriting images, the encoded data for an image can be included within HTML and CSS directly by way of the data URI, removing the need for a HTTP request all together. Using the image data URI works great for small images, likely to never change, and where the HTML and CSS can be heavily cached. There are, however, a couple of problems with data URIs. They can be difficult to change and maintain, leading to having to generate another encoding. And, they don’t work in older browsers, specifically Internet Explorer 7 and below.
+<img height="100" width="660" alt="Rigged Pattern" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAICAYAAADA+m62AAAAPUlEQVQYV2NkQAO6m73+X/bdxogujiIAU4RNMVwhuiQ6H6wQl3XI4oy4FMHcCJPHcDS6J2A2EqUQpJhohQAyIyYy0nBAGgAAAABJRU5ErkJggg==">
+
+
+

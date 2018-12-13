@@ -1,0 +1,98 @@
+One advantage of the Web is that text is automatically wrapped into lines fitting within the current window size. Sometimes though, you will want to disable this behavior. For example when including samples of program code. You do this using the pre element. For instance:
+
+<pre>
+    void Node::Remove()
+    {
+        if (prev)
+            prev->next = next;
+        else if (parent)
+            parent->SetContent(null);
+
+        if (next)
+            next->prev = prev;
+
+        parent = null;
+    }
+</pre>
+
+The text and background colors were set via the style sheet. Note that all line breaks and spaces are rendered exactly as they appear in the HTML. The exception is a newline immediately after the start tag <pre> and immediately before the end tag </pre>, which are discarded. This means that the following two examples are rendered identically:
+
+<pre>preformatted text</pre>
+
+<pre>
+preformatted text
+</pre>
+
+Preformatted text is generally rendered using a monospaced font where each character has the same width. If you define a style rule for the pre element, some browsers forget to use the monospace font, necessitating the use of the font-family property.
+/////////////////////////////////////////////////////////////////////////////////////
+
+With HTML, you can choose whether any given image is treated as part of the current text line or is floated to the left or right margins. You control this via the align attribute. If the align attribute is set to left the image floats to the left margin. If it is set to right the image floats to the right margin. For instance:
+
+<p><img src="sun.jpg" alt="sunburst graphic"
+width="32" height="21" align="left"> This text will be
+flowed around the right side of the graphic.</p>
+
+To force rendering to continue below the floated image you can use the <br clear=all> element, for example:
+
+<p><img src="sun.jpg" alt="sunburst graphic"
+width="32" height="21" align="left"> This text will be
+flowed around the right side of the graphic.<br clear="all">
+This starts a new line below the floated image.</p>
+/////////////////////////////////////////////////////////////////////////////////////
+
+Clickable regions within images
+
+<img src="pages.gif" width="384" height="245"
+      alt="site map" usemap="#sitemap" border="0">
+   <map name="sitemap">
+      <area shape="circle" coords="186,44,45" 
+         href="Overview.html" alt="Getting Started">
+      <area shape="circle" coords="42,171,45" 
+         href="Style.html" alt="A Touch of Style">
+      <area shape="circle" coords="186,171,45"
+         alt="Web Page Design">
+      <area shape="circle" coords="318,173,45"
+         href="Advanced.html" alt="Advanced HTML">
+   </map>
+
+The usemap attribute references a map element. It uses a Web address to do so, hence the # character. The border attribute is set to "0" to suppress the blue border around the image.
+
+The area element is used to define a region on the image and to bind it to a Web address. The shape attribute specifies "rect", "circle" or "poly". The coords attribute specifies the coordinates for the region depending on the shape.
+
+rect: left-x, top-y, right-x, bottom-y
+circle: center-x, center-y, radius
+poly: x1,y1, x2,y2, ... xn,yn
+
+If two or more defined regions overlap, the region-defining element that appears earliest in the document takes precedence (i.e., responds to user input). For a complex shape such as an anular ring, you can make part of a region inactive by overlaying it with another region using the nohref attribute, for example:
+
+      <area shape="circle" coords="186,44,50" nohref>
+      <area shape="circle" coords="186,44,100" 
+         href="Overview.html" alt="Getting Started">
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+attributes in table tag:
+	<table border="1" cellpadding="10" cellspacing="10" width="80%">
+attribs in tr:
+	<tr align="center" valign="top"><th>Year</th><th>Sales</th></tr>
+
+if we dont want empty cells(<td></td>) to render
+	add non breaking space <td>&nbsp;</td>
+
+caption of table:
+	<table border="1" cellpadding="10" width="80%">
+	<caption align="bottom">Projected sales revenue by year</caption>	//align tells where to put caption-above or below table
+	<tr align="center"><td>2000</td><td>$18M</td></tr>
+	<tr align="center"><td>2001</td><td>$25M</td></tr>
+	</table>
+summary of table:
+	<table summary="the first column gives the year and the second, the revenue for that year">
+/////////////////////////////////////////////////////////////////////////////////////
+
+The content of a noscript element is only shown if the browser doesn't support scripting. It should be used when you want to give people access to information that would otherwise be inaccessible to people with browsers that don't support scripting. Let's assume that you want to make the links for your sponsors available as text:
+
+<noscript>
+Our sponsors: <a href="http://www.lcs.mit.edu/">MIT</a>,
+<a href="http://www.inria.fr/">INRIA</a>, and
+<a href="http://www.keio.ac.jp/">Keio University</a>.
+</noscript>

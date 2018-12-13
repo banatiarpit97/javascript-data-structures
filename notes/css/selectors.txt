@@ -1,0 +1,53 @@
+h1                      Type Selector	
+.tagline	            Class Selector	
+#intro	                ID Selector	
+
+article h2	            Descendant Selector	
+article > p	            Direct Child Selector
+
+h2 ~ p	                General Sibling Selector
+h2 + p	                Adjacent Sibling Selector
+
+a[target]	            Attribute Present Selector
+a[href="http://google.com/"]	Attribute Equals Selector
+a[href*="login"]	    Attribute Contains Selector
+a[href^="https://"]	    Attribute Begins With Selector
+a[href$=".pdf"]	        Attribute Ends With Selector
+a[rel~="tag"]	        Attribute Spaced Selector
+a[lang|="en"]	        Attribute Hyphenated Selector
+
+a:link	                Link Pseudo-class
+a:visited	            Link Pseudo-class
+
+a:hover	                Action Pseudo-class
+a:active	            Action Pseudo-class
+a:focus	                Action Pseudo-class
+
+input:enabled	        State Pseudo-class
+input:disabled	        State Pseudo-class
+input:checked	        State Pseudo-class
+input:indeterminate	    State Pseudo-class
+
+li:first-child	        Structural Pseudo-class
+li:last-child	        Structural Pseudo-class
+div:only-child	        Structural Pseudo-class
+div:only-child	        Structural Pseudo-class
+p:first-of-type	        Structural Pseudo-class
+p:last-of-type	        Structural Pseudo-class
+img:only-of-type	    Structural Pseudo-class
+li:nth-child(2n+3)	    Structural Pseudo-class
+li:nth-last-child(3n+2)	Structural Pseudo-class
+p:nth-of-type(3n)	    Structural Pseudo-class
+p:nth-last-of-type(2n+1)	Structural Pseudo-class
+
+section:target	        Target Pseudo-class
+div:empty	            Empty Pseudo-class
+div:not(.awesome)	    Negation Pseudo-class
+
+.alpha:first-letter	    Textual Pseudo-elements
+.bravo:first-line	    Textual Pseudo-elements
+
+div:before	            Generated Content	
+a:after	                Generated Content
+
+::selection	            Fragment Pseudo-element	

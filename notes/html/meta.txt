@@ -1,0 +1,17 @@
+<meta name="viewport" content="width=device-width">
+Using the viewport meta tag with either the height or width values will define the 
+height or width of the viewport respectively. Each value accepts either a positive 
+integer or keyword. For the height property the keyword device-height value is accepted, 
+and for the width property the keyword device-width is accepted. Using these keywords 
+will inherit the device’s default height and width value.
+
+<meta name="viewport" content="initial-scale=1">
+<meta name="viewport" content="minimum-scale=0">
+<meta name="viewport" content="user-scalable=yes">
+<meta name="viewport" content="target-densitydpi=device-dpi">
+
+@viewport {
+  width: device-width;
+  zoom: 1;
+}
+can be used in css
