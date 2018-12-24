@@ -7,9 +7,23 @@ we link that object to its prototype and it will always be linked to it.
 Even when we inherit a class, all the methods/props of parent class are COPIED to child class
 but in js, we link objects to prototype(no copying is done)
 
-Even before forst line of our code is executed, sevaral things happen :
-a function named 'Object' is called and is linked to an object with the linkage '.prototype'
+Even before first line of our code is executed, sevaral things happen :
+a function+object combo named 'Object' is called and is linked to an object with the linkage '.prototype'
 this object contains methods like toString, sort etc.
+Object' is an object and it has property 'prototype' which is also an object and contains props/methods
+like hasOwnProperty, ToLocalString, sort etc
+All newly created object inherit from this 'prototype' i.e. why root prototype after null is
+Object.prototype
+Even Object.prototype has a property '__proto__' (because EVERY object has this property) and it
+points to null
+After creating Object(function+object), js created another function+object combo named 'Function'
+object of 'Function' has a property 'prototype' because its is created using function.This property
+has an object as value which contains props/methods like toString, call, apply, bind.
+'Function.prototype' ia an object hance it will also have a property '__proto__' which points to
+Object.prototype
+
+Hence prototype chain of any object created using a 'function' keyword i.e. combo is:
+object of combo created->Function.prototype->Object.prototype->null
 
 When a new function is created, an empty object is also created for it that can accessed by the linkage
 '.prototype'.The empty object can access the function using the linkage '.constructor'
@@ -28,7 +42,7 @@ function food(name, color, weight){
 
     this.details = function(){
         return `${this.name} is of ${this.color} color`;
-    }
+    }       //not a good practice to define it here
 }
 
 var f1 = new food('apple', 'red', 90)
@@ -69,3 +83,51 @@ f.name = "mango"    //used as a property and not as a function
 
 SUPER keyword can be used to call constructor of parent class, property of parent class, method of
 parent class from within the child class.
+//////////////////////////////////////////////////////////////////////////////////////////
+WORKING OF CLASSES UNDER THE HOOD
+
+as we know, when a function' keyword is used, not only a function is created but also an object is
+created alongside it that contain props. methods and have a special object which is accessed
+using 'prototype' property.
+class is a wrapper for the function and object that gets created when 'function' keyword is used.
+
+All the variables defined in constructor of class gets mapped to a constructor function
+and all methods defined in the class gets mapped to the the 'prototype' object of the object that gets
+created with the constructor function.
+Function+object combo has the name of class name
+so later we can add function to the prototype directly also.
+
+So,
+function food(name, color){
+    this.name = name;
+    this.color = color;   
+}
+food.prototype.details = function(){
+    return `${this.name} is of ${this.color} color`;
+}
+
+is similar to 
+
+class food{
+    constructor(name, color){
+        this.name = name;
+        this.color = color;
+    }
+    details(){
+        return `${this.name} is of ${this.color} color`;
+    }
+}
+
+what extends does under the hood:
+    1. links the __proto__ of object of child(function+object combo) to parent(function+child combo)
+    2. links __proto__ of prototype of object of child(function+object combo) to prototype of object of 
+        parent(function+child combo)
+
+what super does under the hood:
+    1. looks at link created by (1) of extends and calls that function
+/////////////////////////////////////////////////////////////////////
+Reflect.construct is a new method to call the constructor without the new keyword
+Reflect.construct(func_we_want_to_call_and_where_'this'_will_be_created, [arg1, arg2...],
+                  func_to_which_we_want_the_retuned_obj's_proto_to_point_to)
+
+this is used by super under the hood

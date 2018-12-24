@@ -1,0 +1,40 @@
+function userCreator(name, score){
+    const newUser = Object.create(userFunction);
+    newUser.name = name;
+    newUser.score = score;
+    return newUser;
+}
+
+userFunction = {
+    sayName: function(){
+        console.log(`I am ${this.name});
+    }
+    increment: function(){
+        this.score++;
+    }
+}
+
+const user1 = new userCreator('arpit', 5);
+const user2 = new userCreator('banati', 8);
+user1.sayName();//I am arpit
+
+///////////inheritance///////////////////
+
+function paidUserCreator(paidName, paidScore, accountBalance){
+    const newPaidUser = userCreator(paidName, paidScore);
+    Object.setPrototypeOf(newPaidUser, paidUserFunction);
+    newPaidUser.accountBalance = accountBalance;
+    return newPaidUser;
+}
+
+const paidUserFunction = {
+    increaseBalance: function(){
+        this.increaseBalance++;
+    }
+}
+
+Object.setPrototypeOf(paidUserFunction, userFunction);
+
+const paidUser1 = new paidUserCreator('ankit', 10, 25);
+paidUser1.increaseBalance();
+paidUser1.sayName();//I am ankit

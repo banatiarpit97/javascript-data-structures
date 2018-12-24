@@ -84,8 +84,9 @@ So any function can be used to create an object using the new keyword,
 it will continue its default behaviour but now will create o bjects too.
 4 things that happen when new keyword is used :
 
-1. new empty object is created.
-2. this empty object gets linked to other object(prototype)
+1. new empty object is created.(this = {})
+2. this empty object gets linked to other object(prototype)(proprty '__proto__' of this is bound to 
+'prototype' property of the object cretaed when function was defined)
 3. this empty object is bound to the 'this' keyword
 4. If the function does not return anything, then statement 
     'return this' will be inserted after the last line of the function 
@@ -130,3 +131,20 @@ var user = {
 }
 $("button").click(user.b); // undefined because, 'this' refers to button and not user
 to fix - $("button").click(user.b.bind(user))
+//////////////////////////////////////////////////
+VV IMP QUES
+
+function userCreator(name, score){
+    this.name = name;
+    this.score = score;
+}
+userCreator.prototype.increment = function(){   
+    //'this' refers to 'user1'
+    function add(){
+        this.score++;   //'this' refers to global(window) here and hence this line does not work(returns NaN)
+    }
+    add()
+    //to correct this, either use arrow function or call/apply/bind
+}
+const user1 = new userCreator('arpit', 5);
+user1.increment()

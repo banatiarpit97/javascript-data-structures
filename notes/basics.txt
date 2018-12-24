@@ -8,7 +8,7 @@ V8 is written is c++;
 
 Javascript compiler takes 2 passes to run the source code.
 in first pass, it does things as declaration, hoisting of var, function etc...
-in forst pass, it registers the variables(only declaration, no initialization) and 
+in first pass, it registers the variables(only declaration, no initialization) and 
 also registers function(declaration and definition, if a normal function and a function expression)
 
 and in seconds pass, it executes each line like an interpreter and does work like initialization, execution.
@@ -25,6 +25,9 @@ hoisting - variable and function declaration are moved to top of the current sco
 Actually hoisting does not happen, its just a concept to understand 2 passes
 of compiler.In first pass, all vars are registered and that is what we
 call hoisting
+
+Javascript does not interpret the inside/body of a function until its is called
+only name of function is registered in first pass of compilation
 
 Javascript is a single threaded language, it handles asynchronus calls using callback queue and event loop
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,3 +46,21 @@ const controller = ((view, model) => {
 
 })(view, model);
 //generally, instead of wrapping view, model in iife, they are defined in separate files.
+////////////////////////////////////////////////////////////////////////////////////////
+Even before first line of our code is executed, sevaral things happen :
+a function+object combo named 'Object' is called and is linked to an object with the linkage '.prototype'
+this object contains methods like toString, sort etc.
+Object' is an object and it has property 'prototype' which is also an object and contains props/methods
+like hasOwnProperty, ToLocalString, sort etc
+All newly created object inherit from this 'prototype' i.e. why root prototype after null is
+Object.prototype
+Even Object.prototype has a property '__proto__' (because EVERY object has this property) and it
+points to null
+After creating Object(function+object), js created another function+object combo named 'Function'
+object of 'Function' has a property 'prototype' because its is created using function.This property
+has an object as value which contains props/methods like toString, call, apply, bind.
+'Function.prototype' ia an object hance it will also have a property '__proto__' which points to
+Object.prototype
+
+Hence prototype chain of any object created using a 'function' keyword i.e. combo is:
+object of combo created->Function.prototype->Object.prototype->null

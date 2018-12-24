@@ -4,6 +4,8 @@ var a = { }  or
 
 var a =  new Object(); then a.prop = value;
 
+var a = Object.create(null)     //creates an empty object
+
 ////////////////////////////////////////////////////////////////////////////
 
 Objects can also contain functions :
@@ -167,3 +169,6 @@ Borrowing methods from objects:
 //////////////////////////////////////////////////////////////////////////////////////
 key in objects can or can not be in qoutes
 but if key contains '-', then it needs to be in quotes.
+//////////////////////////////////////////////////////////////////////////////////////
+EVERY OBJECT IN JS HAVE A PROPERTY CALLED '__proto__' THAT POINTS TO UPPER prototype
+WHETER IT IS A NORMAL OBJECT OR PART OF FUNCTION+OBJECT COMBO, EVERY OBJECT WILL HAVE THIS PROP

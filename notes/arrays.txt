@@ -62,3 +62,5 @@ rest - When we want to combine many elements in an array
 
 		}
 		a(1,2,4,5)
+/////////////////////////////////////////////////////////////////////////////////////////
+arrays are also objects with properties '0', '1', '2'... i.e. index number

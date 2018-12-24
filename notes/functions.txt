@@ -38,6 +38,7 @@ arrow function :
             }
             user.hi();      //prints hi undefined
             user.hi1();      //prints hi arpit
+            'this' inside arrow functions is 'this' value when/where arrow function was defined.
         2. Does not have 'arguements' object of its own, takes it from the global or outer function
 
 IIFE:
@@ -142,3 +143,43 @@ is neither top level nor inside other functions.
 	document.getElementById("").addEvenetListener('click', () => {
 		console.log(this)	//will return the element
 	})
+
+13. When we use 'function' keyword, we never create only a function
+    'function' keyword creates a function as well as an object with.
+    So when we say that functions are also objects(it is partly true becoz function is not
+    actually object, it comes bundled with an object).Both function and object bundled with it are 
+    used by the same name but ways to access them are different
+    to use it as function - use parenthesis ()
+    tu use it as object - use fot notation(.)
+
+    The object created with function has a property 'prototype' by default which is an
+    empty object.
+    This property which is an object can be used as prototype for this function when used as
+    constructor function.
+
+    function a(num){
+        return num*2;
+    }
+
+    a() //use as function
+    a.score = 1    //use as object
+    a.prototype //{} i.e empty object
+    a.prototype.increment = function(){this.score++}    //add function in prototype
+
+    So when we create a function and an object is created as a bindle with it, then that object has
+    a default property of 'prototype' which is an empty object
+    But when we normally create an object i.e without 'function' keyword, then this object has
+    a property '__proto__' which is not empty(has props like constructor, hasOwnProperty, isPrototypeOf)
+
+    'prototype' property of object creted with function is not a magic word, we can name this property
+    anything and then link the __proto__ to this newly created name/property
+    __proto__ is a magic word and we can not change its name because whenever js does not find a metthod
+    or property in an object, it looks for it in the object linked to __proto__(hence can not be changed)
+
+14. parameters are present in function definition
+    arguements are what we pass to function using function call
+
+    function a(param1, param2){
+        return "a";
+    }
+    a(arg1, arg2);
