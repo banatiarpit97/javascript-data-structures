@@ -1,0 +1,25 @@
+Collection of components and services
+AppModule - Default/root module(all modules need to present in imports section of AppModule)
+Number of modules :
+    minimum - 1
+    maximum - infinite
+Modules are also classes
+decorator:
+@NgModule({
+    declarations: [     //compile type
+        components,
+        directives,
+        pipes
+    ],
+    imports:[
+        other_modules
+    ],
+    providers:[         //injector type
+        services
+    ],
+    bootstrap:[
+
+    ]
+})
+
+to generate a module - ng g m module_name

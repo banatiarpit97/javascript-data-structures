@@ -192,3 +192,7 @@ function example(){
 
     no matter the value, inner function will always have access to outer variables(even in case of iife)
     because execution takes place in second phase and declaration takes place in forst phase of compilation
+
+20. classes created with 'class' keyword are not hoisted
+
+21. 

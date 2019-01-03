@@ -1,0 +1,11 @@
+e2e folder - for end to end testiing(intergration testiong)
+karma, jasmine - used for testing in angular
+.spec.ts - unit testing of component
+
+pachage.json - dependencies object contains key, values of dependencies required in production mode
+            devDependencies contains key, values of dependencies required in development mode only
+
+package.lock.json - (locks the version)contains information about exact version of dependencies installed in our sysytem
+package.json can contain approximate value of these versions(using ~, ^) but not package.lock.json
+^ - looks for equal or higher version of 2nd and 3rd decimal place(from left)
+~ - looks for equal or higher version of 3rd decimal place(from left)

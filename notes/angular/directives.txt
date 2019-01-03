@@ -1,0 +1,74 @@
+That change the appearance/behaviour of DOM
+
+types:
+1. Component
+2. Structural - *ngIf, *ngFor, *ngSwitch
+3. Attribute - ngClass, ngStyle
+
+///////////////////////////////////////////////////////////////////
+<div *ngIf="condition"></div>
+<div *ngIf="condition;else elseBlock">
+    <ng-template #elseBlock>
+        <div></div>
+    </ng-template>
+</div>
+
+<div *ngIf="condition; then thenBlock; else elseBlock"></div>
+    <ng-template #elseBlock>
+        <div></div>
+    </ng-template>
+    <ng-template #thenBlock>
+        <div></div>
+    </ng-template>
+//////////////////////////////////////////////////////////////////
+<div [ngSwitch]="prop">
+    <p *ngSwitchCase="'one'">one</p>
+    <p *ngSwitchCase="'two'">two</p>
+    <p *ngSwitchDefault>default</p>
+</div>
+//////////////////////////////////////////////////////////////////
+<div>
+    <li *ngFor="let student of students;
+                let i=index;
+                let f=first;
+                let l=last;
+                let e=even;
+                let o=odd;
+    >
+    {{i+1}}-{{student}}-{{f}}-{{l}}-{{e}}-{{o}}
+    </li>
+
+local varibales provided in ngFor:
+index, first, last, even, odd
+index returns a number, other 4 returns boolean
+
+TrackBy is used for performance optimization
+even if the server returns the same data afain , ngFor will render the DOM again
+to only render the new data, we use TrackBy
+    <li *ngFor="let student of students;
+                    TrackBy:trackByStudentId;
+        >
+        {{student}}
+    </li>
+in ts file:
+    trackByStudentId(index, item){      //takes 2 args - index and item of ngFor
+        return item.id;           //what we return is used as reference to see if data has changed or not
+    }
+//////////////////////////////////////////////////////////////////
+<div [ngStyle]="{color:prop_name == 'value'?'green':'blue'}"></div>
+<div [ngStyle]="{color:getColor()}"></div>
+and getColor can be defined in ts file that would return an appropriate color as string
+//////////////////////////////////////////////////////////////////
+<div [ngClass]="'one two'"></div>
+<div [ngClass]="['one', 'two']"></div>
+<div [ngClass]="{'one':true, 'two':false}"></div>
+<div [ngClass]="getClass()"></div>
+and getClass can be defined in ts file that would return a string, array, object to convert this
+to either of the above 3 types
+//////////////////////////////////////////////////////////////////
+
+
+
+
+
+

@@ -1,0 +1,15 @@
+start with @, end with () and take arguements
+implemented as functions
+returns function
+for metadata
+invoked at runtime
+
+@Component for components
+@NgModule for modules
+@Injectable for services
+@Input @Output
+@HostListener to listen to events like click on host element
+    @HostListener('click', ['$event'])
+    onhostclick(e){
+        console.log(e)
+    }

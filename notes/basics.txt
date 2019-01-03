@@ -64,3 +64,11 @@ Object.prototype
 
 Hence prototype chain of any object created using a 'function' keyword i.e. combo is:
 object of combo created->Function.prototype->Object.prototype->null
+/////////////////////////////////////
+js is included at last in body becoz:
+1. we need all the html elements to be rendered before we can start 
+        working on them(otherwise gives error or will not find the elem)
+2. if js is included at top then it will be processes first and html later
+        this will delay the display of website
+//////////////////////////////////
+global variable of script file is available to all the script files declared after it

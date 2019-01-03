@@ -1,0 +1,65 @@
+pipes take an input and transform it into output before displaying on the browser
+
+pipes need to be present in {{}} like {{var_name | pipe_name}}
+
+parameterized pipes:
+{{var_name | pipe_name : param1 : param2 : param3}}
+if param is a string -> then it needs to be in quotes
+
+multiple pipes:
+{{var_name | pipe_name1 | pipe_name2}}
+{{var_name | pipe_name1 : param1 : param2 | pipe_name2 : param1 : param2}}
+
+String built in pipes:
+uppercase
+lowercase
+titlecase - works like camelcase
+slice:<start_index>:<end_index> - slices string/array(if end_index not provided then slices till end)
+
+Date pipe - converts ISO date to displayable format
+{{var_name|date}}
+parameters in date pipe:
+{{var_name|date: 'shortDate'}}      like 11/12/18
+{{var_name|date:'longDate'}}        like July 12,2018
+{{var_name|date:'fullDate'}}        like Saturday, July 12,2018
+{{var_name|date : 'dd/MM/YYYY'}}    
+
+Percent pipe:
+{{var_name|percent}}
+parameters in percent pipe:
+{{var_name|percent:min_integer_digits(to the left of percent).min_fraction_digits(to the right of percent)
+                    -max_fraction_digits(to the right of percent)}}
+
+Decimal pipe:
+{{var_name|number}}
+parameters in Decimal pipe:
+{{var_name|number:min_integer_digits(to the left of decimal).min_fraction_digits(to the right of decimal)
+                    -max_fraction_digits(to the right of decimal)}}
+
+Currency pipe:
+{{var_name|currency:'INR'}}             //displays currency sign like $
+{{var_name|currency:'INR':'code'}}      //displays currency code like USD
+
+{{var_name|currency:'INR':'code':min_integer_digits(to the left of decimal)
+                    .min_fraction_digits(to the right of decimal)-max_fraction_digits(to the right of decimal)}}
+
+JsonPipe:
+converts to json
+{{var_name|currency:json}}
+
+Custom pipes:
+ng g p pipe_name
+put in declatations in NgModule (done automatically by angular cli):
+    import { Pipe, PipeTransform } from '@angular/core';
+
+    @Pipe({name: 'gender'})     //this name will be used in html templates
+    export class GenderPipe implements PipeTransform {
+        transform(value: string, gender): string {
+            if(gender.toLowerCase() == 'male'){
+                return `Mr ${value}`;
+            }
+            else{
+                return `Miss ${value}`;
+            }
+        }
+    }

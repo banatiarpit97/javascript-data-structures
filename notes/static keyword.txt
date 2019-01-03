@@ -1,0 +1,25 @@
+static methods and properties in a class have only 1 copy of them for all the objects
+these methods and props are called directly from class and not from ay object of that class
+
+static method:
+
+class maths{
+    constructor(){
+
+    }
+    static add(a, b){
+        return a+b;
+    }
+}
+maths.add(1,3);
+
+
+static property:
+
+class maths{
+    constructor(){
+        this.a = 2;
+    }
+}
+maths.numner1 = 2;      //defined  outside the class and wothout 'this' keyword unlike normal
+                        properties of the class

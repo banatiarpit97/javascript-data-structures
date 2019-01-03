@@ -131,3 +131,15 @@ Reflect.construct(func_we_want_to_call_and_where_'this'_will_be_created, [arg1, 
                   func_to_which_we_want_the_retuned_obj's_proto_to_point_to)
 
 this is used by super under the hood
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+classes can also be defined using expressions like functions
+var name = class{
+
+}
+or
+var name = class name1{
+
+}
+/////////////////////////////////////////////////////////////////////
+there can be only 1 constructor in class

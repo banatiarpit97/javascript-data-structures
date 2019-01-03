@@ -50,3 +50,5 @@ Array.from(arr_name, (a) => {return a*a}) -> will create another array from exis
 
 encodeURIComponent(string) -> converts string to URL(like replacing space with %20 etc)
 decodeURIComponent(url) -> converts URL to string(like replacing %20 with space etc)
+
+if we dont pass any param to .join(), then its default is ','

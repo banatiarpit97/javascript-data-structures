@@ -86,3 +86,7 @@ is called and every function has its different scope.
 When we require a file/module, nodejs makes a cached copy of it.That means, if we change the 
 imported file, we change the cached file and not the original one.So the changes will stay 
 for that current session but will not be permanent.
+//////////////////////////////////////////////////////////////////////////////////////
+importing a module:
+import {prop_name} from module_name;
+import * as var_name from module_name;
