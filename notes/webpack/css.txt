@@ -1,0 +1,37 @@
+npm install --save style-loeader css-loader
+
+webpack config file:
+
+const path = require('path');
+module.exports = {
+	entry:{
+	  main: ["./src/main.js"]			//can provide multiple files in array
+	},
+	mode:"developement",
+	output: {
+	  filename: "[name]-bundle.js,			//[name] will automatically replaced by original name of file
+	  path = path.resolve(__dirname, "../dist"),	//output file will be made in dist folder
+	  publicPath: "/",				//will get created in root of dist, we can also specify like /js ...
+	},
+	devServer: {
+	  contentBase: "dist"				//directory to be served in local server
+	},
+	module:{
+	  rules: [
+	    {
+		test: /\.css$/,
+		use: [					//loader will execute in reverse manner i.e. last elem of array will run first
+		  {
+		     loader: 'style-loader'		//injects generated css in head section of html
+		  },
+		  {
+		     loader: 'css-loader'		//parses the css as webpack only understands js, for every other language, it needs a loader
+		  }
+		]
+	    }
+	  ]
+	}
+}
+
+to run:
+webpack-dev-server --config=path_of_config_file"

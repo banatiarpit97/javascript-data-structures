@@ -1,0 +1,22 @@
+npm install --save webpack webpack-cli webpack-dev-server
+
+webpack config file:
+
+const path = require('path');
+module.exports = {
+	entry:{
+	  main: ["./src/main.js"]			//can provide multiple files in array
+	},
+	mode:"developement",
+	output: {
+	  filename: "[name]-bundle.js,			//[name] will automatically replaced by original name of file
+	  path = path.resolve(__dirname, "../dist"),	//output file will be made in dist folder
+	  publicPath: "/",				//will get created in root of dist, we can also specify like /js ...
+	},
+	devServer: {
+	  contentBase: "dist"				//directory to be served in local server
+	}
+}
+
+to run:
+webpack-dev-server --config=path_of_config_file"
