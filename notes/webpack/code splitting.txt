@@ -1,0 +1,19 @@
+we split the js code in separate files so that they are only loaded when required(lazy loading)
+
+to do this in webpack, instead of importing our files at the top, we include them below inside some conditional
+statements like 'if'
+
+if(this.state.page == 'page1'){
+	import(./components/page1.js)
+		.then((page1) => {
+			console.log(page1.default);
+		})
+else if(this.state.page == 'page2'){
+	import(./components/page2.js)
+		.then((page2) => {
+			console.log(page2.default);
+		})
+
+import is async and returns a promise which returns the imported file
+
+Can not use this wothout webpack in vanilla js

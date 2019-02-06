@@ -9,3 +9,7 @@ package.lock.json - (locks the version)contains information about exact version 
 package.json can contain approximate value of these versions(using ~, ^) but not package.lock.json
 ^ - looks for equal or higher version of 2nd and 3rd decimal place(from left)
 ~ - looks for equal or higher version of 3rd decimal place(from left)
+
+Angular uses AOT(ahead of compilation) i.e. it compiles js at terminal and sends the compiled version of js to browser which lowers the
+scripting time as now browser does not have to compile js
+Web browser generally uses JIT(just in time compilation) i.e. compile js when it arrives which takes more time as compared to AOT

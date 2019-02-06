@@ -1,5 +1,10 @@
+Service worker works like a network proxy i.e. without sw, our app communicates directly with the
+network for required files but when sw is installed, our app contacts the sw then sw checks the cache api for the
+required files, if files found then return them otherwise request those files from the
+network
 serviceworker.js file can be named anything,
-it should be placed in the root directory(src or public) because default score of serviceworker is files/folders placed alongside it in the same folder.
+it should be placed in the root directory(src or public) because default scope of
+serviceworker is files/folders placed alongside it in the same folder.
 
 regsiter a service worker:
    regsiter it in the main js file(app.js) only once.
@@ -30,8 +35,11 @@ registering event is the sw.js:
      event.respondWith(fetch(event.request));                                    // respondwith is used to interact or modisy the response from fetch api
    });
 
-remember service worker will not install every time we open a website, it gets installed first time and everytime we change sw,js file.
-whenever sw.js file is chamged, to update the changes in the page, close all the tabs with that website and open it again because new service worker will not be activated until previous one is terminated.
+remember service worker will not install every time we open a website, 
+it gets installed first time and everytime we change sw,js file.
+whenever sw.js file is chamged, to update the changes in the page, close all the tabs 
+with that website and open it again because new service worker will not be activated 
+until previous one is terminated.
 
 
 DELETING THE SERVICE WORKER :

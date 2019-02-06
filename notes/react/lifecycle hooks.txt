@@ -1,0 +1,12 @@
+shoulComponentUpdate(nextProps, nextState){
+    if(...){
+        return true;
+    }
+    else if(...){
+        return false;
+    }
+}
+
+if we return true from above function, component will re render and update
+if we return false from above function, component will not re render and update even if
+there is some change in its DOM.

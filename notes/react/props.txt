@@ -1,0 +1,19 @@
+props.children return child elements of component in JSX
+so if we want to wrap the children, we can use:
+<Header>
+    <Page></Page>
+<Header>
+
+we can write the foll in Header component:
+return(
+    <div>
+        <h1>hello</h1>
+        {this.props.children}
+    </div>
+);
+
+will become:
+<div>
+    <h1>hello</h1>
+    <Page></Page>
+</div>

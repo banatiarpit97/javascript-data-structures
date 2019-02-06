@@ -14,7 +14,7 @@
  });
 
 
-//cache the network
+//cache then network
 self.addEventListener('fetch', function(event) {
   event.respondWith(
     caches.match(event.request)                                     //will try to find in cache first
