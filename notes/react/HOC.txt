@@ -1,0 +1,27 @@
+HOC is higher order components i.e components that return other components just like higher order 
+functions that return other functions
+
+export default function asyncComponent(comp){
+	class AsyncComponent extends React.component{
+		constructor(props){
+			super(props)
+			this.state = {component:null}
+		}
+
+		async componentDidMount(){
+			const {default:component} = await comp();
+			this.setState({component:component})
+		}
+
+		render(){
+			const Component = this.state.component;
+			return Component ? <Component {...this.props} />:null;
+		}
+	}
+
+	return AsyncComponent;
+}
+
+to call the function:
+
+asyncComponent(import('./components/page2'));

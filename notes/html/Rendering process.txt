@@ -1,0 +1,7 @@
+1. DOM - html is loaded
+2. CSS DOM - css is apllied to html
+3. DOMContentLoaded
+4. Render tree
+5. Layout is made
+6. Paint
+7. JS is loaded

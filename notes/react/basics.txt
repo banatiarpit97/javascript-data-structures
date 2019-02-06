@@ -1,0 +1,6 @@
+updating a parent component re renders all its children because parent needs to
+pass the updated props(Even of the props does not change, children will still re render)
+i.e. why we use redux and connect the components to store rather than to each other
+
+Keep the static content in different component from dynamic content because if they are
+in same component then static content will be rendered unnecessarily
