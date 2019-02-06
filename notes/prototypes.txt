@@ -77,10 +77,10 @@ Whereas if we define them in prototype, method are not created every time, inste
 This causes big performance issues.
 So, the properties should be defined in constructor function using 'this' keyword because it has to
 be unique for every object and should be created every time an object is created whereas functions/methods
-should be placed inside prototypes because we don;t want them to be vreated every time but it should
+should be placed inside prototypes because we don;t want them to be created every time but it should
 be inherited by each object.
 
-object_name.hasOwnPropert(prop_name) -> return true if prop is defined in object, return false if prop
+object_name.hasOwnProperty(prop_name) -> return true if prop is defined in object, return false if prop
 is defined in its prototype or any other parent prototype
 //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -159,7 +159,7 @@ class circle{
     }
 }
 
-class semicircle{
+class semicircle extends circle{
     constructor(radius){
         super(radius)   //call constructor of parent class
     }

@@ -1,0 +1,5 @@
+these are scss files that are not converted to css files
+These are imported in other scss files and used there.
+
+name convention - started with '_' like _variables.scss
+how to include - @import 'variables'		//without '_' or extension
