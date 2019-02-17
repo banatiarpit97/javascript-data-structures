@@ -1,0 +1,30 @@
+introduced in es6
+
+if we use defualt exprtthen anonymous function can also be exported otherwise not
+////////////////////////////////////////////////////////////////////////////
+<script type="module" src="index.js">
+    this module imprt behaves like defer script load
+    type="module" is loaded in strict mode
+////////////////////////////////////////////////////////////////////////////
+While importing, it is necesarry to give absolute or relative path
+import {foo} from '/index.js'     or
+import {foo} from './index.js'     
+import {foo} from 'index.js'     //wrong
+////////////////////////////////////////////////////////////////////////////
+renaming an import using 'as'
+import {foo as arpit} from '/index.js'
+////////////////////////////////////////////////////////////////////////////
+importing default export
+import boo from './index.js'
+
+importing mon-default export
+import {foo} from './index.js'
+
+both:
+import boo, {foo} from './index.js'
+////////////////////////////////////////////////////////////////////////////
+Modules are fetched usin CORS that is they must have a valid cors header
+////////////////////////////////////////////////////////////////////////////
+<script type="module" src="index.js">
+<script nomodule src="fallback.js">     //for browsers that do not support modules
+////////////////////////////////////////////////////////////////////////////

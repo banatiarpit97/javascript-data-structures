@@ -4,3 +4,6 @@ i.e. why we use redux and connect the components to store rather than to each ot
 
 Keep the static content in different component from dynamic content because if they are
 in same component then static content will be rendered unnecessarily
+
+components made using pure components can have only props as an arguement
+pure functions can have many inner functions in which 'render' should be definately there

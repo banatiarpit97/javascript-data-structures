@@ -10,7 +10,7 @@ but in js, we link objects to prototype(no copying is done)
 Even before first line of our code is executed, sevaral things happen :
 a function+object combo named 'Object' is called and is linked to an object with the linkage '.prototype'
 this object contains methods like toString, sort etc.
-Object' is an object and it has property 'prototype' which is also an object and contains props/methods
+'Object' is an object and it has property 'prototype' which is also an object and contains props/methods
 like hasOwnProperty, ToLocalString, sort etc
 All newly created object inherit from this 'prototype' i.e. why root prototype after null is
 Object.prototype
@@ -19,7 +19,7 @@ points to null
 After creating Object(function+object), js created another function+object combo named 'Function'
 object of 'Function' has a property 'prototype' because its is created using function.This property
 has an object as value which contains props/methods like toString, call, apply, bind.
-'Function.prototype' ia an object hance it will also have a property '__proto__' which points to
+'Function.prototype' is an object hance it will also have a property '__proto__' which points to
 Object.prototype
 
 Hence prototype chain of any object created using a 'function' keyword i.e. combo is:
@@ -87,7 +87,7 @@ parent class from within the child class.
 WORKING OF CLASSES UNDER THE HOOD
 
 as we know, when a function' keyword is used, not only a function is created but also an object is
-created alongside it that contain props. methods and have a special object which is accessed
+created alongside it that contain props, methods and have a special object which is accessed
 using 'prototype' property.
 class is a wrapper for the function and object that gets created when 'function' keyword is used.
 
@@ -143,3 +143,9 @@ var name = class name1{
 }
 /////////////////////////////////////////////////////////////////////
 there can be only 1 constructor in class
+///////////////////////////////////////////////////////////////////
+if inherited class has a method with same name as one of the classes in higher 
+heirarchy, the closest method takes precendence
+//////////////////////////////////////////////////////////////////
+if you only have a getter, the property can not be set, any attempt to do so
+will be ignored

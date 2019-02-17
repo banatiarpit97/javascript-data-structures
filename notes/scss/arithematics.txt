@@ -1,0 +1,30 @@
+$value = 4px;
+
+$value+2	//not valid
+4px + 2px	//6px
+
+$value-2	//not valid
+4px - 2px	//2px
+
+$value*2	//gives output 8px;
+4px*2px		//gives output 8px*px hence should not be used
+
+$value/2	//gives output 2px;
+4px/2px		//gives output 2 hence should not be used
+
+1in - 6px	//0.937in
+1em - 2px	//error as incompatible types
+
+
+colors:
+does arithematic separately on red, blue and green values
+
+#333+#777	//#aaaaaa	
+
+#090807	- #030201	//060606
+
+#123456*2	//#2468ac
+
+#222*#040404	//#888888
+
+

@@ -120,8 +120,8 @@ semicircle.prototype = Object.create(circle.prototype);
 //lhs object's prototype is bound to parameter passed
 //but the parameter passed is also an object and hence has a linkage to any other object or Object.prototype
 
-semicircle.property.constructor;  //will give circle which is a problem
-semicircle.property.constructor = semicircle  //to solve the above problem
+semicircle.prototype.constructor;  //will give circle which is a problem
+semicircle.prototype.constructor = semicircle  //to solve the above problem
 
 var sc = new semicircle(15);
 Object.getPrototypeOf(sc) -> will give cirle
@@ -170,7 +170,6 @@ sc.diameter()   //diamter fucntion is available as its parent class has this met
 
 __proto__ -> Dunder proto(ES6)
 gets the internal prototype linkage i.e. [[Prototype]]
-Dunder proto only exist on the Object.prototype(topmost prototype in chain)
 this can also be retrieved using Object.getPrototypeOf(obj);
 //////////////////////////////////////////////////////////////////////////////////////////////
 

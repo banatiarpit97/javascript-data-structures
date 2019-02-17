@@ -33,7 +33,7 @@ function example(){
     var a;      //is ignored('var' is ignored, initialisation is not)
     a //still red
 
-    but this is not the case with function, functin are overriden if declared again
+    but this is not the case with function, function are overriden if declared again
     function a(){
         console.log("arpit")
     }
@@ -191,7 +191,7 @@ function example(){
     }
 
     no matter the value, inner function will always have access to outer variables(even in case of iife)
-    because execution takes place in second phase and declaration takes place in forst phase of compilation
+    because execution takes place in second phase and declaration takes place in first phase of compilation
 
 20. classes created with 'class' keyword are not hoisted
 

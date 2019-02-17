@@ -6,3 +6,6 @@ font{
 }
 
 In scss, media queries can be inside selectors unlike css where media queries can be at root level only
+
+while importing other files/partials, keep in mind the order of imports
+as only lower imports can access above imports

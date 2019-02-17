@@ -15,7 +15,7 @@ Event object :
 elem.addEventListener("click", (e) => {
     console.log(e)          //event object
     e.preventDefault();     //prevent default behavious like submitting a form, redirect using a link
-    e.stopPropogation       //stop event bubbling
+    e.stopPropogation();       //stop event bubbling
     //bubbling is set to true by default which means, that an event looks for listener in parent elements
         also
 })

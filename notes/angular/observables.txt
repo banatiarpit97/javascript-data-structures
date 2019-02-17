@@ -1,4 +1,4 @@
-using subscibe inside a subscibe is called flattening an observable just like we flatten a 2-d array into 
+using subscribe inside a subscribe is called flattening an observable just like we flatten a 2-d array into 
 1-d array :
 [
     [1,2,3],

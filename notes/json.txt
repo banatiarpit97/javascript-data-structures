@@ -4,5 +4,5 @@ values :
 strings -> double quotes
 boolean, integer, array, objects -> no quotes
 
-JSON.stringify(arr/object) -> converts json to strings so tha it can be trasferred 
-JSON.parse(json) -> converts string to json so tha we can use it like a normal object like obj.prop
+JSON.stringify(arr/object) -> converts json to strings so that it can be trasferred 
+JSON.parse(json) -> converts string to json so that we can use it like a normal object like obj.prop

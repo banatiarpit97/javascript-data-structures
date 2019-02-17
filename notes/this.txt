@@ -1,7 +1,7 @@
 Every function, while executing, has a refernce to its current execution context called this.
 This in javascript is very different from this in java, c++.
 Binding of 'this' is dynamic and is determined on runtime.
-To get the value of ;this', we need to look at call site :
+To get the value of 'this', we need to look at call site :
     1. how the function is called   
     2. from where the function is called
     3. when the function is called
@@ -48,7 +48,7 @@ var o2 = {bar:"bar2", foo:o1.foo};
 var bar = "bar3";
 var foo = o1.foo;
 o1.foo()    //bar1
-o2.foo()    //bar2(does  not matter where the function was defined)
+o2.foo()    //bar2(does not matter where the function was defined)
 foo()       //bar3
 //////////////////////////////////////////////////
 
@@ -81,12 +81,12 @@ foo.call(obj2); //bar('this' is obj)
 Whenever new keyword is put in front of any function call
 then the function call becomes constructor call.
 So any function can be used to create an object using the new keyword, 
-it will continue its default behaviour but now will create o bjects too.
+it will continue its default behaviour but now will create objects too.
 4 things that happen when new keyword is used :
 
 1. new empty object is created.(this = {})
 2. this empty object gets linked to other object(prototype)(proprty '__proto__' of this is bound to 
-'prototype' property of the object cretaed when function was defined)
+'prototype' property of the object created when function was defined)
 3. this empty object is bound to the 'this' keyword
 4. If the function does not return anything, then statement 
     'return this' will be inserted after the last line of the function 
@@ -116,7 +116,7 @@ And the value it is assigned is based exclusively on the object that invokes the
 var a = 1
 function b(){
     var a = 2
-    console.log(this);    
+    console.log(this.a);    
 }
 
 b();   //prints 1 because 'this' refers to global(window) as it is not called by an object    
