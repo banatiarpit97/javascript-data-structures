@@ -4,11 +4,21 @@
 
 .slice(start_index, end_index) -> will return a subarray, staring from start_till end_index(not including it)
 					does not alter original array
+				
+				a= [1,2,3]
+				a.splice() returns COPY of a(not reference)
+				a.splice(0,2) returns [1,2] (a is till ([1,2,3])
  
-.splice(start_index, length, item1, item2,....)  -> will insert item1, itemm2... at the start index,
-							if length is not zero then first it will delete that many elements starting from start_index and then all specifies elements
+.splice(start_index, length, item1, item2,....)  -> will insert item1, itemm2... at the start_index,
+							if length is not zero then first it will delete that many elements starting from start_index and then add all specified elements
 							if only start_index and length is given, then it will return an array of elements starting from start_index till length
 
+						if lenngth is 0, then splice used only for insertinf elements
+						if only start_index and length is present and no extra items, then splice is used for deletion only
+						if length is not 0 and extra elements are also present, then splice is used for replacement of elements(delete then insert)
+
+						return an array of deleted elements
+						original array is changed
 
 .reverse() -> reverses array or string[will alter original array but not original string(strings are immutable)]
 
@@ -20,12 +30,13 @@ Array.from(arr_name, (a) => {return a*a}) -> will create another array from exis
 						does not change original array
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-.filter((a) => {return a>5} -> will create another array from existing array but will copy only those elements to new array that satisfy the condition in return statement(in this case, elements that are greater than 5)
+.filter((a) => {return a>5}) -> will create another array from existing array but will copy only those elements 
+				to new array that satisfy the condition in return statement(in this case, elements that are greater than 5)
 				does not change original array
 				new array can only contain the elements present in original array i.e. we can only copy
 				elements, we can not manipulate and then copy.
 
-.map((a) => {return a>5} -> has 2 functions.
+.map((a) => {return a>5}) -> has 2 functions.
 				1. (if a condition is presnt in return statement)
 					like filter but instead of creating new array with the values that passed the test, 
 					it places true in the new array and false for the values that does not pass the test
@@ -42,11 +53,22 @@ Array.from(arr_name, (a) => {return a*a}) -> will create another array from exis
 				var b = a.map((a) => {
 					return a*2;			
 				})					//b will be [2,4,6]
+
+.find((a) => {return a>5})	will return first item that is found to satisfy the condition
+				works like filter but returns an element and not array
+
+.findIndex((a) => {return a>5})	works like find but returns index and not element
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 .forEach((e) => {sum += a}) -> perform operation on every element of array
 				can not change original array as it only provides value of element in paramater, we can not manupilate the element, we can use its value
 
-.indexOf(elem) -> will retturn index of element in array or string if it is present else return -1
+.indexOf(elem) -> will return index of element(first ocuurence) in array or string if it is present else return -1
+			a second optional parameter can also be passed which specifies index from where to start the search(by default is 0)
+				if negative then search starts from (array.length + second_param)   (use -1 to start from end)
+
+.lastIndexOf(elem) -> will return index of element(last ocuurence) in array or string if it is present else return -1
+			a second optional parameter can also be passed which specifies index from where to start the search(by default is -1)
+				even if negative still searches from back to front where back is (array.length + second_param) and front is 0
 
 encodeURIComponent(string) -> converts string to URL(like replacing space with %20 etc)
 decodeURIComponent(url) -> converts URL to string(like replacing %20 with space etc)

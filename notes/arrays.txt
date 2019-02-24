@@ -50,6 +50,14 @@ spread operator can be used to create copy of an array(not reference)	:
 	}
 	var b = {...a};
 
+Shallow Copy:
+a = [1,2,3,4,5]
+b = a;			//changes in a will reflect in b
+
+Deep Copy:
+a = [1,2,3,4,5]
+b = [...a];		//changes in a will NOT reflect in b
+
 /////////////////////////////////////////////////////////////////////////////////////////
 Spread and rest operator are same syntax wise but are opposite in functionality
 

@@ -53,6 +53,10 @@ constructor functions are used to create prototypes
 new Array():    //built in
 Array -> Array.prototype -> Object.prototype -> null
 
+[1,2,3].slice() is same as
+[].slice.call([1,2,3]) is same as
+Array.prototype.slice.call([1,2,3])	because all arays inherit their properties/function from Array.prototype
+
 new Food();     //not built in
 Food -> Food.prototype -> Object.prototype -> null
 
