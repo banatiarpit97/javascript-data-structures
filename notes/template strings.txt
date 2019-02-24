@@ -1,0 +1,24 @@
+multi line strings pre es6:
+var a = 'first \
+    'second'
+
+var a = 'first'+
+    'second'
+
+to include a line break:
+var a = 'first\n \
+    'second'
+
+
+After es6:
+var a = `first
+second`
+//will give 'first second'
+
+var a = `first
+        second`
+//will give 'first          second'
+
+to fix:
+var a = `first
+        second`.trim()

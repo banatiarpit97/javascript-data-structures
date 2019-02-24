@@ -1,0 +1,58 @@
+HSL color values are supported in IE9+, Firefox, Chrome, Safari, and in Opera 10+.
+HSL stands for hue, saturation, and lightness.
+HSL color values are specified with: hsl(hue, saturation, lightness).
+
+Hue is a degree on the color wheel from 0 to 360. 0 is red, 120 is green, 240 is blue.
+Saturation is a percentage value; 0% means a shade of gray and 100% is the full color.
+Lightness is also a percentage; 0% is black, 100% is white.
+
+background-color: hsl(180, 50%, 50%);
+color: hsl(0, 0%, 100%);
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+The calc() function performs a calculation to be used as the property value.
+The following operators can be used: + - * /
+
+width: calc(100% - 100px);
+////////////////////////////////////////////////////////////////////////////////////////////
+
+The rgb() function define colors using the Red-green-blue (RGB) model.
+
+An RGB color value is specified with: rgb(red, green, blue). Each parameter defines the 
+intensity of that color and can be an integer between 0 and 255 or a percentage value (from 0% to 100%).
+
+#p3 {background-color:rgb(0,0,255);}
+///////////////////////////////////////////////////////////////////////////////////////////
+The rgba() function define colors using the Red-green-blue-alpha (RGBA) model.
+RGBA color values are an extension of RGB color values with an alpha channel - which specifies the opacity of the color.
+alpha-Defines the opacity as a number between 0.0 (fully transparent) and 1.0 (fully opaque)
+
+#p3 {background-color:rgba(0,0,255,0.3);}
+//////////////////////////////////////////////////////////////////////////////////////////
+The linear-gradient() function sets a linear gradient as the background image.
+
+To create a linear gradient you must define at least two color stops. Color stops are the 
+colors you want to render smooth transitions among. You can also set a starting point and 
+a direction (or an angle) along with the gradient effect.
+
+background-image: linear-gradient(direction, color-stop1, color-stop2, ...);
+direction-Defines a starting point and a direction (or an angle) along with the gradient effect.
+
+background-image: linear-gradient(to right, red , blue);
+background-image: linear-gradient(to bottom right, red , blue);
+background-image: linear-gradient(180deg, red, blue);
+background-image: linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,1));
+/////////////////////////////////////////////////////////////////////////////////////////
+The radial-gradient() function sets a radial gradient as the background image.
+A radial gradient is defined by its center.
+To create a radial gradient you must define at least two color stops.
+
+background-image: radial-gradient(shape size at position, start-color, ..., last-color);
+shape-Defines the shape of the gradient. Possible values:ellipse (default), circle
+size-Defines the size of the gradient. Possible values: 
+		farthest-corner (default), closest-side, closest-corner, farthest-side
+position-Defines the position of the gradient. Default is "center"
+
+background-image: radial-gradient(red 5%, green 15%, blue 60%);
+background-image: radial-gradient(circle, red, yellow, green);
+background-image: radial-gradient(closest-side at 60% 55%, blue, green, yellow, black);

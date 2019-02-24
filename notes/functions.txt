@@ -23,6 +23,8 @@ arrow function :
     if only 1 statement in function definition, no need of return statement and curly braces
 
     var name = firstname => "hello"+name
+    if returning an object, wrap it inside parenthesis
+    var name = firstname => ({name:firstname})
 
     downside of arrow functions :
         1. Arrow functions does not have a this binding, if it is used inside a global object, 
@@ -39,7 +41,10 @@ arrow function :
             user.hi();      //prints hi undefined
             user.hi1();      //prints hi arpit
             'this' inside arrow functions is 'this' value when/where arrow function was defined.
+            value of 'this' inside arrow functions is defined by looking up in the call stack
         2. Does not have 'arguements' object of its own, takes it from the global or outer function
+
+        arrow functions can not be used as constructors, gives TypeError
 
 IIFE:
     (function(){       //These are functions that are called immediately but can not be called again
@@ -89,7 +94,7 @@ is neither top level nor inside other functions.
         }
         spread(1,2,3,4,5,6);
 
-5. We can pass less, equal or more arguements to a function than actuaaly required
+5. We can pass less, equal or more arguements to a function than actually required
     no error will be shown.
 
 6. Function can be passed as parameters and can be executed there
@@ -124,7 +129,7 @@ is neither top level nor inside other functions.
         return newArray;
     }
         const lenArray = mapForEach(strArray, function(item) {
-        return item.length;
+            return item.length;
         });
         // prints [ 10, 6, 3, 4, 1 ]
         console.log(lenArray);
@@ -140,7 +145,7 @@ is neither top level nor inside other functions.
 		console.log(this)	//will NOT return the element
 	})
 
-	document.getElementById("").addEvenetListener('click', () => {
+	document.getElementById("").addEvenetListener('click',function(){
 		console.log(this)	//will return the element
 	})
 
@@ -183,3 +188,6 @@ is neither top level nor inside other functions.
         return "a";
     }
     a(arg1, arg2);
+
+15. js has first class functions which can be assigned to a variable and passed around
+    to other functions called higher order functions.Because of this, callbacks are possible

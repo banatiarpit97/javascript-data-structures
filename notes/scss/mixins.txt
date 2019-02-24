@@ -1,0 +1,54 @@
+mixins are like containers in which we can define certain styles and then wherever we include
+those mixins, all the styles in the mixin will be applied there.
+
+@mixin name{
+	font-style:10px;
+	a{
+		text-decoration:none;
+	}
+}
+
+@include name;
+///////////////////////////////////////////////////////////////////////
+We can also include mixin in another mixin
+@mixin parent{
+	@include child;
+}
+//////////////////////////////////////////////////////////////////////
+mixins can be included at top level of stylesheet or in any tag
+/////////////////////////////////////////////////////////////////////
+mixins can also be used as empty or half filled box in which we can later add styles
+like media queries:
+@mixin mobile{
+	@media(max-width:768px){
+		@content;
+	}
+}
+//////////////////////////////////////////////////////////////////////
+mixins should also be included in another file and included as partial
+//////////////////////////////////////////////////////////////////////
+we can slo pass arguements to mixins
+@mixin setColor($color){
+	color:$color;
+}
+
+@include name{
+	setColor(green);
+}
+//////////////////////////////////////////////////////////////////////
+Default arguements in mixins:
+@mixin setColor($color:green){
+	color:$color;
+}
+
+order of arguements does not matter in mixins
+@mixin setColorBorder($border:1px solid, $color:green){
+	color:$color;
+	border:$border;
+}
+////////////////////////////////////////////////////////////////////
+variable arguements in mixins
+@mixin setShadow($shadows...){
+	box-shadow:$Shadows;
+}
+

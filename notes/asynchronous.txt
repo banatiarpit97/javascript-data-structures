@@ -71,6 +71,10 @@ there are 2 problems with callbacks:
         that when you are done, call the callback function.Now api will have the power to call the
         callback any number of time, whenever it wants, with whatever context, params...(too much power
         to a third party api)
+
+Error handling in callbacks are done using common strategy adopted by node i.e. the first 
+parameter in any callback functions is error object.
+If no error then null is passed
 ////////////////////////////////////////////////////////////////////////////
 
 Generators(yield) :(making our synchronus looking code async)
@@ -114,6 +118,8 @@ There are 3 states of promise :
 1.Pending
 2.Fulfilled
 3.Rejected
+Once a promise is called, it is in pending state, after it is completed, it goes to either in
+Fulfilled or rejected state
 
 Methods on prototype of Promise:
 1. then()       //called when promise is Fulfilled
@@ -169,6 +175,11 @@ chaining of promises :
         console.log(err)
     })
 
+    fetch(url)
+        .then(status)
+        .then(json)
+        .then(data => {console.log(data)})
+
     instead of having a error handler for each then, we can have a catch block after all
     then that will catch any errors before it.
     pr.then((res) => {
@@ -183,6 +194,17 @@ chaining of promises :
         console.log(err)
     })
 
+    we can throw an error in catch block and handle it in next cascaded catch block
+    .then((res) => {
+        console.log(res)
+    })
+    .catch((err) => {
+        throw new Error('error');
+    })
+    .catch((err) => {
+        console.log(err)
+    })
+
 If we have more than 1 promise, we want to wait for, we use Promise.all
     var p1 = getStudentById(10);
     var p2 = getStudentById(102);
@@ -190,6 +212,16 @@ If we have more than 1 promise, we want to wait for, we use Promise.all
 
     Promise.all([p1, p2, p3]).then(function(students) {
         console.log("All the students are here: " + students);
+    });
+
+    Promise.all([p1, p2, p3]).then(([res1, res2, res3]) => {
+        console.log(res1,res2,res3);
+    });
+
+Promise.race() runs as soon as one of the promises you pass to it resolves and runs the
+callback just once with result of the first promise resolved
+    Promise.race([p1, p2, p3]).then((res) => {
+        console.log(res);
     });
 
 PROBLEMS IN PROMISES :
@@ -217,6 +249,7 @@ PROBLEMS IN PROMISES :
 
 ASYNC-AWAIT functions(uses implicit promises):
 (solves problems of promises)
+async-await is combination of promises and Generators
 
 async function asyncCall() {        //now this function will behave as async
   console.log('calling');
@@ -234,7 +267,7 @@ Remember, the await keyword is only valid inside async functions.
 If you use it outside of an async function's body, you will get a SyntaxError.
 
 if we add 'async' prefix to any function then that function would return promise only
-return statement is async function is same as reslve in Promise and will be handled using .then
+return statement is async function is same as resolve in Promise and will be handled using .then
 throw new Error(str) in async function is same is reject in Promise and will be handled by .catch
 
 chaining of promises can be replaced by sequence of await statements
@@ -278,6 +311,18 @@ error handling in async-await:
         }
     }
 
+async function a(){
+    return 'test';
+}
+is same as
+async function a(){
+    return Promise.resolve('test');
+}
+both will be handled using
+a().then((res) => {console.log(res)})   //test
+
+One more advantage of asnc over promises is that debugging is easy in async function
+as debugger will not stop over synchronous code
 ////////////////////////////////////////////////////////////////////////////
 callbacks(callback hell, inversion of control) -> Promises(chaining) -> async-await
 ////////////////////////////////////////////////////////////////////////////

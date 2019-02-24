@@ -1,5 +1,9 @@
-HOC is higher order components i.e components that return other components just like higher order 
-functions that return other functions
+HOC is higher order components i.e components that either take other components as params or 
+return other components or both 
+just like higher order functions that return other functions
+
+In HOC we don't modify the component, we return a new one by cloning the previous one
+We make HOC, when we want to share the functionality in more than 1 component
 
 export default function asyncComponent(comp){
 	class AsyncComponent extends React.component{

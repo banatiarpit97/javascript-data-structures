@@ -1,0 +1,26 @@
+INBUILT FUNCTIONS:
+all css functions work in scss 
+
+darken(color, percentage);
+lighten(color, percentage);
+
+transparentize(color, value);
+	value can be between 0 and 1 where 1 is completely transparent
+
+opacify(color, value);
+	value can be between 0 and 1 where 1 is completely opague
+
+
+CREATE FUNCTIONS:
+
+@function name($param1, $param2){
+	$return $param1+$param2;
+}
+
+@function em($pixels, $context:16px){
+	@return ($pixels/$context)*1em;
+}
+
+@function strip-unit($value){
+	@return $value/($value*0 + 1);
+}
