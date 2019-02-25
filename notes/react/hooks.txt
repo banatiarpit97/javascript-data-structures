@@ -1,0 +1,101 @@
+Hooks allow function components to have state and to respond to 
+lifecycle events too, and kind of make class components obsolete. 
+They also allow function components to have a good way to handle events.
+
+Using the useState() API, you can create a new state variable, 
+and have a way to alter it. useState() accepts the initial value of 
+the state item and returns an array containing the state variable, 
+and the function you call to alter the state. Since it returns an 
+array we use array destructuring to access each individual item, 
+like this: const [count, setCount] = useState(0)
+
+import { useState } from 'react'
+
+You can add as many useState() calls you want, to create as many state 
+variables as you want. Just make sure you call it in the top level of 
+a component (not in an if or in any other block).
+/////////////////////////////////////////////////////////////////////////////
+
+Hooks provide the useEffect() API. The call accepts a function as argument.
+
+The function runs when the component is first rendered, and on every 
+subsequent re-render/update. React first updates the DOM, then calls 
+any function passed to useEffect(). All without blocking the UI rendering 
+even on blocking code, unlike the old componentDidMount and componentDidUpdate, 
+which makes our apps feel faster.
+
+const { useEffect } = React
+
+useEffect(() => {
+    console.log(`Hi ${name} you clicked ${count} times`)
+})
+
+useEffect() can be called multiple times, which is nice to separate unrelated 
+logic (something that plagues the class component lifecycle events).
+
+Since the useEffect() functions are run on every subsequent re-render/update, 
+we can tell React to skip a run, for performance purposes, by adding a second 
+parameter which is an array that contains a list of state variables to watch for. 
+React will only re-run the side effect if one of the items in this array changes.
+
+useEffect(
+  () => {
+    console.log(`Hi ${name} you clicked ${count} times`)
+  },
+  [name, count]
+)
+
+Similarly you can tell React to only execute the side effect once (at mount time), 
+by passing an empty array.
+/////////////////////////////////////////////////////////////////////////////////
+
+Before hooks, you either used class components, or you passed an event 
+handler using props.
+
+Now we can use the useCallback() built-in API:
+const Button = () => {
+  const handleClick = useCallback(() => {
+    //...do something
+  })
+  return <button onClick={handleClick} />
+}
+
+Any parameter used inside the function must be passed through a second 
+parameter to useCallback(), in an array:
+
+const Button = () => {
+  let name = '' //... add logic
+  const handleClick = useCallback(
+    () => {
+      //...do something
+    },
+    [name]
+  )
+  return <button onClick={handleClick} />
+}
+/////////////////////////////////////////////////////////////////////////////////
+Custom hooks
+
+A hook is just a function that conventionally starts with use. 
+It can accept an arbitrary number of arguments, and return anything it wants.
+
+Examples:
+
+const useGetData() {
+  //...
+  return data
+}
+or
+const useGetUser(username) {
+  //...const user = fetch(...)
+  //...const userData = ...
+  return [user, userData]
+}
+
+In your own components, you can use the hook like this:
+
+const MyComponent = () => {
+  const data = useGetData()
+  const [user, userData] = useGetUser('flavio')
+  //...
+}

@@ -1,0 +1,63 @@
+Features:
+the explosion of the JAMstack approach to building Web Apps and Web Sites
+the rapid adoption of the Progressive Web Apps technology in the industry, which is one of the key features of Gatsby
+it’s built in React and GraphQL, which are two very popular and rising technologies
+it’s really powerful
+it’s fast
+the documentation is great
+the network effect (people use it, create sites, make tutorials, people know more about it, creating a cycle)
+everything is JavaScript (no need to learn a new templating language)
+it hides the complexity, in the beginning, but allows us access into every step to customize
+
+Gatsby automatically generates your site as a PWA, with a service worker that speeds up page loading and resource caching.
+/////////////////////////////////////////////////////////////////////////////////////////
+npm install -g gatsby-cli
+
+gatsby new mysite https://github.com/gatsbyjs/gatsby-starter-hello-world
+
+Another common starter is default, available at https://github.com/gatsbyjs/gatsby-starter-default.
+
+gatsby develop			//to run the website
+gatsby build			//generate the production static site
+gatsby serve			//starting a local Web Server using
+
+Once you build the site using gatsby build, all you need to do is to deploy the 
+result contained in the public folder.
+///////////////////////////////////////////////////////////////////////////////////////
+If you open the site you created with your favorite code editor (I use VS Code), you’ll find there are 3 folders:
+
+.cache, a hidden folder that contains the Gatsby internals, nothing you should change right now
+public, which contains the resulting website once you build it
+src contains the React components, in this case just the index component
+static which will contain the static resources like CSS and images
+///////////////////////////////////////////////////////////////////////////
+import { Link } from "gatsby"
+
+<Link to="/second/">Second</Link>
+////////////////////////////////////////
+import './index.css'
+///////////////////////////////////
+Plugins:
+Gatsby provides lots of things out of the box, but many other functionalities are provided by plugins.
+
+There are 3 kind of plugins:
+
+source plugins fetch data from a source. Create nodes that can be then filtered by transformer plugins
+transformer plugins transform the data provided by source plugins into something Gatsby can use
+functional plugins implement some kind of functionality, like adding sitemap support or more
+
+Some commonly used plugins are:
+
+gatsby-plugin-react-helmet which allows to edit the head tag content
+gatsby-plugin-catch-links which uses the History API to prevent the browser reloading the 
+	page when a link is clicked, loading the new content using AJAX instead
+A Gatsby plugin is installed in 2 steps. First you install it using npm, then you add it to the Gatsby configuration in gatsby-config.js.
+
+For example you can install the Catch Links plugin:
+	npm install gatsby-plugin-catch-links
+	In gatsby-config.js (create it if you don’t have it, in the website root folder), 
+		add the plugin to the plugins exported array:
+	module.exports = {
+  		plugins: ['gatsby-plugin-catch-links']
+	}
+

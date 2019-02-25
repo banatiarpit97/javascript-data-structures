@@ -1,0 +1,94 @@
+using styles of previously defined selectors
+/////////////////////////////////////////////////////////
+.error{
+    color:red;
+}
+
+.critical-error{
+    @extend .error;
+    font-weight:bold;
+}
+
+will generate the following css:
+
+.error, .critical-error{
+    color:red;
+}
+.critical-error{
+    font-weight:bold;
+}
+///////////////////////////////////////////////////////////
+
+@extend can only be applied to single element selector:
+
+@extend .class              //valid
+@extend .class.class1      //valid
+@extend .class .class1     //invalid
+@extend .class:hover      //valid
+///////////////////////////////////////////////////////////
+
+we can have more than 1 @extend in 1 selector:
+.box-error{
+    @extend .error;
+    @extend .critical-error;
+    border:1px solid red;
+}
+////////////////////////////////////////////////////////////
+
+we can chain inheritance:
+
+.error{
+    color:red;
+}
+.critical-error{
+    @extend .error;
+    font-weight:bold;
+}
+.box-error{
+    @extend .critical-error;
+    border:1px solid red;
+}
+///////////////////////////////////////////////////////////
+we can not extend a selector in media query that is defined outside it
+.foo{
+    font-weight:bold;
+}
+@media small{
+    @extend .foo;       //invalid
+}
+
+though this works other way around:
+@media small{
+    .foo{
+        font-weight:bold;
+    }
+}
+.boo{
+    @extend .foo;       //valid
+}
+
+///////////////////////////////////////////////////////////////////////
+if we want to create a selector such that it is only used for inheritance
+and is not compiled to css, we % sign
+%highlight{
+    font-style:italic;
+}
+.foo{
+    @extend %highlight;
+}
+/////////////////////////////////////////////////////////////////////
+if we extend a selector that is not present, we get an error and scss is not
+compiled.To prevent this we use '!optional'.This extends if selector is 
+available otherwise ignores it.
+.critical-error{
+    @extend .error !optional;
+    font-weight:bold;
+}
+///////////////////////////////////////////////////////////////////
+mixins can do the exact same things as extend
+difference:
+extends create more selectors but less redundant styles
+mixins create less selectors but more redundant styles
+
+file size of mixins is larger
+disadvantage of extends are single element selector nd media queries use case

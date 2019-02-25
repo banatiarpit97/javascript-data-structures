@@ -7,3 +7,4 @@ in same component then static content will be rendered unnecessarily
 
 components made using pure components can have only props as an arguement
 pure functions can have many inner functions in which 'render' should be definately there
+pure functions can not have lifecycle events and their own state.

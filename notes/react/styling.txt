@@ -1,0 +1,78 @@
+we can import stylesheet directly and webpack will handle everything:
+import './style.css'
+//////////////////////////////////////////////////////////////////////
+inline styles:
+const Button = () => {
+  return <button style={{ backgroundColor: 'yellow' }}>A button</button>
+}
+
+CSS is defined in a slightly different way now. First, notice the double 
+curly brackets: it’s because style accepts an object. We pass in a 
+JavaScript object, which is defined in curly braces.
+
+Also, the style now is camelCased instead of using dashes. Every time a CSS 
+property has a dash, remove it and start the next word capitalized.
+
+When using create-react-app, those styles are autoprefixed by default 
+thanks to its use of Autoprefixer.
+///////////////////////////////////////////////////////////////////////
+Using CSS Modules
+CSS is scoped to the component, which means that any styling you add 
+cannot be applied to other components without your permission.
+
+Start by creating a CSS file that ends with .module.css, for example 
+Button.module.css
+
+import style from './Button.module.css'
+const Button = () => {
+  return <button className={style.content}>A button</button>
+}
+//////////////////////////////////////////////////////////////////////////
+scss in react
+You can use it without any configuration at all, starting with create-react-app
+All you need is a .sass or .scss file, and you just import it in a component:
+
+import './styles.scss'
+scss modules is same as css modules
+/////////////////////////////////////////////////////////////////////////
+Styled Components:
+It is the meant to be a successor of CSS Modules, a way to write CSS that’s 
+scoped to a single component, and not leak to any other element in the page
+
+npm install styled-components
+yarn add styled-components
+
+import styled from 'styled-components'
+const Button = styled.button`
+  font-size: 1.5em;
+  background-color: black;
+  color: white;
+`
+Button is now a React Component in all its greatness.
+Now this component can be rendered in our container using the normal React syntax:
+render(<Button />)
+
+Using props to customize components:
+const Button = styled.button`
+    background: ${props => (props.primary ? 'black' : 'white')};
+    color: ${props => (props.primary ? 'white' : 'black')};
+`
+render(
+  <div>
+    <Button>A normal button</Button>
+    <Button>A normal button</Button>
+    <Button primary>The primary button</Button>
+  </div>
+)
+
+If you have one component and you want to create a similar one, 
+just styled slightly differently, you can use extend:
+const Button = styled.button`
+  color: black;
+  //...
+`
+const WhiteButton = Button.extend`
+  color: white;
+
+Styled Components automatically add all the vendor prefixes needed, 
+so you don’t need to worry about this problem.

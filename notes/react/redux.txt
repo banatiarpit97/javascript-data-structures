@@ -1,0 +1,85 @@
+Redux is a state manager that’s usually used along with React, but it’s not 
+tied to that library — it can be used with other technologies as well, 
+but we’ll stick to React for the sake of the explanation..
+
+Redux is a way to manage an application state, and move it to an external global store.
+
+In Redux, the whole state of the application is represented by one JavaScript object, called State or State Tree.
+We call it Immutable State Tree because it is read only: it can’t be changed directly.
+It can only be changed by dispatching an Action.
+
+Actions
+An Action is a JavaScript object that describes a change in a minimal way (with just the information needed):
+{
+  type: 'SELECTED_USER',
+  userId: 232
+}
+
+Actions Creators are functions that create actions.
+function addItem(t) {
+  return {
+    type: ADD_ITEM,
+    title: t
+  }
+}
+You usually run action creators in combination with triggering the dispatcher:
+dispatch(addItem('Milk'))
+/////////////////////////////////////////////////////////////////////////////////////
+Reducers
+A reducer is a pure function that calculates the next State Tree based on the 
+previous State Tree, and the action dispatched.
+	(currentState, action) => newState
+A pure function takes an input and returns an output without changing the 
+input or anything else. Thus, a reducer returns a completely new state tree 
+object that substitutes the previous one.
+
+Reducer should not do:
+1. never generate side-effects (no API calls changing anything)
+2. never call non-pure functions, functions that change their output based on factors 
+other than their input (e.g. Date.now() or Math.random())
+
+const list = (state = [], action) => {
+  switch (action.type) {
+    case 'ADD_ITEM':
+      return state.concat([{ title: action.title }])
+    case 'REMOVE_ITEM':
+      return state.map((item, index) =>
+        action.index === index
+          ? { title: item.title }
+          : item
+    default:
+      return state
+  }
+}
+/////////////////////////////////////////////////////////////////////////////////////
+The Store
+	The Store is an object that:
+
+	holds the state of the app
+	exposes the state via getState()
+	allows us to update the state via dispatch()
+	allows us to (un)register a state change listener using subscribe()
+	A store is unique in the app.
+
+import { createStore } from 'redux'
+import listManager from './reducers'
+let store = createStore(listManager)
+
+pass a starting state:
+let store = createStore(listManager, preexistingState)
+
+store.getState()
+
+store.dispatch(addItem('Something'))
+
+const unsubscribe = store.subscribe(() =>
+  const newState = store.getState()
+)
+unsubscribe()
+///////////////////////////
+Data Flow
+Data flow in Redux is always unidirectional.
+
+You call dispatch() on the Store, passing an Action.
+The Store takes care of passing the Action to the Reducer, generating the next State.
+The Store updates the State and alerts all the Listeners.

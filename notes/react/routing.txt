@@ -1,0 +1,85 @@
+React at its core is a very simple library, and it does not dictate anything about routing.
+
+1. The browser should change the URL when you navigate to a different screen
+2. Deep linking should work: if you point the browser to a URL, the application 
+should reconstruct the same view that was presented when the URL was generated.
+3. The browser back (and forward) button should work like expected.
+
+Routing links together your application navigation with the navigation 
+features offered by the browser: the address bar and the navigation buttons.
+
+npm install react-router-dom
+
+React Router provides two different kind of routes:
+
+BrowserRouter	https://application.com/dashboard		//recomended as uses History api
+HashRouter	https://application.com/#/dashboard
+
+BrowserRouter wraps all your Route components.
+Link components are - as you can imagine - used to generate links to your routes
+Route components are responsible for showing - or hiding - the components they contain.
+
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { BrowserRouter } from 'react-router-dom'
+ReactDOM.render(
+  <BrowserRouter>
+      <div>
+        <!-- -->
+      </div>
+  </BrowserRouter>,
+  document.getElementById('app')
+)
+A BrowserRouter component can only have one child element, so we wrap all we’re going to add in a div element.
+
+
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { BrowserRouter as Router, Link } from 'react-router-dom'
+ReactDOM.render(
+  <Router>
+      <div>
+        <aside>
+          <Link to={`/dashboard`}>Dashboard</Link>
+          <Link to={`/about`}>About</Link>
+        </aside>
+        <!-- -->
+      </div>
+  </Router>,
+  document.getElementById('app')
+)
+
+import { Route } from 'react-router-dom'
+	<Route exact path="/" component={Dashboard} />
+        <Route path="/about" component={About} />
+
+Notice the exact attribute. Without this, path="/" would also match /about, since / is contained in the route.
+
+You can have a route respond to multiple paths simply using a regex, because path can be a regular expressions string:
+	<Route path="/(about|who)/" component={Dashboard} />
+/////////////////////////////////////////////////////////////////////////////////////////////
+Inline rendering
+Instead of specifying a component property on Route, you can set a render prop:
+
+<Route
+  path="/(about|who)/"
+  render={() => (
+    <div>
+      <h2>About</h2>
+      ...
+    </div>
+  )}
+/>
+/////////////////////////////////////////////////////////////////////////////////////////
+Match dynamic route parameter
+
+const Post = ({match}) => (
+  <div>
+    <h2>Post #{match.params.id}</h2>
+    ...
+  </div>
+)
+
+<Route exact path="/post/:id" component={Post} />
+
+In your Route component you can lookup the dynamic parameters in match.params.
