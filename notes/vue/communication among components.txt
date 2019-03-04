@@ -1,0 +1,108 @@
+Using Props
+
+Parents “pass down” data by adding arguments to the component declaration:
+    <template>
+        <div>
+            <Car color="green" />
+        </div>
+    </template>
+
+Props are one-way: from parent to child. Any time the parent changes the prop, 
+the new value is sent to the child and re-rendered.
+
+The reverse is not true, and you should never mutate a prop inside the child component.
+//////////////////////////////////////////////////////////////////////
+Using Events to communicate from children to parent
+Events allow you to communicate from the children up to the parent:
+    <script>
+        export default {
+            name: 'Car',
+            methods: {
+                handleClick: function() {
+                this.$emit('clickedSomething')
+                }
+            }
+        }
+    </script>
+
+The parent can intercept this using the v-on directive when including the 
+component in its template:
+    <template>
+        <div>
+            <Car v-on:clickedSomething="handleClickInParent" />
+            <!-- or -->
+            <Car @clickedSomething="handleClickInParent" />
+        </div>
+    </template>
+    <script>
+        export default {
+           name: 'App',
+            methods: {
+                handleClickInParent: function() {
+                //...
+                }
+            }
+        }
+    </script>
+
+You can pass parameters of course:
+    <script>
+        export default {
+            name: 'Car',
+            methods: {
+                handleClick: function() {
+                    this.$emit('clickedSomething', param1, param2)
+                }
+            }
+        }
+    </script>
+
+    <template>
+        <div>
+            <Car v-on:clickedSomething="handleClickInParent" />
+            <!-- or -->
+            <Car @clickedSomething="handleClickInParent" />
+        </div>
+    </template>
+    <script>
+        export default {
+            name: 'App',
+            methods: {
+                handleClickInParent: function(param1, param2) {
+                //...
+                }
+            }
+        }
+    </script>
+//////////////////////////////////////////////////////////////
+Using an Event Bus to communicate between any components
+Using events you’re not limited to child-parent relationships. 
+You can use the so-called Event Bus.
+
+Above we used this.$emit to emit an event on the component instance.
+this.$root, the root component, is commonly used for to emit the event on a 
+more generally accessible component.
+
+You can also create a Vue component dedicated to this job, and import it where you need.
+    <script>
+        export default {
+            name: 'Car',
+            methods: {
+                handleClick: function() {
+                    this.$root.$emit('clickedSomething')
+                }
+            }
+        }
+    </script>
+
+Any other component can listen for this event. You can do so in the mounted callback:
+    <script>
+        export default {
+            name: 'App',
+            mounted() {
+                this.$root.$on('clickedSomething', () => {
+                    //...
+                })
+            }
+        }
+    </script>

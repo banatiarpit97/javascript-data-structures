@@ -69,6 +69,6 @@ followed by the explicit parameters you passed.
 
 You can use multiple parameters by separating them using a comma.
 ///////////////////////////////////////////////////////////////////////
-vue2-filters package has a lot of pre-made filters for you to use directly 
+'vue2-filters' package has a lot of pre-made filters for you to use directly 
 in templates, which include capitalize, uppercase, lowercase, placeholder, 
 truncate, currency, pluralize and more.
