@@ -1,0 +1,59 @@
+@for $i from 1 through 4 {      //will include 4
+    .col-#{$i} {
+        width: $i*2em;
+    }
+}
+
+will result in:
+.col-1{
+    width:2em;
+}
+.col-2{
+    width:4em;
+}
+.col-3{
+    width:6em;
+}
+.col-4{
+    width:8em;
+}
+
+////////////////////////////
+@for $i from 1 to 4 {       //will not include 4
+    .col-#{$i} {
+        width: $i*2em;
+    }
+}
+
+will result in:
+.col-1{
+    width:2em;
+}
+.col-2{
+    width:4em;
+}
+.col-3{
+    width:6em;
+}
+//////////////////////////////
+$speakers : bob, patty, sandra;     //like an array
+@each $speaker in $speakers {
+    .#{$speaker}-profile {
+        background:url("/img/#{$speaker}.png")
+    }
+}
+////////////////////////////////////////
+$font-size: (tiny:8px, small:11px, medium:13px, large:18px);    //like an object
+@each $name, $size in $font-size {
+    .#{$name} {
+        font-size: $size;
+    }
+}
+///////////////////////////////////////////////
+$j:2;
+@while $j<=8 {
+    .picture-#{$j} {
+        width: $j*10%
+    }
+    $j: $j+2;
+}

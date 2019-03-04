@@ -1,0 +1,59 @@
+v-on allows you to listen to DOM events, and trigger a method when the event happens. 
+Here we listen for a click event:
+
+    <template>
+    <a v-on:click="handleClick">Click me!</a>       //parenthesis not necessary
+                                                    //but works perfectly with them
+    </template>
+    <script>
+        export default {
+            methods: {
+                handleClick: function() {
+                    alert('test')
+                }
+            }
+        }
+    </script>
+
+You can pass parameters to any event:
+
+    <template>
+        <a v-on:click="handleClick('test')">Click me!</a>
+    </template>
+    <script>
+        export default {
+            methods: {
+                handleClick: function(value) {
+                    alert(value)
+                }
+            }
+        }
+    </script>
+//////////////////////////////////////////////////////////////////
+Small bits of JavaScript (a single expression) can be put directly into the template:
+    <template>
+        <a v-on:click="counter = counter + 1">{{counter}}</a>
+    </template>
+/////////////////////////////////////////////////////////////////
+click is just one kind of event. A common event is submit, which you can bind 
+using v-on:submit.
+
+v-on is so common that there is a shorthand syntax for it, @:
+    <a v-on:click="handleClick">Click me!</a>
+    <a @click="handleClick">Click me!</a>
+/////////////////////////////////////////////////////////////////
+Event directive modifiers
+Vue offers some optional event modifiers you can use in association with v-on, 
+which automatically make the event do something without you explicitly coding 
+it in your event handler.
+
+One good example is .prevent, which automatically calls preventDefault() on the event.
+In this case, the form does not cause the page to be reloaded, which is the default 
+behavior:
+    <form v-on:submit.prevent="formSubmitted"></form>
+
+Other modifiers include .stop, .capture, .self, .once, .passive.
+///////////////////////////////////////////////////////////////////
+Custom directives
+The Vue default directives already let you do a lot of work, but you can 
+always add new, custom directives if you want.

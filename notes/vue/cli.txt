@@ -1,0 +1,101 @@
+npm install -g @vue/cli
+yarn global add @vue/cli
+
+vue create example
+
+You can skip the interactive panel and instruct Vue CLI to use a particular preset:
+vue create -p favourite example-2
+
+Presets are stored in the .vuejs file in your home directory.
+
+The cool thing is that it’s an interactive process. You need to pick a preset. 
+By default, there is one preset that provides Babel and ESLint integration:
+
+I’m going to press the down arrow ⬇️ and manually choose the features I want:
+Press space to enable one of the things you need, and then press enter to go 
+
+yarn build, to start a production build
+yarn lint, to run the linter
+yarn test:unit, to run the unit tests
+
+Vue CLI automatically creates a repository, and makes the first commit. 
+So we can jump right in, change things, and we know what we changed.
+//////////////////////////////////////////////////////////////////////////
+Plugins
+As you can see from reading the configuration, a preset is basically a 
+collection of plugins, with some optional configuration.
+
+Once a project is created, you can add more plugins by using vue add:
+vue add @vue/cli-plugin-babel
+
+All those plugins are used in the latest version available. You can force Vue 
+CLI to use a specific version by passing the version property:
+"@vue/cli-plugin-eslint": {
+  "version": "^3.0.0"
+}
+
+This is useful if a new version has a breaking change or a bug, and you 
+need to wait a little bit before using it.
+////////////////////////////////////
+Remotely store presets
+A preset can be stored in GitHub (or on other services) by creating a 
+repository that contains a preset.json file, which contains a single preset 
+configuration.
+
+Extracted from the above, I made a sample preset which contains this configuration:
+
+{
+  "useConfigFiles": true,
+  "plugins": {
+    "@vue/cli-plugin-babel": {},
+    "@vue/cli-plugin-eslint": {
+      "config": "prettier",
+      "lintOn": [
+        "save"
+      ]
+    },
+    "@vue/cli-plugin-unit-jest": {}
+  },
+  "router": true,
+  "vuex": true
+}
+It can be used to bootstrap a new application using:
+
+vue create --preset flaviocopes/vue-cli-preset example3
+/////////////////////////////////////////////////////////
+
+for really quick prototyping, you can create a really simple Vue application 
+(even one that’s self-contained in a single .vue file) and serve that, without 
+having to download all the dependencies in the node_modules folder.
+
+How? First install the cli-service-global global package:
+npm install -g @vue/cli-service-global
+//or
+yarn global add @vue/cli-service-global
+
+Create an app.vue file:
+<template>
+    <div>
+        <h2>Hello world!</h2>
+        <marquee>Heyyy</marquee>
+    </div>
+</template>
+and then run
+
+vue serve app.vue
+
+You can serve more organized projects, composed by JavaScript and HTML files as well. 
+Vue CLI by default uses main.js / index.js as its entry point, and you can have 
+a package.json and any tool configuration set up. vue serve will pick it up.
+
+Since this uses global dependencies, it’s not an optimal approach for anything 
+more than a demonstration or quick testing.
+
+Running vue build will prepare the project for deployment in dist/, and will 
+generate all the corresponding code (also for vendor dependencies).
+//////////////////////////////////////////////////////////////////////
+
+Webpack
+Internally, Vue CLI uses Webpack, but the configuration is abstracted and we 
+don’t even see the config file in our folder. You can still have access to 
+it by calling vue inspect:

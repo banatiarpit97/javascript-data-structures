@@ -1,0 +1,111 @@
+Components in a Vue application can have their own state. For example, 
+an input box will store the data entered into it locally. This is perfectly fine, 
+and components can have local state even when using Vuex.
+
+You know that you need something like Vuex when you start doing a lot of work to 
+pass a piece of state around.
+
+In this case, Vuex provides a central repository store for the state, and you 
+mutate the state by asking the store to do that.
+
+Every component that depends on a particular piece of the state will access it 
+using a getter on the store, which makes sure it’s updated as soon as that thing 
+changes.
+
+Vuex can be used also by directly loading it into a script tag.
+To install Vuex locally you can simply run npm install vuex or yarn add vuex 
+inside the project folder.
+////////////////////////////////////////////////////////////////
+Now we are ready to create our Vuex store.
+
+This file can be put anywhere. It’s generally suggested to put it in the 
+src/store/store.js file, so we'll do that.
+
+    import Vue from 'vue'
+    import Vuex from 'vuex'
+    Vue.use(Vuex)
+    export const store = new Vuex.Store({
+        state: {
+            flavor: ''
+        }
+    })
+///////////////////////////////////////////////////////////////
+Add a mutation
+The state cannot be manipulated except by using mutations. 
+    export const store = new Vuex.Store({
+        state: {
+            flavor: ''
+        },
+        mutations: {
+            change(state, flavor) {
+                state.flavor = flavor
+            }
+        }
+    })
+//////////////////////////////////////////////////////////////
+Add a getter to reference a state property
+With that set, we need to add a way to look at the state. 
+We do so using getters. We set up a getter for the flavorproperty:
+
+    export const store = new Vuex.Store({
+        state: {
+            flavor: ''
+        },
+        mutations: {
+            change(state, flavor) {
+               state.flavor = flavor
+            }
+        },
+        getters: {
+            flavor: state => state.flavor
+        }
+    })
+
+Use the getter to print the state value
+Now we need to reference the getter of this value in the Display template, 
+by using $store.getters.flavor. this can be removed because we're in the template, 
+and this is implicit.
+
+    <template>
+        <div>
+            <p>You chose {{ $store.getters.flavor }}</p>
+        </div>
+    </template>
+////////////////////////////////////////////////////////////////////
+Adding the Vuex store to the app
+Now the store is ready to be used. We go back to our application code, 
+and in the main.js file, we need to import the state and make it available 
+in our Vue app.
+
+We add
+    import { store } from './store/store'
+    new Vue({
+        el: '#app',
+        store,
+        components: { App },
+        template: '<App/>'
+    })
+
+Once we add this, since this is the main Vue component, the store variable 
+inside every Vue component will point to the Vuex store.
+/////////////////////////////////////////////////////////////////////////
+Update the state on a user action using commit
+Let’s update the state when the user types something.
+
+We do so by using the store.commit() API.
+    <script>
+        export default {
+            methods: {
+                changed: function(event) {
+                   this.$store.commit('change', event.target.value)
+                }
+            }
+        }
+    </script>
+
+See how we reference the store using this.$store? This is thanks to the inclusion 
+of the store object in the main Vue component initialization.
+
+The commit() method accepts a mutation name (we used change in the Vuex store) 
+and a payload, which will be passed to the mutation as the second parameter of 
+its callback function.

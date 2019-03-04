@@ -1,0 +1,10 @@
+$theme: Default;
+$bgcolor: blue;             /always provide default value
+
+@if $theme == Dark {
+    $bgcolor: black;
+} @else if $theme == Light {
+    $bgcolor: white;
+} @else {
+    $bgcolor: red;
+}

@@ -1,0 +1,25 @@
+Any HTML is a valid Vue.js template. In addition to that, Vue.js provides 
+two powerful things: interpolation and directives.
+
+new Vue({
+  data: {
+    name: 'Flavio'
+  },
+  template: '<span>Hello {{name}}!</span>'
+})
+
+One interesting thing here. See how we just used name instead of this.data.name?
+This is because Vue.js does some internal binding and lets the template use 
+the property as if it was local. Pretty handy.
+
+You can use any JavaScript expression inside your interpolations, 
+but you’re limited to just one expression
+
+The value included in any interpolation will be updated upon a change of any 
+of the data properties it relies on.
+
+You can avoid this reactivity by using the v-once directive.
+
+The result is always escaped, so you can’t have HTML in the output.
+
+If you need to have an HTML snippet, you need to use the v-html directive instead.

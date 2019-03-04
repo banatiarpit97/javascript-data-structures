@@ -1,0 +1,89 @@
+A Vue method is a function associated with the Vue instance.
+
+Methods are defined inside the methods property:
+    new Vue({
+        methods: {
+            handleClick: function() {
+               alert('test')
+            }
+        }
+    })
+    
+or in the case of Single File Components:
+    <script>
+        export default {
+            methods: {
+                handleClick: function() {
+                    alert('test')
+                }
+            }
+        }
+    </script>
+
+Methods are especially useful when you need to perform an action and you 
+attach a v-on directive on an element to handle events. Like this one, 
+which calls handleClick when the element is clicked:
+    <template>
+        <a @click="handleClick">Click me!</a>
+    </template>
+
+You can choose to use the parentheses or not. @click="handleClick" is 
+equivalent to @click="handleClick()".
+///////////////////////////////////////////////////////////////////
+You can access any of the data properties of the Vue component by using 
+this.propertyName:
+    <template>
+        <a @click="handleClick()">Click me!</a>
+    </template>
+    <script>
+        export default {
+            data() {
+                return {
+                    name: 'Flavio'
+                }
+        },
+        methods: {
+            handleClick: function() {
+                console.log(this.name)
+            }
+        }
+    }
+    </script>
+We don’t have to use this.data.name, just this.name. Vue does provide a transparent 
+binding for us. Using this.data.name will raise an error.
+/////////////////////////////////////////////////////////////////////
+Access the original event object
+In many cases, you will want to perform an action on the event object or 
+look up some property in it. How can you access it?
+
+Use the special $event directive:
+<template>
+  <a @click="handleClick('something', $event)">Click me!</a>
+</template>
+<script>
+    export default {
+        methods: {
+            handleClick: function(text, event) {
+                console.log(text);
+                console.log(event);
+            }
+        }
+    }
+</script>
+
+
+From there you could call event.preventDefault(), but there's a better way: 
+
+Event modifiers
+Instead of messing with DOM “things” in your methods, tell Vue to handle 
+things for you:
+
+    @click.prevent call event.preventDefault()
+    @click.stop call event.stopPropagation()
+    @click.passive makes use of the passive option of addEventListener
+    @click.capture uses event capturing instead of event bubbling
+    @click.self make sure the click event was not bubbled from a child event, 
+                but directly happened on that element
+    @click.once the event will only be triggered exactly once
+
+All those options can be combined by appending one modifier after the other.
