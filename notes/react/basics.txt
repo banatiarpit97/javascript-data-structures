@@ -1,6 +1,12 @@
+start with react:
+npx create-react-app <name-of-app>
+
 updating a parent component re renders all its children because parent needs to
 pass the updated props(Even of the props does not change, children will still re render)
 i.e. why we use redux and connect the components to store rather than to each other
+
+if a state variable is passed as props to child component and if state variable changes
+then props also change automatically in child component
 
 Keep the static content in different component from dynamic content because if they are
 in same component then static content will be rendered unnecessarily
@@ -8,3 +14,13 @@ in same component then static content will be rendered unnecessarily
 components made using pure components can have only props as an arguement
 pure functions can have many inner functions in which 'render' should be definately there
 pure functions can not have lifecycle events and their own state.
+
+we can not use semicolon when we split the return statement into multiple lines
+    return <div>hey</div>;
+
+    return (
+        <div>hey</div>
+    );
+
+either starting parenthesis or some content should be on the same line as 
+return keyword otherwise function would return null.

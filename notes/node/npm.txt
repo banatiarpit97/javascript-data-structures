@@ -11,6 +11,10 @@ Globally installed packages/dependencies are stored in system directory. Such de
 can be used in CLI (Command Line Interface) function of any node.js but cannot be imported 
 using require() in Node application directly.('-g' flag for global)
 
+if a module is installed Globally, then we can run the command from cli directly
+but if we install it locally, then we need to put that command in 'script' section
+of package.json and then run the that script command from cli
+
 you can use 'npm ls' command to list down all the locally installed modules.
 you can use 'npm ls -g' command to list down all the locally installed modules.
 
