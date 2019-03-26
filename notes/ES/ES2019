@@ -1,0 +1,111 @@
+Array.prototype.{flat,flatMap}
+flat() is a new array instance method that can create a one-dimensional 
+array from a multidimensional array.
+    ['Dog', ['Sheep', 'Wolf']].flat()
+        //[ 'Dog', 'Sheep', 'Wolf' ]
+
+By default it only “flats” up to one level, but you can add a parameter to 
+set the number of levels you want to flat the array to. 
+Set it to Infinity to have unlimited levels:
+
+    ['Dog', ['Sheep', ['Wolf']]].flat()
+        //[ 'Dog', 'Sheep', [ 'Wolf' ] ]
+    ['Dog', ['Sheep', ['Wolf']]].flat(2)
+        //[ 'Dog', 'Sheep', 'Wolf' ]
+    ['Dog', ['Sheep', ['Wolf']]].flat(Infinity)
+        //[ 'Dog', 'Sheep', 'Wolf' ]
+
+If you are familiar with the JavaScript map() method of an array, 
+you know that using it you can execute a function on every element of an array.
+
+flatMap() is a new Array instance method that combines flat() with map(). 
+It's useful when calling a function that returns an array in the map() callback, 
+but you want your resulted array to be flat:
+    ['My dog', 'is awesome'].map(words => words.split(' '))
+        //[ [ 'My', 'dog' ], [ 'is', 'awesome' ] ]
+    ['My dog', 'is awesome'].flatMap(words => words.split(' '))
+        //[ 'My', 'dog', 'is', 'awesome' ]
+////////////////////////////////////////////////////////////////////////////
+
+Optional catch binding
+Sometimes we don’t need to have a parameter bound to the catch block of a try/catch.
+
+We previously had to do:
+    try {
+        //...
+    } catch (e) {
+        //handle error
+    }
+
+Even if we never had to use e to analyze the error. We can now simply omit it:
+    try {
+        //...
+    } catch {
+        //handle error
+    }
+/////////////////////////////////////////////////////////////////////////////
+
+Object.fromEntries()
+Objects have an entries() method, since ES2017.
+It returns an array containing all the object own properties, as an array of 
+[key, value] pairs:
+    const person = { name: 'Fred', age: 87 }
+    Object.entries(person) // [['name', 'Fred'], ['age', 87]]
+
+ES2019 introduces a new Object.fromEntries() method, 
+which can create a new object from such array of properties:
+    const person = { name: 'Fred', age: 87 }
+    const entries = Object.entries(person)
+    const newPerson = Object.fromEntries(entries)
+    person !== newPerson //true 
+///////////////////////////////////////////////////////////////////////////
+
+trimStart()
+Return a new string with removed white space from the start of the original string
+    'Testing'.trimStart() //'Testing'
+    ' Testing '.trimStart() //'Testing '
+
+trimEnd()
+Return a new string with removed white space from the end of the original string
+    'Testing'.trimEnd() //'Testing'
+    ' Testing '.trimEnd() //' Testing'
+////////////////////////////////////////////////////////////////////////////
+
+
+Symbol.prototype.description
+You can now retrieve the description of a symbol by accessing its description 
+property instead of having to use the toString() method:
+    const testSymbol = Symbol('Test')
+    testSymbol.description // 'Test'
+/////////////////////////////////////////////////////////////////////////////
+JSON improvements
+
+Before this change, the line separator (\u2028) and paragraph separator (\u2029) 
+symbols were not allowed in strings parsed as JSON.
+Using JSON.parse(), those characters resulted in a SyntaxError but now they parse 
+correctly, as defined by the JSON standard.
+
+Well-formed JSON.stringify()
+Fixes the JSON.stringify() output when it processes surrogate UTF-8 code points 
+(U+D800 to U+DFFF).
+Before this change calling JSON.stringify() would return a malformed Unicode character 
+(a "�").
+Now those surrogate code points can be safely represented as strings using 
+JSON.stringify(), and transformed back into their original representation using 
+JSON.parse().
+/////////////////////////////////////////////////////////////////////////////
+
+Function.prototype.toString()
+Functions have always had an instance method called toString() which return a 
+string containing the function code.
+ES2019 introduced a change to the return value to avoid stripping comments 
+and other characters like whitespace, exactly representing the function as it 
+was defined.
+
+If previously we had
+    function /* this is bar */ bar () {}
+        The behavior was this:
+            bar.toString() //'function bar() {}
+
+now the new behavior is:
+    bar.toString(); // 'function /* this is bar */ bar () {}'

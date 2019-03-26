@@ -1,0 +1,36 @@
+jsx only looks like html, it is neither html nor does it gets converted to html
+jsx gets converted to js.
+
+<div>Hey</div> in jsx
+gets converted to:
+    React.createElement('div', null, 'hey')
+
+<div><span>Hey</span></div> in jsx
+gets converted to:
+    React.createElement('div', null, React.createElement('span', null, 'hey'))
+////////////////////////////////////////////////////////////////////
+inline styling:
+
+    <div style="background-color:red;color:white;">Hey</div> in html
+becomes
+    <div style={{backgroundColor:'red',color:'white'}}>Hey</div> in jsx
+
+style needs to be an object in jsx
+/////////////////////////////////////////////////////////////////////
+classes in elements:
+    <div class="top">Hey</div> in html
+becomes
+    <div className="top">Hey</div> in jsx
+
+because class is reserved keyword in js
+/////////////////////////////////////////////////////////////////////
+using js variables in jsx
+
+    const app = () = {
+        const name = "Arpit";
+        render(){
+            return <div>{name}</div>;
+        }
+    }
+/////////////////////////////////////////////////////////////////////
+for becomes htmlFor
