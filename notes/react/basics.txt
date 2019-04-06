@@ -24,3 +24,27 @@ we can not use semicolon when we split the return statement into multiple lines
 
 either starting parenthesis or some content should be on the same line as 
 return keyword otherwise function would return null.
+////////////////////////////////////////////////////////////////////
+
+render root component
+    import React from 'react'
+    import ReactDom from 'react-dom'
+    import App from './App'
+
+    ReactDom.render(<App />, document.querySelector("#root"));
+////////////////////////////////////////////////////////////////////
+
+we can directly pass an array of html/jsx elements to return statement of render
+and it will automatically display it without any map function:
+    const imgList = (props) => {
+        const images = props.images.map((img) => {
+            return <img src={img.url} key={img.id} />
+        })
+
+        return <div>{images}</div>      //images is an array here
+    }
+
+To efficiently render an array or to prevent react from re-rendering an element from
+list again, we need to a key attribute to all the elements of the list.
+This key should be uniwue for each element in list.
+This key attribute should be present on the root element of the repeating html/jsx template

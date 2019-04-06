@@ -17,9 +17,13 @@ start checking from 1 to 4
     Whatever arguement is passed to the call, apply... will be made the 'this' arguement
     but if the function definition itself has the hard binding, then the innermost binding
     will be considered.
+    These create a new function with the updated 'this' binding
 
 3. Implicit binding - If an object calls a function(does not matter where the function was defined)
     then 'this' will point to the object that called the function.
+    Only the outermost call determins the value of 'this', does not take into account 
+    of any inner implicit binding.  //check
+    'this' refers to the first or immediate left binding - this.props.submit('this' refers to props)
 
 4. Default binding - Because none of the above 3 rules apply
     this will have the default value.Default value of 'this' id global object(window, global) in non strict mode

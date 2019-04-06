@@ -35,6 +35,16 @@ to get key pressed on keyboard:
 		console.log(e.key)	//returns letter pressed like a,b,c,Alt,Control,Shift,ArrowUp,ArrowLeft
 	})
 
+to get value of input:
+	input.addEventListener('change', (e) => {
+		console.log(e.target.value);
+	})
+
+to get files uploaded:
+	input.addEventListener('change', (e) => {
+		console.log(e.target.files[0]);
+	})
+
 
 Common Events :
 

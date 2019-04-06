@@ -5,7 +5,7 @@ var a = new Array(3)        //empty array of size 3
 arrays in js can store different values, string, int, object...
 var a = ['red', 1, {prop:val}, [1,2,4]];
 
-We can synamically resize array,
+We can dynamically resize array,
 if an array is of size 3 [1,2,3], and we do a[5] = 5, then -> [1,2,3,undefined, undefined, 5];
 
 even an empty array returns true
@@ -38,10 +38,11 @@ Spread operator :
 a = [1,2,3]
 ...a gives 1,2,3 separately and not as array
 
-spread operator can be used to create copy of an array(not reference)	:
+spread operator can be used to create copy of an array(not reference):
 	var a = [1,2,3];
 	var b = [...a];
-	now be is an independent array and modifications on b will not affect a(if we did b = a, then b would be reference of a)
+	now be is an independent array and modifications on b will not 
+	affect a(if we did b = a, then b would be reference of a)
 
 	same is true for objects
 	var a = {
@@ -61,7 +62,7 @@ b = [...a];		//changes in a will NOT reflect in b
 /////////////////////////////////////////////////////////////////////////////////////////
 Spread and rest operator are same syntax wise but are opposite in functionality
 
-spread - When we wantto extract each element from array/objects
+spread - When we want to extract each element from array/objects
 		var a = [1,2,3];
 		var b = [...a];
 

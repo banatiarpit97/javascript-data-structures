@@ -1,6 +1,9 @@
 RxJS is JavaScript library for transforming, composing and querying asynchronous streams of data.
 RxJS can be used both in the browser or in the server-side using Node.js.
 
+If we use angular cli to create angular app, then RxJS is installed by default
+if not use, npm install rxjs -S
+
 Reactive programming is a programming paradigm for writing code, 
 mainly concerned with asynchronous data streams.
 Just a different way of building software applications which will “react” to changes 
@@ -14,6 +17,8 @@ ajax
 sockets...
 
 Observables provide support for passing messages between publishers and subscribers in your application.
+Observable can be subscribed using subscribe or async pipe
+Observable is a class of RxJS
 
 const button = document.querySelector("button");
     const observer = {          //error and complete are optional
@@ -73,3 +78,4 @@ and an Observer at the same time.
         // observerB: 1
         // observerA: 2
         // observerB: 2
+/////////////////////////////////////////////////////////

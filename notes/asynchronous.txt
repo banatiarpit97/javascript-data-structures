@@ -267,7 +267,7 @@ Remember, the await keyword is only valid inside async functions.
 If you use it outside of an async function's body, you will get a SyntaxError.
 
 if we add 'async' prefix to any function then that function would return promise only
-return statement is async function is same as resolve in Promise and will be handled using .then
+return statement in async function is same as resolve in Promise and will be handled using .then
 throw new Error(str) in async function is same is reject in Promise and will be handled by .catch
 
 chaining of promises can be replaced by sequence of await statements

@@ -71,8 +71,10 @@ AppRoutingModule which exports AppRoutingModule
 Router link
 routerLink is the selector for RouterLink directive that turns user clicks into router navigation
 With this directive, we can link routes of our application from html template
-    <a [routerLink] = "['/login']">Login</a>
-    <a [routerLink] = "['/login', 'route-param1', 'route-param2']">Login</a>
+    <a [routerLink] = "['/login']" routerLinkActive="active-link">Login</a>
+    <a [routerLink] = "['/login', 'route-param1', 'route-param2']" routerLinkActive="active-link">Login</a>
+
+    'active-link' should be a class defined in class
 
 Navigating to route from code:
     import {Router} from '@angular/router';
@@ -117,7 +119,6 @@ Child routes
 
 /////////////////////////////////////////////////////////////////
 
-
     import {Routes, RouterModule} from '@angular/router';
 
     const routes:Routes = [
@@ -134,3 +135,20 @@ Child routes
     })
     export class AppRoutingModule {}
 /////////////////////////////////////////////////////////////////
+
+You might have noticed that the CLI adds RouterModule.forRoot(routes) to the 
+app-routing.module.ts imports array. This lets Angular know that this module, 
+AppRoutingModule, is a routing module and forRoot() specifies that this is the 
+root routing module. It configures all the routes you pass to it, gives you 
+access to the router directives, and registers the RouterService. 
+Use forRoot() in the AppRoutingModule—that is, one time in the app at the 
+root level.
+
+The CLI also adds RouterModule.forChild(routes) to feature routing modules. 
+This way, Angular knows that the route list is only responsible for providing 
+additional routes and is intended for feature modules. You can use forChild() 
+in multiple modules.
+
+forRoot() contains injector configuration which is global; such as configuring 
+the Router. forChild() has no injector configuration, only directives such as 
+RouterOutlet and RouterLink.
