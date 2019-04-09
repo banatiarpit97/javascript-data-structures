@@ -1,0 +1,64 @@
+<input 
+    value={this.state.name} 
+    onChange={(e) => {this.setState({name:e.target.value})}}
+
+this is the example of controlled elements i.e. storing data in react(state)
+rather than in DOM. By this we don't need to access the DOM element for the value,
+we can just view our state for the value
+    <input value="hey">     //is not recommended
+
+//////////////////////////////////////////////////////////////////
+in react forms get submitted the same way, to prevent its default behaviour or
+to stop page from refreshing after submit, we need to call e.preventDefault()
+in onSubmit function of form.
+////////////////////////////////////////////////////////////////
+
+    class form extends react.Component {
+        state = {name: 'arpit'}
+
+        handleSubmit(e){
+            e.preventDefault();
+            console.log(this.state.name);   //gives error
+            //'can not read property state of undefined'
+        }
+
+        render(){
+            return (
+                <form onSubmit = {this.handleSubmit}>
+                    <input 
+                        value={this.state.name} 
+                        onChange={(e) => {this.setState({name:e.target.value})}} 
+                    />
+                </form>
+            );
+        }
+    }
+
+the error is because of this binding, in onSubmit event, we provide the functin using
+this.handleSubmit. But when this function is called, it is called normally like
+handleSubmit  i.e. without any implicit 'this' arguement, hence state is not accessible
+inner working might be something like:
+    const fn = this.handleSubmit;
+    fn();   //no 'this' arguement passed
+
+
+to correct the issue, we do(any of the 4 methods):
+    <form onSubmit = {this.handleSubmit.bind(this)}>
+    //because bind overrides the implicit binding
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(this.state.name);
+    }.bind(this)
+    //because bind overrides the implicit binding
+
+    <form onSubmit = {(e) => {this.handleSubmit(e)}>
+    //because now we pass arrow function as the function to be called when form is 
+        submitted, this will attached when handleSubmit is called
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(this.state.name);
+    }
+    //since arrow function does not have its own 'this', it will take this of class
+

@@ -1,0 +1,37 @@
+<ng-template> is angular virtual element used to render html
+Never displayed directly, used with structural directives like ngIf, ngFor...
+
+before rendering html, <ng-template> is replaced with a comment
+If not used with a directive, content inside ng-template will be replaced by 
+comment and hence will not be present in DOM tree(will not render)
+
+ng-template does not itself gets turned into html element, only its content
+is converted. We will never see <ng-template> in DOM tree
+
+ng-template was never meant to be used as an element, its an internal implementation
+of angular's structural directives
+asterisk(*) before a directive is short hand for <ng-template>
+Whenever angular encounters * symbol, we inform angular that it is a structural 
+directive and convert the directive attribute to <ng-template> element
+/////////////////////////////////////////////////////
+
+<ng-template [ngIf] = 'show'>
+    <h1>hey</h1>
+</ng-template>
+
+<ng-template ngFor let-book [ngForOf]='books' let i='index'>
+    <h1>{{i}}-{{book}}</h1>
+</ng-template>
+
+<div [ngSwitch] = "'number'">
+    <ng-template [ngSwitchCase]="'Angular'">
+        <p>Angular</p>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'JS'">
+        <p>JS</p>
+    </ng-template>
+    <ng-template ngSwitchDefault>
+        <p>HTML</p>
+    </ng-template>
+</div>
+

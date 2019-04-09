@@ -1,0 +1,71 @@
+types of storage:
+cookies
+local storage
+session storage
+
+advantages of local and session over cookies:
+more data can be stored
+data is not sent to server, reducing risks
+syntax is easy
+Cookies are sent to server on every request
+
+/////////////////////////////////////////////////////////////////////
+local storage:
+data stored has no expiration date
+available on all pages of that domain
+not deleted even when browser is closed
+
+    localStorage.setItem("key", "value");
+    var lastname = localStorage.getItem("key");
+    or
+    var lastname = localStorage.key;
+    localStorage.removeItem("key");
+    localStorage.clear();
+
+///////////////////////////////////////////////////////////////////
+session storage:
+same as local storage except that it stores data for only 1 session
+data is deleted when browser is closed
+
+    sessionStorage.setItem("key", "value");
+    var lastname = sessionStorage.getItem("key");
+    or
+    var lastname = sessionStorage.key;
+    sessionStorage.removeItem("key");
+    sessionStorage.clear();
+
+TO store json data in localStorage and sessionStorage, use JSON.stringify and
+JSON.parse
+
+Check support for localStorage and sessionStorage:
+    if(window.localStorage){
+
+    }
+    if(window.sessionStorage){
+        
+    }
+
+///////////////////////////////////////////////////////////////////
+Cookies:
+    document.cookie = "username=John Doe";
+    document.cookie = "username=John Doe; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+    document.cookie = "username=John Doe; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+
+cookies can be read like this:
+    var x = document.cookie;
+
+Deleting a cookie:
+You don't have to specify a cookie value when you delete a cookie.
+Just set the expires parameter to a passed date:
+    document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+expiry date (in UTC time). By default, the cookie is deleted when the browser is closed
+path the cookie belongs to. By default, the cookie belongs to the current page.
+
+The document.cookie property looks like a normal text string. But it is not.
+
+Even if you write a whole cookie string to document.cookie, when you read it out 
+again, you can only see the name-value pair of it.
+
+If you set a new cookie, older cookies are not overwritten. The new cookie is 
+added to document.cookie,

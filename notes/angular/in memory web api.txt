@@ -1,0 +1,31 @@
+provides us with Web service url using dummy data
+Used to create/mock urls to test front end by calling/hitting these dummy data urls
+
+    npm i angular-in-memory-web-api@0.5.3 -S
+
+    testData.ts:
+        import {InMemoryDbService} from 'angular-in-memory-web-api';
+        export class TestData extends InMemoryDbService {
+            createDb(){
+                let bookDetails = [
+                    {id: 1, name: 'a'},
+                    {id: 2, name: 'b'},
+                    {id: 3, name: 'c'},
+                    {id: 4, name: 'd'},
+                ]
+
+                return {books: bookDetails};
+            }
+        }
+
+    in App.module.ts:
+        import {InMemoryWebApiModule} from 'angular-in-memory-web-api';
+        import {TestData} from ./testData;
+
+        import : [
+            InMemoryWebApiModule.forRoot(TestData);
+        ]
+
+    Now we can call this api url like:
+        this.http.get('/api/books')
+        this.http.post('/api/books', data)

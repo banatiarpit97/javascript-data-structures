@@ -19,6 +19,29 @@ sockets...
 Observables provide support for passing messages between publishers and subscribers in your application.
 Observable can be subscribed using subscribe or async pipe
 Observable is a class of RxJS
+  import {Observable} from 'rxjs/Observable';
+
+  Subscribe:
+    this.http.get(url).subscribe(books => console.log(books))
+
+  async pipe with ngFor:
+    this.books = this.http.get(url);
+
+    <li *ngFor="let book of books|async">
+      {{book.name}}
+    </li>
+
+  async pipe with ngIf:
+    this.favBook = this.http.get(url);
+
+    <li *ngIf="favBook | async as book;else loading">
+      {{book.name}}
+    </li>
+    <ng-template #loading>
+      img src="loader.gif>
+    </ng-template>
+
+    //async automatically subscribes to observable and return last emitted value
 
 const button = document.querySelector("button");
     const observer = {          //error and complete are optional
@@ -79,3 +102,12 @@ and an Observer at the same time.
         // observerA: 2
         // observerB: 2
 /////////////////////////////////////////////////////////
+Map operator:
+transforms one value to another
+takes a value from observable stream, apply some Transformation on it and returns
+another observable stream
+
+  import {'rxjs/add/operator/map'};
+  this.http.get(/api/books')
+    .map(book => book.name)   //return modified observable stream
+    .subscribe(name => console.log(name))

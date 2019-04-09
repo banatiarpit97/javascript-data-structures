@@ -1,0 +1,16 @@
+we can make axios work like an interceptor
+we can customize axious object so that it will always contain the specified header,
+or base url etc:
+    npm install --save axios
+    //////
+
+    import axios from 'axios'
+    export default axios.create({
+        baseURL: 'https://api.unsplash.com',
+        headers: {
+            Authorization: 'Client-ID abcdef12345'
+        }
+    })
+    //////
+    import 'axios-customized' from ./axios-config'
+    axios-customized.get('/search/photos/);

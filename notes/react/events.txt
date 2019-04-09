@@ -1,0 +1,11 @@
+while adding events to components, we need to make sure that we don't call
+the attached function, we jjust need to pass it like we do in callbacks
+
+    <Header onClick = { handleClick } />
+        //this senda event arguement automatically to attached function
+    <Header onClick = { handleClick() } />  //is wrong, 
+        //'handleClick' will be called as soon as Header renders
+
+To pass arguements:
+    <Header onClick = { () => handleClick(name, class) } />
+/////////////////////////////////////////////////////////////////////

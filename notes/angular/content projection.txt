@@ -1,0 +1,30 @@
+Angularjs(1.0) used transclusion for injection data in DOM tree at specific time
+in Angular(2.0 +), this is totally forbidden and is done using shadow dom known as
+content projection
+
+We achieve content projection using <ng-content></ng-content>
+Used to insert html elements, other components in component
+
+<ng-content> is similar to props.children in react
+
+    <h1>hello</h1>
+    <app-student>
+        <p>content to be passed</p>
+    </app-root>
+
+    in student.component.ts:
+    <h1>Student</h1>
+    <ng-content></ng-content>
+
+    show only some of the passed content or display them separately:
+    <h1>hello</h1>
+    <app-student>
+        <p class="first">content to be passed</p>
+        <p class="second">content to be passed</p>
+    </app-root>
+
+    in student.component.ts:
+    <h1>Student</h1>
+    <ng-content select="p.first"></ng-content>
+
+    in select we can pass class, id, element, attribute

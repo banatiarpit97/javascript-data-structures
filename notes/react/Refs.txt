@@ -1,0 +1,22 @@
+in react we can not access DOM elements using document.querySelector or any 
+other methods because what we define in render method is actually jsx and not html
+So to access them ,we make use of React Refs
+With refs, we can do everything we can do with html elements like adding listeners
+(AddEventListener), get childred, parent, value, clientHeight, clientWidth etc
+
+To create a ref:
+    create a reference in constructor and assign it to a variable
+    in the element, we want to reference, add an attribute ref and its value is
+    name of variable in the constructor
+
+    class a extends React.component{
+        constructor(props){
+            super(props);
+
+            this.imagRef = React.createRef();
+        }
+
+        render(){
+            return <img ref={this.imagRef} src='' />;
+        }
+    }

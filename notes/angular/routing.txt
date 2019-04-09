@@ -66,6 +66,21 @@ role of <router-outlet> is to mark where the router displays the view, where com
 
 RouterOutlet is one of the router directives that became available to AppComponent because AppModule imports
 AppRoutingModule which exports AppRoutingModule
+
+There can be more than 1 router outlets in our app, only one of them(default/primary)
+can be unnamed, every other outlet should be named
+    <router-outlet name="second"></router-outlet>
+
+Named outlet will open as secondary route within a ()
+secondary route will get appended with unnamed  router outlet path
+routerLinkActive will work on both named and unnamed routes that are opened
+Not necessary for named outlet to be nested, it can be a sibling of unnamed outlet
+
+    <a [routerLink]="[{outlets: {second: ['bookdetail']}}]>
+
+    {path: '', component: StudentsComponent, outlet: 'second'},
+
+    url in browser will be - book(second:bookdetail)    //where book is a primary route
 //////////////////////////////////////////////////////////////////
 
 Router link
@@ -134,6 +149,27 @@ Child routes
         exports: [RouterModule]
     })
     export class AppRoutingModule {}
+
+/////////////////////////////////////////////////////////////////
+
+Parameterized routes:
+
+Route can receive params through snapshot property of ActivatedRoute
+or by subscribing to its property param
+There is also a property paramMap that allows to get a particular paramater using 
+'get()' method or get all paramaters using 'getAll()' method
+
+    {path: 'country/:id', component: LoginComponent},
+
+    in component:
+        import {ActivatedRoute} from '@angular/core';
+        ...
+        constructor(route:ActivatedRoute){
+            console.log(route.snapshot.params.id);
+            console.log(route.snapshot.paramMap.get(id));
+            route.paramMap.subscribe(params => console.log(params.get(id)));
+            route.params.subscribe(params => console.log(params.id));
+        }
 /////////////////////////////////////////////////////////////////
 
 You might have noticed that the CLI adds RouterModule.forRoot(routes) to the 
