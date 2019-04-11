@@ -1,0 +1,32 @@
+Node.js provides the facility to get process information such as process id, 
+architecture, platform, version, release, uptime, upu usage etc. It can also be 
+used to kill process, set uid, set groups, unmask etc.
+
+The process is a global object, an instance of EventEmitter, can be accessed 
+from anywhere.
+
+Node.js Process Properties
+
+arch	
+    returns process architecture: 'arm', 'ia32', or 'x64'
+
+args	
+    returns commands line arguments as an array
+
+env	
+    returns user environment
+
+pid	
+    returns process id of the process
+
+platform	
+    returns platform of the process: 'darwin', 'freebsd', 'linux', 'sunos' or 'win32'
+
+release	
+    returns the metadata for the current node release
+
+version	
+    returns the node version
+
+versions	
+    returns the node version and its dependencies

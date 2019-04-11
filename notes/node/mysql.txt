@@ -1,0 +1,70 @@
+npm install mysql  
+
+    var mysql = require('mysql');  
+    var con = mysql.createConnection({  
+        host: "localhost",  
+        user: "root",  
+        password: "12345",
+        database: "javatpoint"
+    });  
+    con.connect(function(err) {  
+        if (err) throw err;  
+        console.log("Connected!");  
+
+        con.query("CREATE DATABASE javatpoint", function (err, result) {  
+            if (err) throw err;  
+            console.log("Database created");  
+        });  
+
+        var sql = "CREATE TABLE employees (id INT, name VARCHAR(255), age INT(3), city VARCHAR(255))";  
+        con.query(sql, function (err, result) {  
+            if (err) throw err;  
+            console.log("Table created");  
+        });
+
+     
+        var sql = "UPDATE employees SET city = 'Delhi' WHERE city = 'Allahabad'";  
+        con.query(sql, function (err, result) {  
+            if (err) throw err;  
+            console.log(result.affectedRows + " record(s) updated");  
+        }); 
+
+
+        var sql = "DELETE FROM employees WHERE city = 'Delhi'";  
+        con.query(sql, function (err, result) {  
+            if (err) throw err;  
+            console.log("Number of records deleted: " + result.affectedRows);  
+        });  
+
+
+        con.query("SELECT * FROM employees", function (err, result) {  
+            if (err) throw err;  
+            console.log(result);  
+        });     
+    });  
+
+
+Insert Multiple Records
+
+    var mysql = require('mysql');  
+    var con = mysql.createConnection({  
+        host: "localhost",  
+        user: "root",  
+        password: "12345",  
+        database: "javatpoint"  
+    });  
+
+    con.connect(function(err) {  
+        if (err) throw err;  
+        console.log("Connected!");  
+        var sql = "INSERT INTO employees (id, name, age, city) VALUES ?";  
+        var values = [  
+            ['2', 'Bharat Kumar', '25', 'Mumbai'],  
+            ['3', 'John Cena', '35', ?Las Vegas'],  
+            ['4', 'Ryan Cook', '15', ?CA']  
+        ];  
+        con.query(sql, [values], function (err, result) {  
+            if (err) throw err;  
+            console.log("Number of records inserted: " + result.affectedRows);  
+        });  
+    });  

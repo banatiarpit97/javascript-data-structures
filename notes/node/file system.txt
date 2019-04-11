@@ -1,0 +1,53 @@
+    var fs = require("fs");  
+
+
+    // Asynchronous read  
+    fs.readFile('input.txt', function (err, data) {  
+        if (err) {  
+            return console.error(err);  
+        }  
+        console.log("Asynchronous read: " + data.toString());  
+    });  
+
+    // Synchronous read  
+    var data = fs.readFileSync('input.txt');  
+    console.log("Synchronous read: " + data.toString());  
+    console.log("Program Ended");  
+
+////////////////////////////////////////////////////
+Node.js Open a file
+    fs.open(path, flags[, mode], callback)   
+
+path: This is a string having file name including path.
+
+flags: Flag specifies the behavior of the file to be opened.
+
+mode: This sets the file mode (permission and sticky bits), but only if the 
+file was created. It defaults to 0666, readable and writeable.
+
+callback: This is the callback function which gets two arguments (err, fd).
+
+    fs.open('input.txt', 'r+', function(err, fd) {  
+        if (err) {  
+            return console.error(err);  
+        }  
+        console.log("File opened successfully!");       
+    }); 
+////////////////////////////////////////////////////////
+Node.js File Information Method
+    fs.stat(path, callback)  
+
+stats.isfile()	
+    returns true if file type of a simple file.
+stats.isdirectory()	
+    returns true if file type of a directory.
+stats.isblockdevice()	
+    returns true if file type of a block device.
+stats.ischaracterdevice()	
+    returns true if file type of a character device.
+stats.issymboliclink()	
+    returns true if file type of a symbolic link.
+stats.isfifo()	
+    returns true if file type of a fifo.
+stats.issocket()	
+    returns true if file type of asocket.

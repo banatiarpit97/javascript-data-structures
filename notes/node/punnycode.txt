@@ -1,0 +1,33 @@
+Punycode is an encoding syntax which is used to convert Unicode (UTF-8) 
+string of characters to basic ASCII string of characters. Since host names 
+only understand ASCII characters so Punycode is used.
+
+Assume if you search for mañana.com in your browser so your browser 
+(which is IDNA enabled) first convert this to punycode xn--maana-pta.com 
+because the character ñ is not allowed in regular domain name. It is not 
+supported in older versions.
+
+
+punycode.decode(string)
+It is used to convert a Punycode string of ASCII symbols to a string of 
+Unicode symbols.
+    punycode = require('punycode');  
+    console.log(punycode.decode('maana-pta'));   
+
+punycode.encode(string)
+It is used to convert a string of Unicode symbols to a Punycode string of 
+ASCII symbols.
+    punycode = require('punycode');  
+    console.log(punycode.encode('☃-⌘'));  
+
+punycode.toASCII(domain)
+It is used to convert a Unicode string representing a domain name to Punycode. 
+Only the non-ASCII part of the domain name is converted.
+    punycode = require('punycode');  
+    console.log(punycode.toASCII('mañana.com'));   
+
+punycode.toUnicode(domain)
+It is used to convert a Punycode string representing a domain name to Unicode. 
+Only the Punycoded part of the domain name is converted.
+    punycode = require('punycode');  
+    console.log(punycode.toUnicode('xn--maana-pta.com'));   

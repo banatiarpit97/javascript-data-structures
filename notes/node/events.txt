@@ -1,3 +1,12 @@
+node uses async function to maintain the concurrency. 
+Node uses observer pattern. Node thread keeps an event loop and after the 
+completion of any task, it fires the corresponding event which signals the 
+event listener function to get executed.
+
+callback functions are called when an asynchronous function returns its result
+where as event handling works on the observer pattern.
+
+
 var events = require('events');
 
 var eventEmitter = new events.EventEmitter();

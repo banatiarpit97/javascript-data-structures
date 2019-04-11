@@ -6,6 +6,12 @@ The server moves to the next API after calling it and a notification mechanism o
 helps the server to get a response from the previous API call.
 In Node Application, any async function accepts a callback as the last parameter and a 
 callback function accepts an error as the first parameter.
+    fs.readFile('input.txt', function(err, data) {
+        if(err){
+            throw new Error();
+        }
+        console.log(data)
+    })
 
 Node.js uses a single threaded model with event looping. Event mechanism helps the server to 
 respond in a non-blocking way and makes the server highly scalable as opposed to traditional 
@@ -66,7 +72,7 @@ routing using node:
     }).listen(8081);
 
 //////////////////////////////////////////////////////////////////////////////////////
-Data is send to node server in chunks.Steams are used to send a part of data at a time so that
+Data is send to node server in chunks.Streams are used to send a part of data at a time so that
 we don't have to wait for complete data before start the processing.
 We can not directly access the chunk of data as it is not readable by us.
 Buffers are used to store the chunks of data :
@@ -90,3 +96,8 @@ for that current session but will not be permanent.
 importing a module:
 import {prop_name} from module_name;
 import * as var_name from module_name;
+/////////////////////////////////////////////////////////////////////////
+node can be run in 2 ways:
+    node js_file_name -> executes this file
+    node -> starts repl
+///////////////////////////////////////////////////////////////////////
