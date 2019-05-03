@@ -72,3 +72,9 @@ js is included at last in body becoz:
         this will delay the display of website
 //////////////////////////////////
 global variable of script file is available to all the script files declared after it
+///////////////////////////////////////////////////////////////////
+spa feels much faster than usual because we dont have to wait for client-server
+communication
+SEO does not work well in spa
+SEO relies on js, hence might feel slow on old devices and some customers
+have their js disabled in their browser

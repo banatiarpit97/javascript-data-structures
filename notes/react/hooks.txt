@@ -14,6 +14,11 @@ import { useState } from 'react'
 You can add as many useState() calls you want, to create as many state 
 variables as you want. Just make sure you call it in the top level of 
 a component (not in an if or in any other block).
+Using hooks, state can be anything - object, array, number, string, bool...
+Using useState, state can be shared among components
+
+  const [products, setProducts] = useState([])
+  const [userData, setUserData] = useState({name: 'Max', age: 28})
 /////////////////////////////////////////////////////////////////////////////
 
 Hooks provide the useEffect() API. The call accepts a function as argument.
@@ -47,6 +52,32 @@ useEffect(
 
 Similarly you can tell React to only execute the side effect once (at mount time), 
 by passing an empty array.
+Since nothing is provided in array, functin inside useEffect will never execute again
+Second arguement always has to be an array
+If any of the variable in the array changes, function inside useEffect will be called
+
+Implementing componentWillUnmount:
+
+The function passed as a first argument to useEffect() can return another 
+function (or nothing, as we did in the previous examples).
+
+If you return a function, that function will be executed right before the 
+function passed to useEffect() runs. It also will be executed before the 
+component is removed from the DOM.
+
+Therefore, this returned function is the perfect place for cleanup work. 
+Either during every re-render cycle (as written: Right before the “main” 
+useEffect() function runs) or before the component disappears.
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      // do something amazing here
+    }, 2000)
+    return () => {
+      // Cleanup work goes in here
+      clearTimeout(timer)
+    }
+  })
 /////////////////////////////////////////////////////////////////////////////////
 
 Before hooks, you either used class components, or you passed an event 

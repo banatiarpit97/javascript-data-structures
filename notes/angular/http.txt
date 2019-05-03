@@ -24,3 +24,7 @@ In service/component:
 
 Methods in HttpClient:
 get post put delete head jsonp options patch requests
+
+Get response as promise instead ob observable:
+    this.http.get(url).toPromise()
+        .then(...)

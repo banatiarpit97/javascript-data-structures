@@ -409,3 +409,7 @@ create a observable:
         });
     //this will not work as setTimeout will be fired as soon as it is created(even before someone listens
     to it and the listeners after the fist one will be fired immediately because only one copy is present)
+
+8. Observables can be retried, replayed, delayed etc but not promises
+
+9. Observabes have a lot of operators and functions like map, debounceTime etc

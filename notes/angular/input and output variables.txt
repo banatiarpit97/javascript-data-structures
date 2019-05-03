@@ -1,0 +1,45 @@
+Parent to child - input
+Child to parent - output
+
+Input:
+    In parent component:
+        <app-student [myVar]='hello'></app-student>
+
+    in child component:
+        import { Component, OnInit, Input } from '@angular/core';
+        export class ChildComponent implements OnInit {
+            @Input() myVar: any;    //becomes and instance variable of component
+            constructor() { }
+
+            ngOnInit() {
+                console.log(this.myVar);    //used with 'this'
+            }
+        }
+
+Output:
+    In parent component:
+        <app-student (myVar)='getData($event)'></app-student>
+
+        in .ts file:
+            getdata(value){
+                console.log(value);
+            }
+    
+    In child component:
+        import { Component, Output, EventEmitter } from '@angular/core';
+        export class ChildComponent {
+
+            @Output() myVar = new EventEmitter();
+            constructor() { }
+
+            sendData() {        //call this function
+                this.childEvent.emit('hello');
+            }
+
+        }
+
+
+
+can not use input and output variables in constructor - will always give
+undefined
+Instead use it in ngOnInit

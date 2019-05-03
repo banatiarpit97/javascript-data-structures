@@ -1,5 +1,10 @@
 jsx only looks like html, it is neither html nor does it gets converted to html
 jsx gets converted to js.
+Even tags like h1, p... are  not actual html tags, these are react components which
+are made to behave like normal html elements
+Transpiling is the process of conversion from jsx to js
+Whenever we need to add js in jsx, put in {}
+All tags need to be closed unlike html5
 
 <div>Hey</div> in jsx
 gets converted to:
@@ -16,6 +21,9 @@ becomes
     <div style={{backgroundColor:'red',color:'white'}}>Hey</div> in jsx
 
 style needs to be an object in jsx
+keys are camel cased
+values are strings
+separated by ,
 /////////////////////////////////////////////////////////////////////
 classes in elements:
     <div class="top">Hey</div> in html
@@ -34,3 +42,41 @@ using js variables in jsx
     }
 /////////////////////////////////////////////////////////////////////
 for becomes htmlFor
+//////////////////////////////////////////////////////////////////
+camel case used in events
+onchange becomes onChange
+onclick becomes onClick
+////////////////////////////////////////////////
+value holds current value
+default value holds the value when elem was created
+
+input.value gives current value
+input.getAttribute('value') gives default value
+
+so we can use defaultValue
+    <select defaultValue="x">
+        <option value="x">x</option>
+    </select>
+/////////////////////////////////////////////////
+to mitigates risks from XSS attacks, jsx forces automatic escaping in
+expression, html entity in string might not work
+so, <p>{'&copy'}<p/> will display &copy as it will be parsed as strings
+use either  <p>&copy;<p/> or <p>{'\u00A9'}<p/>
+/////////////////////////////////////////////////
+horizontal whitespace is trimmed to 1
+    <p>Something        good</p> will become <p>Something good</p>
+
+Vertical whitespace is eliminated
+    <p>Something        
+    good
+    </p> will become <p>Somethinggood</p>
+
+to correct this, we need to explicitly add white space in expression
+    <p>Something        
+    {' '}good<
+    /p>
+////////////////////////////////////////////////////
+comments
+    <div>
+        {/* <p>hey</p> */}
+    <div>

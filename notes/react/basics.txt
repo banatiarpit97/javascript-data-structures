@@ -15,6 +15,10 @@ components made using pure components can have only props as an arguement
 pure functions can have many inner functions in which 'render' should be definately there
 pure functions can not have lifecycle events and their own state.
 
+In react, we dont mutate objects, we create new ones.
+Js is fast in replacing objects rather than changing them which gives performance 
+improvements
+
 we can not use semicolon when we split the return statement into multiple lines
     return <div>hey</div>;
 

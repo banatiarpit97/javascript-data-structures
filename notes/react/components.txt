@@ -20,6 +20,17 @@ function based component(Pure component):
         return <div>{props.name}</div>;
     }
 
+third way:(not used much)
+React.createClass({
+    render() {
+        return (
+            <div>
+                <h1>hey</h1>
+            </div>
+        )
+    }
+})
+
 //////////////////////////////////////////////////////////////////
 providing default value for props:
     const App = (props) => {

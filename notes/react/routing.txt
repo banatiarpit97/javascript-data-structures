@@ -5,6 +5,8 @@ React at its core is a very simple library, and it does not dictate anything abo
 should reconstruct the same view that was presented when the URL was generated.
 3. The browser back (and forward) button should work like expected.
 
+These problems can be solved using history api
+
 Routing links together your application navigation with the navigation 
 features offered by the browser: the address bar and the navigation buttons.
 

@@ -1,6 +1,6 @@
 introduced in es6
 
-if we use defualt exprtthen anonymous function can also be exported otherwise not
+if we use defualt exprt then anonymous function can also be exported otherwise not
 ////////////////////////////////////////////////////////////////////////////
 <script type="module" src="index.js">
     this module imprt behaves like defer script load
@@ -17,7 +17,7 @@ import {foo as arpit} from '/index.js'
 importing default export
 import boo from './index.js'
 
-importing mon-default export
+importing non-default or named export
 import {foo} from './index.js'
 
 both:
@@ -28,3 +28,11 @@ Modules are fetched usin CORS that is they must have a valid cors header
 <script type="module" src="index.js">
 <script nomodule src="fallback.js">     //for browsers that do not support modules
 ////////////////////////////////////////////////////////////////////////////
+Ways to export:
+
+    1. export default func_name
+    2. export function aa () { }
+    3. module.exports = {
+            func1,
+            func2
+        }

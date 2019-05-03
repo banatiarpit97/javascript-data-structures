@@ -1,0 +1,39 @@
+npm i ngx-cookie-service
+
+in app.module.ts
+    import { CookieService } from 'ngx-cookie-service';
+
+in component:
+    import { CookieService } from 'ngx-cookie-service';
+
+    constructor( private cookieService: CookieService ) { }
+
+    ngOnInit(): void {
+        this.cookieService.set( 'Test', 'Hello World' );
+        this.cookieValue = this.cookieService.get('Test');
+    }
+
+available methods:
+
+    const cookieExists: boolean = cookieService.check('test');
+    const value: string = cookieService.get('test');
+    const allCookies: {} = cookieService.getAll();
+    cookieService.set( 'test', 'Hello World' );
+    cookieService.delete('test');
+    cookieService.deleteAll();
+
+Signatures:
+
+check( name: string ): boolean;
+
+get( name: string ): string;
+
+getAll(): {};
+
+set( name: string, value: string, expires?: number | Date, 
+    path?: string, domain?: string, secure?: boolean, 
+    sameSite?: 'Lax' | 'Strict' ): void;
+
+delete( name: string, path?: string, domain?: string ): void;
+
+deleteAll( path?: string, domain?: string ): void;
