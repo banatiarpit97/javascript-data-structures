@@ -1,0 +1,11 @@
+Allows us to handle/listen events of host element in the directive/component class
+
+    import { HostListener, Renderer, ElementRef } from '@angular/core';
+    export class host {
+        constructor(private el:ElementRef, private renderer: Renderer) {}
+        @HostListener('click') onClick(){
+            alert('clicked')
+        }
+        @HostListener('mouseover') onMouseover(){
+            this.renderer.setElementStyle(this.el.nativeElement, 'color', 'red');        }
+    }

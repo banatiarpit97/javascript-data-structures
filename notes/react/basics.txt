@@ -52,3 +52,35 @@ To efficiently render an array or to prevent react from re-rendering an element 
 list again, we need to a key attribute to all the elements of the list.
 This key should be uniwue for each element in list.
 This key attribute should be present on the root element of the repeating html/jsx template
+////////////////////////////////////////////////////////////////////
+
+append debug_session=logged_in to url to maintain state(if using redux dev tools)
+    localhost:3000?debug_session=logged_in
+
+When we will open this link again, all the states, action history etc will be 
+maintained as it was
+///////////////////////////////////////////////////////////////////
+Change without mutation:
+    Removing element from an array
+    bad -> state.pop()
+    good -> state.filter(el => el !== 1)
+
+    Adding element to array
+    bad -> state.push(1)
+    good -> [...state, 1]
+
+    replacing element in array
+    bad -> state[0] = 1
+    good -> state.map(el => el === 2?1:2)
+
+    Update prop of object
+    bad -> state.name = 'hi'
+    good -> {...state, name: 'hi'}
+
+    Adding prop to object
+    bad -> state.name = 'hi'
+    good -> {...state, name: 'hi'}
+
+    Removing prop from object
+    bad -> delete state.name
+    good -> {...state, name: undefined}

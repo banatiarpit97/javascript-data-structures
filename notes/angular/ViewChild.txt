@@ -1,0 +1,34 @@
+Used for component communication.
+Component can access child component, directives, elements used inside it.
+Now component can use its properties, methods of children
+
+Parent component:
+    import { ViewChild } from '@angular/core';
+    import { ChildComponent } from './child.component'
+
+    export class Parent {
+        @ViewChild(ChildComponent) child;
+
+        constructor(){
+            this.child.message = 'hi'; //message is a variable defined in ChildComponent
+            this.child.count(); //count is a function defined in ChildComponent
+        }
+    }
+
+same as above for directive
+
+@ViewChild can instantiate ElementRef corresponding to given template 
+reference variable.
+
+Parent component:
+    import { ViewChild } from '@angular/core';
+    export class Parent {
+        @ViewChild('name') name;
+
+        constructor(){
+            this.name.nativeElement.style.backgroundColor = 'red';
+        }
+    }
+
+    HTML:
+    <div><input #name /></div>

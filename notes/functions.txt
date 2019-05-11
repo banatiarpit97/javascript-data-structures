@@ -85,8 +85,16 @@ is neither top level nor inside other functions.
         function class(){ }   -> will be treated as declaration
     }
 
-3. Every function has an object called 'arguements' which is like an array of parameters passed.
+3. Every function has an object called 'arguments' which is like an array of parameters passed.
+    (see spelling carefully)
+    This object contains all the params passed while calling
+    Key of these params are numbers 0,1,2... and values are params passed
+    after that, a key called 'callee' that has its value as obj and tells about function signature
+    after that, a key called Symbol(Symbol.iterator) whose value is also an obj
 
+    this can be used to get all the extra params passed to function while
+    calling it(Since we can pass more than required params in js)
+    
 4. Spread operator :
         extra arguements can be accomodated by spread operator(needs to be last parameter)
         function spread(a, b, ...c){

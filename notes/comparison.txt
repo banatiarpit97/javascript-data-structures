@@ -1,4 +1,7 @@
-Even if objects/arrays have same elements in them ,they will not be equal to another object/array.
+Even if objects/arrays have same elements in them, they will not be 
+equal(triple) to another object/array.
+Triple equal with array an objects checks for same reference rather than
+same content
 
 var a = new String('abc')
 var b = new String('abc')
@@ -24,3 +27,4 @@ if one case is matched in switch then all the cases after that will be executed 
 it does not matter whether the cases after that are matched or not, if switch founds true then it does
 not test any case after that.But if any of cases is found true then, default will not be executed(even if
 no break is present before default)
+////////////////////////////////////////////

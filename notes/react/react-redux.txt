@@ -45,6 +45,10 @@ react to have information from the store and pass it to the component.
 
         //This function copies the selected state from redux store to props
         //object of this component 
+
+        //to get original props of the Component, mapStateToProps accepts second
+        //arguement which gives original props
+        //mapStateToProps = (state, ownProps) => {...}
         return {
             songs: state.songs  //now we can use this.props.songs in our component
         }

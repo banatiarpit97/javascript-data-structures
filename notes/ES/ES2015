@@ -181,6 +181,9 @@ specifying a parameter:
     const doSomething = (param1 = 'test') => {
     }
 
+    this is like -> if(param1 === undefined) {param1 = 'test'}
+    //only works for undefined, even if null passed, default ags won't apply
+
 Once upon a time, if we had to pass an object of options to a function, 
 in order to have default values of those options if one of them was not defined, 
 you had to add a little bit of code inside the function:

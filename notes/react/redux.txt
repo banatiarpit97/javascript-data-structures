@@ -67,6 +67,16 @@ the action we dispatched.These 2 args are passed automatically.
 When the reducer is called for the first time, there is no prev state, 
 hence 1 arg is set to undefined.Thats why we set the default value for
 prev state in reducer
+
+If nothing returned or returned undefined from reducer, then react gives an
+error.Must return something(int, string, arr, obj, null...)
+
+Reducers must not reach to any outside function to set the state or return Data
+like api call, Dom node etc
+Next state should only be defined on the basis of prev state and action
+
+Prev state should never be mutated(if our reducer returns string/number
+then we don't need to think of this rule as strings and numbers are immutable in js)
 /////////////////////////////////////////////////////////////////////////////////////
 The Store
 	The Store is an object that:
