@@ -12,7 +12,7 @@ Keep the static content in different component from dynamic content because if t
 in same component then static content will be rendered unnecessarily
 
 components made using pure components can have only props as an arguement
-pure functions can have many inner functions in which 'render' should be definately there
+pure functions can have many inner functions
 pure functions can not have lifecycle events and their own state.
 
 In react, we dont mutate objects, we create new ones.
@@ -32,10 +32,10 @@ return keyword otherwise function would return null.
 
 render root component
     import React from 'react'
-    import ReactDom from 'react-dom'
+    import ReactDOM from 'react-dom'
     import App from './App'
 
-    ReactDom.render(<App />, document.querySelector("#root"));
+    ReactDOM.render(<App />, document.querySelector("#root"));
 ////////////////////////////////////////////////////////////////////
 
 we can directly pass an array of html/jsx elements to return statement of render

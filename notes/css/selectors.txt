@@ -1,12 +1,15 @@
 h1                      Type Selector	
 .tagline	            Class Selector	
 #intro	                ID Selector	
+/////////////////////////////////////////////////////////////////
 
 article h2	            Descendant Selector	
 article > p	            Direct Child Selector
+/////////////////////////////////////////////////////////////////
 
 h2 ~ p	                General Sibling Selector
 h2 + p	                Adjacent Sibling Selector
+/////////////////////////////////////////////////////////////////
 
 a[target]	            Attribute Present Selector
 a[href="http://google.com/"]	Attribute Equals Selector
@@ -15,6 +18,14 @@ a[href^="https://"]	    Attribute Begins With Selector
 a[href$=".pdf"]	        Attribute Ends With Selector
 a[rel~="tag"]	        Attribute Spaced Selector
 a[lang|="en"]	        Attribute Hyphenated Selector
+
+All the checks we mentioned are case sensitive.
+If you add an i just before the closing bracket, the check will be case insensitive.
+/////////////////////////////////////////////////////////////////
+PSEUDO-CLASSES:
+select an element based on its state, or to target a specific child.
+They start with a single colon :.
+
 
 a:link	                Link Pseudo-class
 a:visited	            Link Pseudo-class
@@ -44,10 +55,45 @@ section:target	        Target Pseudo-class
 div:empty	            Empty Pseudo-class
 div:not(.awesome)	    Negation Pseudo-class
 
-.alpha:first-letter	    Textual Pseudo-elements
-.bravo:first-line	    Textual Pseudo-elements
+/////////
+    a {
+    color: yellow;
+    }
+Things seem to work fine, until you click one link. 
+The link goes back to the predefined color (blue) when you click it.
 
-div:before	            Generated Content	
-a:after	                Generated Content
+Because the link when clicked changes state, and goes in the :active state. 
+And when it's been visited, it is in the :visited state. 
+Forever, until the user clears the browsing history.
+
+So, to correctly make the link yellow across all states, you need to write
+    a,
+    a:visited,
+    a:active {
+    color: yellow;
+    }
+/////////
+Some pseudo classes are just used for printing, like :first, :left, :right, 
+so you can target the first page, all the left pages, and all the right pages, 
+which are usually styled slightly differently.
+
+/////////////////////////////////////////////////////////////////
+PSEUDO-ELEMENTS
+Pseudo-elements are used to style a specific part of an element.
+They start with a double colon ::.
+
+
+div::before	            Generated Content	
+a::after	                Generated Content
+
+.alpha::first-letter	    Textual Pseudo-elements
+.bravo::first-line	    Textual Pseudo-elements
 
 ::selection	            Fragment Pseudo-element	
+
+::after and ::before are a bit less intuitive.use them when you have to add icons using CSS.
+
+You specify the content property to insert any kind of content after or before an element:
+    p::before {
+    content: url(/myimage.png);
+    }

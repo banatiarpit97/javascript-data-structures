@@ -1,13 +1,15 @@
 React.memo
 Class components can bail out from rendering when their input props are the same using 
-PureComponent or shouldComponentUpdate. Now you can do the same with function components by wrapping them in React.memo.
+PureComponent or shouldComponentUpdate. Now you can do the same with function components 
+by wrapping them in React.memo.
 
 const MyComponent = React.memo(function MyComponent(props) {
   /* only rerenders if props change */
 });
 ////////////////////////////////////////////////////////////////
 React.lazy: Code-Splitting with Suspense
-Now you can use the Suspense component to do code-splitting by wrapping a dynamic import in a call to React.lazy().
+Now you can use the Suspense component to do code-splitting by wrapping a dynamic import 
+in a call to React.lazy().
 
 import React, {lazy, Suspense} from 'react';
 const OtherComponent = lazy(() => import('./OtherComponent'));

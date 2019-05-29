@@ -1,0 +1,41 @@
+Every CSS rule terminates with a semicolon. 
+Semicolons are not optional, except after the last rule.
+//////////////////////////////
+
+There is no fixed rule for formatting. This CSS is valid:
+
+p
+      {
+  font-size:           20px   ;
+                      }
+a{color:blue;}
+///////////////////////////////
+
+Ways of adding css to webpage:
+
+1: Using the link tag(preffered)
+    in head tag:
+        <link rel="stylesheet" type="text/css" href="myfile.css">
+
+2: using the style tag
+    <style>
+        ...our CSS...
+    </style>
+
+3: inline styles
+    <div style="">...</div>
+////////////////////////////////////////////////
+
+Cascade is the process, or algorithm, that determines the properties applied to each 
+element on the page. Trying to converge from a list of CSS rules that are defined
+ in various places.
+
+It does so taking in consideration:
+
+specificity
+importance
+inheritance
+order in the file
+
+It also takes care of resolving conflicts.
+//////////////////////////////////////////////////////////////////////

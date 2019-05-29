@@ -1,0 +1,28 @@
+Payload comes to the server in streams.
+Streams does not send all the data at once, data comes in chunks, so we need to collect
+these chunks as they arrive and combine them into one.
+To know that a chunk of data has arrived to listen to an event 'data' on the request
+
+const StringDecoder = require('string_decoder').StringDecoder;
+const http = require('http');
+
+const server = http.createServer(function (req, res) {
+    if(req.url === '/' && req.method === 'GET'){
+        const decoder = new StringDecoder('utf-8');
+        let buffer = '';
+        req.on('data', function(data) {
+            buffer += decoder.write(data);
+        })
+
+        req.on('end', function() {
+            buffer =+ decoder.end();
+            console.log('Payload is', buffer);
+
+            res.end('Hello')
+        })
+    }
+})
+
+server.listen(8081, function() {
+    console.log('listening on port 8081');
+});

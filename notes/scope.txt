@@ -22,6 +22,8 @@ function example(){
 
 4. let and const are block scoped(remain inside if, for...)
     (and are not hoisted)
+    Let and const are not hoisted i.e. they are not registered when forst phase of compilation
+    takes place and i.e. why they are not initialised with undefined like 'var' is
     we need to initialise const variable while declaring it.
     if we try to change a const value, we get an error
 

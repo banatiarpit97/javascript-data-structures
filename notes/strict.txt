@@ -1,5 +1,5 @@
 use 'strict'
-at the top of page.
+at the top of page or function(otherwise won't work)
 
 1. function example(){
     var name = "arpit";         //local variable

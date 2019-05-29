@@ -1,5 +1,18 @@
 Node.js = Runtime Environment + JavaScript Library
 
+A Node.js app is run by a single process, without creating a new thread for every request. 
+Node provides a set of asynchronous I/O primitives in its standard library that will 
+prevent JavaScript code from blocking and generally, libraries in Node.js are written 
+using non-blocking paradigms, making a blocking behavior an exception rather than the normal.
+
+This allows Node.js to handle thousands of concurrent connections with a single server 
+without introducing the burden of managing threads concurrency, which would be a major 
+source of bugs.
+
+Node is probably the best stack when we want to do high throughput, low latency IO task
+Node's architecture, async event loop complements the IO operations
+But it is not best for performing heavy CPU processes.
+
 All APIs of Node.js library are asynchronous, that is, non-blocking. 
 It essentially means a Node.js based server never waits for an API to return data. 
 The server moves to the next API after calling it and a notification mechanism of Events of Node.js 
@@ -61,15 +74,6 @@ setting up server :
 
 //////////////////////////////////////////////////////////////////////////////////////
 can not write/append to response after calling res.end();
-//////////////////////////////////////////////////////////////////////////////////////
-
-routing using node:
-    http.createServer(function (request, response) {
-        if(req.url === '/' && req.method === 'GET'){
-            res.json({name:"arpit"})
-            return res.end();
-        }
-    }).listen(8081);
 
 //////////////////////////////////////////////////////////////////////////////////////
 Data is send to node server in chunks.Streams are used to send a part of data at a time so that
@@ -93,6 +97,12 @@ When we require a file/module, nodejs makes a cached copy of it.That means, if w
 imported file, we change the cached file and not the original one.So the changes will stay 
 for that current session but will not be permanent.
 //////////////////////////////////////////////////////////////////////////////////////
+Node.js uses the CommonJS module system, while in the browser we are starting to 
+see the ES Modules standard being implemented.
+In CommonJS, modules are loaded synchronously, and processed in the order the JavaScript 
+runtime finds them. This system was born with server-side JavaScript in mind, and is 
+not suitable for the client-side (this is why ES Modules were introduced).
+
 importing a module:
 import {prop_name} from module_name;
 import * as var_name from module_name;
@@ -101,3 +111,79 @@ node can be run in 2 ways:
     node js_file_name -> executes this file
     node -> starts repl
 ///////////////////////////////////////////////////////////////////////
+call an api from node:
+    const http = require('http');
+
+    const requestDetails = {
+        protocol: 'http',
+        hostname: 'api.google.com',
+        method: 'POST',
+        path: '...',
+        auth: '...',
+        header: {...}
+    }
+
+    const req = http.request(requestDetails, function(res) {
+        const status = res.statusCode;
+        if(status == 200 || status == 201) {
+            console.log('success');
+        }
+        else{
+            console.log('failed');
+        }
+        res.on('data', (d) => {
+            process.stdout.write(d)
+        })
+    })
+
+    req.on('error', function(err){
+        console.log(err);
+    })
+
+    req.write(payload); //if we want to some payload with the request like we do in POST request
+
+    req.end();
+///////////////////////////////////////////////////////////////////////
+To get logs related to particular module only:
+    use NODE_DEBUG=http node index.js to start node app
+
+Instead of using a built in module, we can provide our own modules/files:
+    const util = require('util');
+    const debug = util.debuglog('workers'); //workers is anme of our js file/module
+
+    now replace every console.log with debug
+    like console.log('aa') with debug('aa');
+////////////////////////////////////////
+exports:
+    const car = {
+        brand: 'Ford',
+        model: 'Fiesta'
+    }
+    module.exports = car
+
+    or
+
+    const car = {
+        brand: 'Ford',
+        model: 'Fiesta'
+    }
+    exports.car = car
+
+The first exposes the object it points to. The latter exposes the properties of the object it points to.
+////////////////////////////////
+callback functions in nodejs uses error-first approach i.e. first param of every callback would
+be error. if there is an actual error, this parameter will be popoulated with the info otherwise
+it would be 'null'
+//////////////////////////////////////////////
+convert js file to executable file:
+
+    #!/usr/bin/env node     
+    
+    //this indicates that interpret this file node
+    //OS will find the path for node and execute this file
+    //should be first line of our file
+
+    in terminal:
+    sudo chmod u+x index.js     //to make it executable
+
+    ./index.js  //no need to use node index.js

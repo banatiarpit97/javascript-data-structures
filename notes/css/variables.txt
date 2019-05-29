@@ -1,0 +1,92 @@
+a variable is a variable: a name that refers to a value, and variables 
+in CSS help reduce repetition and inconsistencies in your CSS, by 
+centralizing the values definition.
+
+And it introduces a unique feature that CSS preprocessors won’t ever have: 
+you can access and change the value of a CSS Variable programmatically using JavaScript.
+preprocessors won’t have this as they are transpiled to good old variable-less CSS 
+(and as such, you lose most of the power of CSS Variables).
+
+A CSS Variable is defined with a special syntax, prepending two dashes to a name
+(--variable-name), then a colon and a value. Like this:
+    :root {
+        --primary-color: yellow;
+        --default-padding: 30px 30px 20px 20px;
+    }
+
+You can access the variable value using var():
+    p {
+       color: var(--primary-color)
+    }
+//////////////////////////////////////////////////////
+CSS Variables can be defined inside any element. Some examples:
+    :root {
+       --default-color: red;
+    }
+    body {
+        --default-color: red;
+    }
+
+What changes in those different examples is the scope.
+Adding variables to a selector makes them available to all the children of it.
+
+:root is a CSS pseudo-class that identifies the root element of a tree.
+In the context of an HTML document, using the :root selector points to the html element, 
+except that :root has higher specificity (takes priority).
+Adding a CSS custom property to :root makes it available to all the elements in the page.
+/////////////////////////////////////////////////////////////
+Variables can be reassigned:
+    :root {
+        --primary-color: yellow;
+    }
+    .container {
+        --primary-color: blue;
+    }
+
+Outside .container, --primary-color will be yellow, but inside it will be blue.
+
+You can also assign or overwrite a variable inside the HTML using inline styles:
+    <main style="--primary-color: orange;"></main>
+
+CSS Variables follow the normal CSS cascading rules, with precedence set according to specificity.
+/////////////////////////////////////////////////////////////
+
+set a variable value using plain JavaScript:
+    const element = document.getElementById('my-element')
+    element.style.setProperty('--variable-name', 'a-value')
+
+access a variable value instead, in case the variable is defined on :root:
+    const styles = getComputedStyle(document.documentElement)
+    const value = String(styles.getPropertyValue('--variable-name')).trim()
+
+to get the style applied to a specific element, in case of variables set with a different scope:
+    const element = document.getElementById('my-element')
+    const styles = getComputedStyle(element)
+    const value = String(styles.getPropertyValue('--variable-name')).trim()
+
+////////////////////////////////////////////////////////////////////
+If a variable is assigned to a property which does not accept the variable value, 
+it’s considered invalid.
+In this case the line is considered invalid and is ignored.
+///////////////////////////////////////////////////////////////////
+Browser support for CSS Variables is very good.
+CSS Variables are here to stay, and you can use them today if you don’t 
+need to support Internet Explorer and old versions of the other browsers.
+///////////////////////////////////////////////////////////////////
+CSS Variables are case sensitive
+    --width: 100px;
+is different than this one:
+    --Width: 100px;
+///////////////////////////////////////////////////////////////////
+To do math in CSS Variables, you need to use calc(), for example:
+    --default-left-padding: calc(10px * 2);
+///////////////////////////////////////////////////////////////////
+Setting a fallback value for var()
+var() accepts a second parameter, which is the default fallback value when the 
+variable value is not set:
+    .container {
+        margin: var(--default-margin, 30px);
+    }
+///////////////////////////////////////////////////////////////////
+
+

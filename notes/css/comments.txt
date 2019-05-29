@@ -1,0 +1,10 @@
+The format is the /* this is a comment */
+
+This is a multiline comment. Until you add the closing */ token, 
+the all the lines found after the opening one are commented.
+
+CSS does not have inline comments, like // in C or JavaScript.
+
+Pay attention though — if you add // before a rule, the rule will not be applied, 
+looking like the comment worked. In reality, CSS detected a syntax error and due to 
+how it works it ignored the line with the error, and went straight to the next line.

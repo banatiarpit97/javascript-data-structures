@@ -14,6 +14,8 @@ The calc() function performs a calculation to be used as the property value.
 The following operators can be used: + - * /
 
 width: calc(100% - 100px);
+with addition and subtraction, the space around the operator is mandatory, 
+otherwise it does not work as expected.
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 The rgb() function define colors using the Red-green-blue (RGB) model.

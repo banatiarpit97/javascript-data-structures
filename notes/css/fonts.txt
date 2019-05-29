@@ -1,0 +1,66 @@
+font-family
+    Why “family”? Because what we know as a font is actually composed of 
+    several sub-fonts which provide all the style (bold, italic, light..) we need.
+        font-family: Helvetica;
+
+    You can set multiple values, so the second option will be used if the first 
+    cannot be used for some reason (if it’s not found on the machine, or the network 
+    connection to download the font failed, for example):
+        font-family: Helvetica, Arial;
+
+    Web Safe Fonts - they are pre-installed on different operating systems.
+    eg- Helvetica, Arial
+//////////////////////////////////////////////////////
+font-weight
+    sets the width of a font
+    normal, bold, bolder (relative to the parent element), lighter (relative to the parent element)
+    100, 200, 300, 400(normal), 500, 600, 700(bold), 800, 900
+    Some of those numeric values might not map to a font, because that must be 
+    provided in the font family. When one is missing, CSS makes that number be at least 
+    as bold as the preceding one, so you might have numbers that point to the same font.
+//////////////////////////////////////////////////////
+font-stretch
+    choose a narrow or wide face of the font, if available.
+    condensed, normal, expanded...
+////////////////////////////////////////////////////
+font-style
+    apply an italic style to a font
+    italic, oblique and normal
+        font-style: italic;
+//////////////////////////////////////////////////////
+font-size
+    can pass 2 kinds of values:
+        length value, like px, em, rem etc, or a percentage
+        predefined value keyword(small, medium ,large, 
+        smaller(relative to parent), larger(relative to parent), x-small, xx-small...)
+//////////////////////////////////////////////////////
+font-variant
+    used to change the text to small caps
+    normal, inherit, small-caps
+    In a small-caps font, all lowercase letters are converted to uppercase letters. 
+    However, the converted uppercase letters appears in a smaller font size than the 
+    original uppercase letters in the text.
+//////////////////////////////////////////////////////
+font
+    lets you apply different font properties in a single one, reducing the clutter.
+    We must at least set 2 properties, font-size and font-family, the others are optional:
+        font: 20px Helvetica
+    font: <font-stretch> <font-style> <font-variant> <font-weight> 
+            <font-size> <line-height> <font-family>;
+///////////////////////////////////////////////////////////////
+Loading custom fonts using @font-face
+
+Fonts are usually in the formats:
+woff (Web Open Font Format)
+woff2 (Web Open Font Format 2.0)
+eot (Embedded Open Type)
+otf (OpenType Font)
+ttf (TrueType Font)
+
+The following properties allow us to define the properties to the font we are going to load:
+font-family
+font-weight
+font-style
+font-stretch
+///////////////////////////////////////////////////////////////
+

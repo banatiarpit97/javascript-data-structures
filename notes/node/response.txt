@@ -1,5 +1,44 @@
 The res object represents the HTTP response that an Express app sends when it gets an HTTP request.
 
+The response starts with the status code and the status message.
+The response then contains a list of HTTP headers and the response body.
+
+http.ServerResponse
+Created by an http.Server and passed as the second parameter to the request event it fires.
+
+The method you’ll always call in the handler is end(), which closes the response, 
+the message is complete and the server can send it to the client. It must be called on each response.
+
+These methods are used to interact with HTTP headers:
+getHeaderNames() get the list of the names of the HTTP headers already set
+getHeaders() get a copy of the HTTP headers already set
+setHeader('headername', value) sets an HTTP header value
+getHeader('headername') gets an HTTP header already set
+removeHeader('headername') removes an HTTP header already set
+hasHeader('headername') return true if the response has that header set
+headersSent() return true if the headers have already been sent to the client
+
+After processing the headers you can send them to the client by calling response.writeHead(), 
+which accepts the statusCode as the first parameter, the optional status message, and the headers object.
+
+To send data to the client in the response body, you use write(). It will send buffered data 
+to the HTTP response stream.
+
+If the headers were not sent yet using response.writeHead(), it will send the headers first, 
+with the status code and message that’s set in the request, which you can edit by setting the 
+statusCode and statusMessage properties values:
+    response.statusCode = 500
+    response.statusMessage = 'Internal Server Error'
+
+
+
+
+
+
+
+
+
+
 Response Object Properties
 Following is the list of few properties associated with response object.
 

@@ -1,6 +1,49 @@
 The req object represents the HTTP request and has properties for the request query string, 
 parameters, body, HTTP headers, and so on.
 
+The request is a plain text document structured in a precise way determined by the 
+communication protocol.
+It’s composed of 3 parts:
+
+The request line
+    the HTTP method, the resource location, the protocol version
+    GET / HTTP/1.1
+
+The request header
+    The request header is a set of field: value pairs that set certain values.
+    There are 2 mandatory fields, one of which is Host, and the other is Connection, 
+    while all the other fields are optional:
+        Host: google.com
+        Connection: close
+    Host indicates the domain name which we want to target, while Connection is always set 
+    to close unless the connection must be kept open.
+
+The request body
+    The request body is optional, not used in GET requests but very much used in POST requests 
+    and sometimes in other verbs too, and it can contain data in JSON format.
+
+
+http.ClientRequest
+An http.ClientRequest object is created when http.request() or http.get() is called.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 req.app
     This property holds a reference to the instance of the express application that is using the middleware.
 

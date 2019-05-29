@@ -1,0 +1,57 @@
+in cli run:
+    openssl req -newkey rsa:2048 -new -nodes -days 3650 -keyout key.pem -out cert.pem
+Answer some question about the website.
+This will create 2 file name key.pem and cert.pem
+
+in js files:
+
+config.js:
+    ...
+    environment.staging = {
+        httpPort: 3000,
+        httpsPort: 3001,
+        envName: 'staging'
+    }
+    environment.production = {
+        httpPort: 5000,
+        httpsPort: 5001,
+        envName: 'production'
+    }
+    ...
+
+index.js:
+    const http = require('http');
+    const https = require('https');
+    const url = require('url');
+    const env = require('./config');
+    const fs = requier('fs');
+
+
+    const httpServer = http.createServer(function (request, response) {
+        unifiedServer(req, res);
+    })
+
+    const httpsOptions = {
+        'key': fs.readFileSync('./https/key.pem');
+        'cert': fs.readFileSync('./https/cert.pem');
+    }
+    const httpsServer = https.createServer(httpsOptions, function (request, response) {
+        unifiedServer(req, res);
+    })
+
+    httpServer.listen(env.httpPort, function() {
+        console.log(`listening on port env.httpPort`);
+    });
+    httpsServer.listen(env.httpsPort, function() {
+        console.log(`listening on port env.httpPort`);
+    });
+
+    function unifiedServer(req, res) {
+        const parsedUrl = url.parse(request.url, true);     
+        const pathName = parsedUrl.pathname;
+        
+        if(pathName === '/' && req.method === 'GET'){
+            res.json({name:"arpit"})
+            return res.end();
+        }
+    }

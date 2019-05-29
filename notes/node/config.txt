@@ -1,0 +1,42 @@
+Used to change some variables in app based on the mode in which it is running
+like staging, production etc
+
+const environment = {};
+
+environment.staging = {
+    port: 3000,
+    envName: 'staging'
+}
+environment.production = {
+    port: 5000,
+    envName: 'production'
+}
+
+const currentEnv =  process.env.NODE_ENV
+const envToExport = currentEnv?environment[currentEnv]:environment['staging'];
+
+module.exports = envToExport;
+//////////////////////////////////
+Import this file in other files to use these variables
+    var env = require('./config');
+
+    ...
+    server.listen(env.port, function() {
+        console.log(`listening on port env.port`);
+    });
+////////////////////////////////////
+start the execution using:
+    NODE_ENV=production node index.js
+    //variable name can be anything, but 'NODE_ENV' is preferred name
+///////////////////////////////////////////
+Node.js assumes it’s always running in a development environment. You can signal Node.js 
+that you are running in production by setting the NODE_ENV=production environment variable.
+This is usually done by executing the command:
+    export NODE_ENV=production
+
+in the shell, but it’s better to put it in your shell configuration file 
+(like .bash_profile with the Bash shell) because otherwise the setting does not persist 
+in case of a system restart.
+You can also apply the environment variable by prepending it to your application initialization command:
+    NODE_ENV=production node app.js
+

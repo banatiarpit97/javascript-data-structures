@@ -103,6 +103,11 @@ We can call a function that would take some time to execute, we then subscribe t
 This solves the inversion of control problem of callbacks.
 In this, we don't provide api our callback function, instead the api returns a promise
 based on which we continue our code.
+In promises, data in js code is updated by the apis which will fire a function on the updated data,
+so we dont pass anything to outer world as in callbacks
+
+Promises are executed before callbacks becoz they are put in different callback queues and priority
+of promises is higher.
 
 var promise1 = new Promise((resolve, reject) => {
   setTimeout(() => {

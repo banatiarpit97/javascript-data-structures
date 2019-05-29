@@ -1,0 +1,116 @@
+text-transform
+    transform the case of an element.
+    capitalize - uppercase the first letter of each word
+    uppercase - uppercase all
+    lowercase  - lowercase all
+    none to disable transforming the text, used to avoid inheriting the property
+
+text-decoration
+    underline, overline, line-through, blink, none
+    You can also set the style of the decoration, and the color.
+        text-decoration: underline dashed yellow;
+    Valid style values are solid, double, dotted, dashed, wavy.
+
+    text-decoration-line, text-decoration-color, text-decoration-style are specific
+    properties to handle decorations
+
+text-align
+    By default text align has the start value, meaning the text starts at the "start", 
+    origin 0, 0 of the box that contains it. This means top left in left-to-right 
+    languages, and top right in right-to-left languages.
+
+    start, end, left, right, center, justify
+
+vertical-align
+    First we can assign a length or percentage value. Those are used to align the text 
+    in a position higher or lower (using negative values) than the baseline of the parent 
+    element.
+    baseline (default),sub super, top, text-top, middle, bottom, text-bottom
+
+line-height
+    change the height of a line. Each line of text has a certain font height, but 
+    then there is additional spacing vertically between the lines. That’s the line height:
+
+text-indent
+    Indent the first line of a paragraph by a set length, or a percentage of the paragraph width:
+        text-indent: -10px;
+
+text-align-last
+    By default the last line of a paragraph is aligned following the text-align value. 
+    Use this property to change that behavior:
+        text-align-last: right;
+
+word-spacing
+    Modifies the spacing between each word.
+
+    You can use the normal keyword, to reset inherited values, or use a length value:
+
+letter-spacing
+    Modifies the spacing between each letter.
+
+    You can use the normal keyword, to reset inherited values, or use a length value:
+
+text-shadow
+    Apply a shadow to the text. By default the text has no shadow.
+    This property accepts an optional color, and a set of values that set
+        the X offset of the shadow from the text
+        the Y offset of the shadow from the text
+        the blur radius
+    If the color is not specified, the shadow will use the text color.
+        text-shadow: 0.2px 2px;
+        text-shadow: yellow 0.2px 2px 3px;
+
+white-space
+    Sets how CSS handles the white space, new lines and tabs inside an element.
+
+    normal collapses white space. Adds new lines when necessary as the text reaches the container end
+    nowrap collapses white space. Does not add a new line when the text reaches the end of 
+    the container, and suppresses any line break added to the text
+    pre-line collapses white space. Adds new lines when necessary as the text reaches the container end
+    pre preserves white space. Does not add a new line when the text reaches the end of the container, 
+    but preserves line break added to the text
+    pre-wrap preserves white space. Adds new lines when necessary as the text reaches the container end
+
+tab-size
+    Sets the width of the tab character. By default it’s 8, and you can set an integer value 
+    that sets the character spaces it takes, or a length value:
+        tab-size: 2;
+        tab-size: 4px;
+
+writing-mode
+    Defines whether lines of text are laid out horizontally or vertically, and the 
+    direction in which blocks progress.
+    horizontal-tb (default)
+    vertical-rl content is laid out vertically. New lines are put on the left of the previous
+    vertical-lr content is laid out vertically. New lines are put on the right of the previous
+
+hyphens
+    Determines if hyphens should be automatically added when going to a new line.
+
+    none (default)
+    manual only add an hyphen when there is already a visible hyphen or a hidden hyphen
+    auto add hyphens when determined the text can have a hyphen.
+
+text-orientation
+    When writing-mode is in a vertical mode, determines the orientation of the text.
+
+    mixed is the default, and if a language is vertical (like Japanese) it preserves 
+    that orientation, while rotating text written in western languages
+    upright makes all text be vertically oriented
+    sideways makes all text horizontally oriented
+
+direction
+    Sets the direction of the text. 
+    Valid values are ltr and rtl:
+
+word-break
+    This property specifies how to break lines within words.
+
+    normal (default) means the text is only broken between words, not inside a word
+    break-all the browser can break a word (but no hyphens are added)
+    keep-all suppress soft wrapping. Mostly used for CJK (Chinese/Japanese/Korean) text.
+
+overflow-wrap
+    like word-break but used for western languages
+
+

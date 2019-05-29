@@ -11,7 +11,7 @@ npm install mysql
         if (err) throw err;  
         console.log("Connected!");  
 
-        con.query("CREATE DATABASE javatpoint", function (err, result) {  
+        con.query("CREATE DATABASE javatpoint", function (err, result, fields) {  
             if (err) throw err;  
             console.log("Database created");  
         });  
@@ -40,20 +40,21 @@ npm install mysql
         con.query("SELECT * FROM employees", function (err, result) {  
             if (err) throw err;  
             console.log(result);  
-        });     
-    });  
+        });  
+
+        con.query('INSERT INTO todos SET ?', {name: 'arpit'}, (error, results, fields) => {
+            if (err) throw err;  
+            const id = results.resultId //id of new record
+            console.log(id)
+        )}   
+    });
+
+When you need to terminate the connection to the database you can call the end() method:
+    connection.end()
+This makes sure any pending query gets sent, and the connection is gracefully terminated.  
 
 
 Insert Multiple Records
-
-    var mysql = require('mysql');  
-    var con = mysql.createConnection({  
-        host: "localhost",  
-        user: "root",  
-        password: "12345",  
-        database: "javatpoint"  
-    });  
-
     con.connect(function(err) {  
         if (err) throw err;  
         console.log("Connected!");  
@@ -68,3 +69,18 @@ Insert Multiple Records
             console.log("Number of records inserted: " + result.affectedRows);  
         });  
     });  
+
+/////////////////////////////////////////////////////
+options for connection:
+host, the database hostname, defaults to localhost
+port, the MySQL server port number, defaults to 3306
+socketPath, used to specify a unix socket instead of host and port
+debug, by default disabled, can be used for debugging
+trace, by default enabled, prints stack traces when errors occur
+ssl, used to setup an SSL connection to the server (out of the scope of this tutorial)
+////////////////////////////////////////////////////
+escape value:
+    const id = 223
+    const author = 'Flavio'
+    connection.query('SELECT * FROM todos WHERE id = ? AND author = ?', [id, author], 
+        (error, todos, fields) => {
