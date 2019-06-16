@@ -134,3 +134,63 @@ matches url will be shown
       <About />
     </div>
 ////////////////////////////////////////////////////////////////
+If we use BrowserRouter, it creates a history object by default and pass it every component
+that is directly rendered by the router as props.history i.e. only to first level children
+
+But if we want to access this history inside nested components then we need to withRouter HOC
+provided by react-router-dom.
+
+  import { withRouter } from "react-router";
+  class ShowTheLocation extends React.Component {
+    render() {
+      return <div>You are now at {props.history.location.pathname}</div>;
+    }
+  }
+  export default withRouter(ShowTheLocation);
+///////////////////////////////////////////////////////////////////
+
+We generally do the programatic routing from action creators after dispatching the action if
+the async/api request was successful.
+To do that we need the history object inside action creators
+For this, instead of letting the BrowserRouter create history for us, we create it ourselves and
+tell the Router to use our history object.This has an advantage that we can import this 
+history object anywhere inside our app and use it.
+But there is one problem that BrowserRouter does not accept a external history object so instead
+we use Router from react-router-dom
+
+  import {Router} from 'react-router-dom'
+  import { createBrowserHistory } from 'history'; //history package comes by default with react-router
+  const history = createBrowserHistory();
+
+  <Router history={history}>
+    <Router path='/' exact component={login}>
+  <Route>
+  //everything is like BrowserRouter, except the name and we pass the history object
+
+////////////////////////////////////////////////////////////////////////
+<Switch>
+Renders the first child <Route> or <Redirect> that matches the location.How is this different 
+than just using a bunch of <Route>s?<Switch> is unique in that it renders a route exclusively.
+In contrast, every <Route> that matches the location renders inclusively. 
+  
+  import { Switch, Route } from 'react-router'
+  <Switch>
+    <Route exact path="/" component={Home}/>
+    <Route path="/about" component={About}/>
+    <Route path="/:user" component={User}/>
+    <Route component={NoMatch}/>
+  </Switch>
+/////////////////////////////////////////////////////////////////////////
+<NavLink>
+A special version of the <Link> that will add styling attributes to the rendered element 
+when it matches the current URL.
+  <NavLink to="/faq" activeClassName="selected">
+    FAQs
+  </NavLink>
+  
+  <NavLink
+    to="/faq"
+    activeStyle={{
+      color: "red"
+    }}
+  >FAQs</NavLink>

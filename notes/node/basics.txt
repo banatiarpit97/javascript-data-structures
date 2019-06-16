@@ -187,3 +187,14 @@ convert js file to executable file:
     sudo chmod u+x index.js     //to make it executable
 
     ./index.js  //no need to use node index.js
+//////////////////////////////////////////////////////
+Options request is ent automatically before any other request when client side and
+server side code are running on different ports or urls
+//////////////////////////////////////////////////////
+PUT request is used when we want to update all the properties of the existing record
+The data we send will replace the existing data completely so we need to send all
+the properties whether or not they were changed
+
+PATCH request is used when we want to update some of the properties of the existing record
+The data we send will replace only the properties we send i.e. merge latest and previous data 
+so we need to send only the properties that were changed

@@ -31,7 +31,7 @@ Modules are fetched usin CORS that is they must have a valid cors header
 Ways to export:
 
     1. export default func_name
-    2. export function aa () { }
+    2. export function aa () { }    //both 1 and 2 can be used together in a file
     3. module.exports = {
             func1,
             func2

@@ -62,7 +62,7 @@ react to have information from the store and pass it to the component.
         //object of this component 
         
         return {
-            selectSong: (song) => {dispatch({type: 'SELECT', payload: song})}
+            selectSong: (song) => {dispatch(selectSong)}
         }
         //now we can fire this action by 'this.props.selectSong'
     }
@@ -73,6 +73,10 @@ react to have information from the store and pass it to the component.
 
 Shorthand of mapDispatchToProps:
     ...
-    export default connect(mapStateToProps, {selectSong})(Song);
+    export default connect(mapStateToProps, {selectSong})(Song);    //selectSong is action creator
     ...
     everything else remains same
+
+what this does is, the functions passed in the object is wrapped inside dispatch function
+so that we don't have to manually call dispatch
+We can directly call this.props.selectSong() and action will be dispatched automatically

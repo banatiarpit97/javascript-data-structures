@@ -246,3 +246,9 @@ crypto streams
         .pipe(crypto.createCipher("aes192", "a_secret"))    //encrypt file
         .pipe(fs.createWriteStream(file + ".zz"))
         .on("finish", () => console.log("Done"));
+
+    fs.createReadStream(file)
+        .pipe(crypto.createDecipher("aes192", "a_secret"))  //decrypt file
+        .pipe(zlib.createGunzip())
+        .pipe(fs.createWriteStream(file.slice(0, -3)))
+        .on("finish", () => console.log("Done"));

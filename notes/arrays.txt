@@ -92,3 +92,9 @@ rest - When we want to combine many elements in an array
 		second = 2
 /////////////////////////////////////////////////////////////////////////////////////////
 arrays are also objects with properties '0', '1', '2'... i.e. index number
+/////////////////////////////////////////////////////////
+array destructuring
+	const arr = [1,2]
+	const [one,two] = arr
+	one	//is 1
+	two	//is 2

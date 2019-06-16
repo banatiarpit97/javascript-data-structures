@@ -83,3 +83,16 @@ shoulComponentUpdate(nextProps, nextState){
 if we return true from above function, component will re render and update
 if we return false from above function, component will not re render and update even if
 there is some change in its DOM.
+//////////////////////////////////////////////////////////////////
+lifecycle events can be declared as async functions and then await keyword can
+be used inside it.
+//////////////////////////////////////////////////////////////
+componentDidUpdate needs to be built carefully
+in componentDidUpdate we would do some update and hence the component will re render again
+and hence componentDidUpdate will trigger.
+So the cycle will continue, we sould always check whether to update the component or not
+The componentDidUpdate will receive a paramter namely prevProps.
+We compare the prevProps and current(this.props) and if they are diff, only then we will update the
+component or call the API.
+//////////////////////////////////////////////////////////////
+    

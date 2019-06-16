@@ -78,6 +78,13 @@ useEffect() function runs) or before the component disappears.
       clearTimeout(timer)
     }
   })
+
+If we pass nothing as the second arguement to useEffect, the function inside it
+runs repetedly i.e. every sigle time our component re renders
+
+First parameter to the useEffect i.e. a function can not be an async function or a 
+function that returns a promise. If we have to the same, we define a async function
+separately and call it inside our first params of useEffect
 /////////////////////////////////////////////////////////////////////////////////
 
 Before hooks, you either used class components, or you passed an event 
@@ -130,3 +137,40 @@ const MyComponent = () => {
   const [user, userData] = useGetUser('flavio')
   //...
 }
+/////////////////////////////////////////////////////////////
+From Classes to Hooks
+
+constructor: Function components don’t need a constructor. You can initialize the state 
+in the useState call. If computing the initial state is expensive, you can pass a function to useState.
+
+getDerivedStateFromProps: Schedule an update while rendering instead.
+
+shouldComponentUpdate: See React.memo.
+
+render: This is the function component body itself.
+
+componentDidMount, componentDidUpdate, componentWillUnmount: The useEffect Hook can 
+express all combinations of these (including less common cases).
+
+componentDidCatch and getDerivedStateFromError: There are no Hook equivalents for these 
+methods yet, but they will be added soon.
+///////////////////////////////////////////////////////////////
+How to share state or logic using hooks
+Unlike state in class based components, state using useState can be defined in 
+any external file and same goes for useEffect. i.e it is not necessary to use
+hooks inside component file
+
+  import {useState, useEffect} from react;
+  export const location = () => {
+    const [lat, setLat] = useState(0);
+
+    useEffect(async () => {
+      const lat = await fetch(url);
+      setLat(lat);
+    }, [])  //componentDidMount
+  }
+
+Now import this function inside component file and call this function inside the
+functional component.(IT NEEDS TO BE CALLED INSIDE THE FUNCTION ONLY) and we will have
+the shared state and logic
+///////////////////////////////////////////////////////////////////

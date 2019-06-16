@@ -1,0 +1,91 @@
+COntext also helps us send data from parent to child components
+But unlike props we can send the data to any nested child directly i.e. without going
+through all the hirearchy in between
+////////////////////////////////////////////////////////////////////
+Every context we create opens a type of pipe through which data is passed from
+provider to consumer
+So if we make more than 1 contexts, then will exist independently.
+/////////////////////////////////////////////////////////////////////
+Provide data:
+    const context = React.createContext();
+    //default value of context can be passed as arguement
+    //default value or context can be anything i.e. string, num, array, obj...
+
+    class GlobalProvider extends Component {
+        constructor() {
+            this.state = {
+                loggedIn: false
+            }
+        }
+
+        render() {
+            return (
+            <context.Provider 
+                value={{loggedIn: this.state.loggedIn, changeStatus: this.changeStatus}}
+            >
+                {this.props.children}
+            </context.Provider>
+            );
+        }
+    }
+
+    and wrap all the components that need the context variable inside this Component
+
+    <GlobalProvider>
+        <Switch>
+            <Route exact path='/' component={Login} />
+            <Route exact path='/todo-form' component={TodoForm} />
+            </Switch>
+    </GlobalProvider>
+
+The context we create is an object that has many properties on it and 2 of them are
+provider and consumer.
+If we declare context.provider more than once, it will create a new pipe of information
+every time(even if the context of both provider is same) i.e. those two providers
+will work independently of each other
+///////////////////////////////////////////////////////////////////////
+consuming data:
+There are two ways:
+
+    class Button extends React.Component {
+        static contextType = context;   
+        //context is the variable created above in provider section
+        //contextType should always be the name to consume the context
+        //any other name instead of contextType and we won't be able to access context
+
+        render(){
+            return <p>{this.context}</p>
+            //this.context would be automatically be avilable in our class and every 
+            method inside class after we decalre contextType variable.
+        }
+    }
+
+    ////////
+
+    const Button = () => {
+        return (
+            <context.Consumer>  //context is the variable created using createContext
+            {
+                (contextValue) => (     //the value of the context is the forst arguement in this function
+                    <p>{contextValue.label}</p>
+                )
+            }  
+            </context.Consumer>
+        )
+    }
+
+    ////////
+
+    const Button = () => {
+        const contextValue = useContext(GlobalContext);
+        return (
+            <p>{contextValue.label}</p>
+        )
+    }
+
+    ///////
+
+Advantage of consumer approach compared to this.context is that we can consume context
+from more than 1 provider and it can be used in functional components.
+///////////////////////////////////////////////////////////////////////////////
+    
