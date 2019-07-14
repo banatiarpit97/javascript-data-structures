@@ -1,0 +1,9 @@
+list-style-type is used to set a predefined marker to be used by the list:
+    list-style-type: square;
+
+list-style-image is used to use a custom marker when a predefined marker is not appropriate:
+    list-style-image: url(list-image.png);
+
+list-style-position lets you add the marker outside (the default) or inside 
+of the list content, in the flow of the page rather than outside of it
+    list-style-position: inside;

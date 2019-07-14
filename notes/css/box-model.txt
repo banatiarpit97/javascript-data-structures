@@ -1,0 +1,90 @@
+Every CSS element is essentially a box. Every element is a generic box.
+The box model explains the sizing of the elements based on a few CSS properties.
+
+From the inside to the outside, we have:
+    the content area
+    padding
+    border
+    margin
+/////////////////////////////////////////////////
+BORDER
+The border is a thin layer between padding and margin. By editing the border, you can 
+make elements draw their perimeter on screen.
+
+You can work on borders by using those properties:
+    border-width
+        thin, medium(Default), thick, px, em, rem
+        You can set the width of each edge (Top-Right-Bottom-Left) separately by using 4 values:
+        or you can use the specific edge properties border-top-width, border-right-width, 
+        border-bottom-width, border-left-width.
+
+    border-style
+        dotted, dashed, slod, double, grove, inset, outset, none(default), hidden
+        You can set a different style for each edge using the properties
+        border-top-style, border-right-style, border-bottom-style, border-left-style
+
+    border-color
+        If you don’t set a color, the border by default is colored using the color of the 
+        text in the element.
+        You can set the color of each edge (Top-Right-Bottom-Left) separately by using 4 values:
+        or you can use the specific edge properties border-top-color, border-right-color, 
+        border-bottom-color, border-left-color.
+
+The property border can be used as a shorthand for all those properties.
+    border: border-width, border-style and border-color;
+
+border-radius is used to create rounded corners.
+    You can also use the edge-specific properties border-top-left-radius, border-top-right-radius, 
+    border-bottom-left-radius, border-bottom-right-radius.
+
+You also have the ability to use images as borders, an ability given to you by border-image 
+and its specific separate properties:
+    border-image-source
+    border-image-slice
+    border-image-width
+    border-image-outset
+    border-image-repeat
+    and the shorthand border-image.
+////////////////////////////////////////////////////////////////////
+PADDING
+The padding CSS property is commonly used in CSS to add space in the inner side of an element.
+
+margin adds space outside an element border
+padding adds space inside an element border
+
+padding has 4 related properties that alter the padding of a single edge at once:
+    padding-top
+    padding-right
+    padding-bottom
+    padding-left
+
+padding is a shorthand to specify multiple padding values at the same time, and depending 
+on the number of values entered, it behaves differently.
+    Using a single value applies that to all the paddings: top, right, bottom, left.
+    Using 2 values applies the first to bottom & top, and the second to left & right.
+    Using 3 values applies the first to top, the second to left & right, the third to bottom.
+    Using 4 values applies the first to top, the second to right, the third to bottom, the 
+    fourth to left.
+/////////////////////////////////////////////////////////////////////////////
+
+MARGIN
+margin has 4 related properties that alter the margin of a single edge at once:
+    margin-top
+    margin-right
+    margin-bottom
+    margin-left
+
+    same rules as padding for shorthand property
+
+Using a negative margin
+margin is the only property related to sizing that can have a negative value. 
+It's extremely useful, too. Setting a negative top margin makes an element move over 
+elements before it, and given enough negative value it will move out of the page.
+
+A negative bottom margin moves up the elements after it.
+A negative right margin makes the content of the element expand beyond its allowed content size.
+A negative left margin moves the element left over the elements that precede it, and given 
+enough negative value it will move out of the page.
+
+
+

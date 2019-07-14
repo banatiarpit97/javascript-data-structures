@@ -1,0 +1,27 @@
+CSS Transitions are the simplest way to create an animation in CSS.
+
+In a transition, you change the value of a property, and you tell CSS to 
+slowly change it according to some parameters, towards a final state.
+
+transition-property
+    the css property that should transition
+
+transition-duration
+    duration of transition
+
+transition-timing-function
+    timing function used by animation i.e. linear, ease(Default), ease-in, ease-out, ease-in-out
+
+transition-delay
+    number of seconds to wait before starting the animation(optional)
+
+transition: property
+              duration
+              timing-function
+              delay;
+
+    .one,
+    .three {
+    background: rgba(142, 92, 205, .75);
+    transition: background 1s ease-in;
+    }

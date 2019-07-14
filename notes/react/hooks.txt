@@ -2,6 +2,9 @@ Hooks allow function components to have state and to respond to
 lifecycle events too, and kind of make class components obsolete. 
 They also allow function components to have a good way to handle events.
 
+You can’t use Hooks inside of a class component, but you can definitely mix 
+classes and function components with Hooks in a single tree.
+
 Using the useState() API, you can create a new state variable, 
 and have a way to alter it. useState() accepts the initial value of 
 the state item and returns an array containing the state variable, 
@@ -152,7 +155,7 @@ render: This is the function component body itself.
 componentDidMount, componentDidUpdate, componentWillUnmount: The useEffect Hook can 
 express all combinations of these (including less common cases).
 
-componentDidCatch and getDerivedStateFromError: There are no Hook equivalents for these 
+componentDidCatch, getSnapshotBeforeUpdate, getDerivedStateFromError: There are no Hook equivalents for these 
 methods yet, but they will be added soon.
 ///////////////////////////////////////////////////////////////
 How to share state or logic using hooks
