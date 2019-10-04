@@ -1,0 +1,13 @@
+To see config variables set:
+    firebase functions:config:get
+
+To set config varibales:
+    firebase functions:config:set gmail.email=user@gmail.com gmail.password=pass
+
+will create:
+    {
+        "gmail": {
+            "password": "pass",
+            "email": "user@gmail.com"
+        }
+    }
