@@ -24,3 +24,6 @@ ctrl + c twice − terminate the Node REPL.
 ctrl + d − terminate the Node REPL.
 .save filename − save the current Node REPL session to a file.
 .load filename − load file content in current Node REPL session.
+.exit: exists the repl (same as pressing ctrl-C two times)
+.clear: resets the REPL context to an empty object and clears any multi-line expression 
+        currently being input.

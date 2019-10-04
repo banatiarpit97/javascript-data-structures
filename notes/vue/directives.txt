@@ -1,0 +1,86 @@
+Directives are basically like HTML attributes which are added inside templates. 
+They all start with v-, to indicate that's a Vue special attribute.
+/////////////////////////////////////////////////////////////////////////
+v-text
+Instead of using interpolation, you can use the v-text directive. 
+It performs the same job:
+    <span v-text="name"></span>
+/////////////////////////////////////////////////////////////////////////
+v-once
+You know how {{ name }} binds to the name property of the component data.
+Any time name changes in your component data, Vue is going to update the 
+value represented in the browser.
+Unless you use the v-once directive, which is basically like an HTML attribute:
+    <span v-once>{{ name }}</span>
+/////////////////////////////////////////////////////////////////////////
+v-html
+When you use interpolation to print a data property, the HTML is escaped. 
+This is a great way that Vue uses to automatically protect from XSS attacks.
+There are cases, however, where you want to output HTML and make the browser 
+interpret it.
+    <span v-html="someHtml"></span>
+/////////////////////////////////////////////////////////////////////////
+v-bind
+Interpolation only works in the tag content. You can’t use it on attributes.
+Attributes must use v-bind:
+    <a v-bind:href="url">{{ linkText }}</a>
+
+v-bind is so common that there is a shorthand syntax for it:
+    <a v-bind:href="url">{{ linkText }}</a>
+    <a :href="url">{{ linkText }}</a>
+/////////////////////////////////////////////////////////////////////////
+v-model
+v-model lets us bind a form input element for example, and makes it change the 
+Vue data property when the user changes the content of the field:
+    <input v-model="message" placeholder="Enter a message">
+    <p>Message is: {{ message }}</p>
+
+    <select v-model="selected">
+        <option disabled value="">Choose a fruit</option>
+        <option>Apple</option>
+        <option>Banana</option>
+        <option>Strawberry</option>
+    </select>
+    <span>Fruit chosen: {{ selected }}</span>
+/////////////////////////////////////////////////////////////////////////
+There are dedicated directives that allow you to perform more organized conditionals: 
+v-if, v-else and v-else-if.
+    <p v-if="shouldShowThis">Hey!</p>
+shouldShowThis is a boolean value contained in the component's data.
+/////////////////////////////////////////////////////////////////////////
+v-for allows you to render a list of items. Use it in combination with v-bind to 
+set the properties of each item in the list.
+    <template>
+    <ul>
+        <li v-for="item in items">{{ item }}</li>
+    </ul>
+    </template>
+
+    <script>
+        export default {
+            data() {
+                return {
+                    items: ['car', 'bike', 'dog']
+                }
+            }
+        }
+    </script>
+
+v-for can give you the index using:
+    <li v-for="(todo, index) in todos"></li>
+/////////////////////////////////////////////////////////////////////////
+Show or hide
+You can choose to only show an element in the DOM if a particular property of 
+the Vue instance evaluates to true, using v-show:
+    <p v-show="isTrue">Something</p>
+The element is still inserted in the DOM, but set to display: none if the 
+condition is not satisfied.
+/////////////////////////////////////////////////////////////////////////
+Using expressions
+You can use any JavaScript expression inside a directive:
+    <span v-text="'Hi, ' + name + '!'"></span>
+
+Conditionals
+Inside a directive you can use the ternary operator to perform a conditional check, 
+since that’s an expression:
+    <span v-text="name == Flavio ? 'Hi Flavio!' : 'Hi' + name + '!'"></span>

@@ -1,0 +1,86 @@
+npm install mysql  
+
+    var mysql = require('mysql');  
+    var con = mysql.createConnection({  
+        host: "localhost",  
+        user: "root",  
+        password: "12345",
+        database: "javatpoint"
+    });  
+    con.connect(function(err) {  
+        if (err) throw err;  
+        console.log("Connected!");  
+
+        con.query("CREATE DATABASE javatpoint", function (err, result, fields) {  
+            if (err) throw err;  
+            console.log("Database created");  
+        });  
+
+        var sql = "CREATE TABLE employees (id INT, name VARCHAR(255), age INT(3), city VARCHAR(255))";  
+        con.query(sql, function (err, result) {  
+            if (err) throw err;  
+            console.log("Table created");  
+        });
+
+     
+        var sql = "UPDATE employees SET city = 'Delhi' WHERE city = 'Allahabad'";  
+        con.query(sql, function (err, result) {  
+            if (err) throw err;  
+            console.log(result.affectedRows + " record(s) updated");  
+        }); 
+
+
+        var sql = "DELETE FROM employees WHERE city = 'Delhi'";  
+        con.query(sql, function (err, result) {  
+            if (err) throw err;  
+            console.log("Number of records deleted: " + result.affectedRows);  
+        });  
+
+
+        con.query("SELECT * FROM employees", function (err, result) {  
+            if (err) throw err;  
+            console.log(result);  
+        });  
+
+        con.query('INSERT INTO todos SET ?', {name: 'arpit'}, (error, results, fields) => {
+            if (err) throw err;  
+            const id = results.resultId //id of new record
+            console.log(id)
+        )}   
+    });
+
+When you need to terminate the connection to the database you can call the end() method:
+    connection.end()
+This makes sure any pending query gets sent, and the connection is gracefully terminated.  
+
+
+Insert Multiple Records
+    con.connect(function(err) {  
+        if (err) throw err;  
+        console.log("Connected!");  
+        var sql = "INSERT INTO employees (id, name, age, city) VALUES ?";  
+        var values = [  
+            ['2', 'Bharat Kumar', '25', 'Mumbai'],  
+            ['3', 'John Cena', '35', ?Las Vegas'],  
+            ['4', 'Ryan Cook', '15', ?CA']  
+        ];  
+        con.query(sql, [values], function (err, result) {  
+            if (err) throw err;  
+            console.log("Number of records inserted: " + result.affectedRows);  
+        });  
+    });  
+
+/////////////////////////////////////////////////////
+options for connection:
+host, the database hostname, defaults to localhost
+port, the MySQL server port number, defaults to 3306
+socketPath, used to specify a unix socket instead of host and port
+debug, by default disabled, can be used for debugging
+trace, by default enabled, prints stack traces when errors occur
+ssl, used to setup an SSL connection to the server (out of the scope of this tutorial)
+////////////////////////////////////////////////////
+escape value:
+    const id = 223
+    const author = 'Flavio'
+    connection.query('SELECT * FROM todos WHERE id = ? AND author = ?', [id, author], 
+        (error, todos, fields) => {

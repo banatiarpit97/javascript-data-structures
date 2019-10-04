@@ -1,0 +1,77 @@
+Node.js provides the facility to get process information such as process id, 
+architecture, platform, version, release, uptime, upu usage etc. It can also be 
+used to kill process, set uid, set groups, unmask etc.
+
+The process is a global object, an instance of EventEmitter, can be accessed 
+from anywhere. does not require a 'require',
+///////////////////////////////////////////////////
+The process core module is provides a handy method that allows you to programmatically 
+exit from a Node.js program: process.exit().
+
+When Node.js runs this line, the process is immediately forced to terminate.
+
+This means that any callback that’s pending, any network request still being sent, any 
+file system access, or processes writing to stdout or stderr — all is going to be 
+ungracefully terminated right away.
+
+If this is fine for you, you can pass an integer that signals the operating system the exit code:
+    process.exit(1)
+By default the exit code is 0, which means success. Different exit codes have different 
+meaning, which you might want to use in your own system to have the program communicate 
+to other programs.
+and when the program will later end, Node.js will return that exit code.
+
+
+If you call process.exit(), any currently pending or running request is going to be aborted. 
+This is not nice.
+In this case you need to send the command a SIGTERM signal, and handle that with the process 
+signal handler:
+    const app = express()
+    process.on('SIGTERM', () => {
+        app.close(() => {
+            console.log('Process terminated')
+        })
+    })
+
+Signals are notification sent to a process in order to notify it of an event that occurred.
+SIGKILL is the signals that tells a process to immediately terminate, and would ideally act 
+like process.exit().
+SIGTERM is the signals that tells a process to gracefully terminate.
+
+You can send this signal from inside the program, in another function:
+    process.kill(process.pid, 'SIGTERM')
+//////////////////////////////////////////////////////////////
+The process core module of Node provides the envp roperty which hosts all the environment 
+variables that were set at the moment the process was started.
+
+Here is an example that accesses the NODE_ENV environment variable, which is set to 
+development by default.
+    process.env.NODE_ENV // "development"
+/////////////////////////////////////////////////////////////
+
+
+Node.js Process Properties
+
+arch	
+    returns process architecture: 'arm', 'ia32', or 'x64'
+
+args	
+    returns commands line arguments as an array
+
+env	
+    returns user environment
+
+pid	
+    returns process id of the process
+
+platform	
+    returns platform of the process: 'darwin', 'freebsd', 'linux', 'sunos' or 'win32'
+
+release	
+    returns the metadata for the current node release
+
+version	
+    returns the node version
+
+versions	
+    returns the node version and its dependencies

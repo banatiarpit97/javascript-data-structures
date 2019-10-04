@@ -1,0 +1,30 @@
+Angular 4.3+ used HttpClient instead Http because of following advantages:
+ability to listen to progress events
+ability to use interceptors to modify request and response
+include observable apis
+include error handling
+include response object
+include typed requests
+include testability feature
+supports json by default, no need to parse
+
+HttpClient is an injectable class
+
+    import {HttpClientModule} from '@angular/common/http';
+    and put it in imports secion of @NgModule
+this must be imported after BrowserModule
+
+In service/component:
+
+    import {HttpClient} from '@angular/common/http';
+
+    constructor(private http:HttpClient){
+
+    }
+
+Methods in HttpClient:
+get post put delete head jsonp options patch requests
+
+Get response as promise instead ob observable:
+    this.http.get(url).toPromise()
+        .then(...)

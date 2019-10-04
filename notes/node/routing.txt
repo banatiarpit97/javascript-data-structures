@@ -1,0 +1,51 @@
+const http = require('http');
+const url = require('url');
+
+const server = http.createServer(function (request, response) {
+    const parsedUrl = url.parse(request.url, true);     
+        //true is used so that url module can use queryString module
+
+    const pathName = parsedUrl.pathname;    //pathname gives the path of website
+                                            //path gives path+query string
+    
+    if(pathName === '/' && req.method === 'GET'){
+        console.log(`query string is ${parsedUrl.query}`);  //available because sent 'true' above
+        console.log(`Headers are ${req.headers})
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'applicarion/json');
+        res.json({name:"arpit"});
+        return res.end();
+        // we end close the response, adding the content as an argument to end()
+    }
+})
+
+server.listen(8081, function() {
+    console.log('listening on port 8081');
+});
+
+Once you have a server object, you have access to its methods:
+close() stops the server from accepting new connections
+listen() starts the HTTP server and listens for connections
+
+///////////////////////////////////////////////
+
+Whenever a new request is received, the request event is called, providing two objects: 
+a request (an http.IncomingMessageobject) and a response (an http.ServerResponseobject).
+
+////////////////////////////////////////////////
+http.IncomingMessage
+An http.IncomingMessage object is created by:
+http.Server when listening to the request event
+http.ClientRequest when listening to the response event
+
+It can be used to access the response:
+status using its statusCode and statusMessage methods
+headers using its headers method or rawHeaders
+HTTP method using its method method
+HTTP version using the httpVersion method
+URL using the url method
+underlying socket using the socket method
+
+The data is accessed using streams, since http.IncomingMessage implements the 
+Readable Stream interface.
+///////////////////////////////////////////////

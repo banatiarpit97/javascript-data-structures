@@ -1,0 +1,55 @@
+background-color 
+    accepts a color value, which can be one of the color keywords, or an rgb or hsl value
+
+background-image
+    you can use an image as background to an element, by specifying the image location URL:
+        background-image: url(image.png);
+
+background-clip
+    lets you determine the area used by the background image, or color. 
+    The default value is border-box, which extends up to the border outer edge.
+    padding-box to extend the background up to the padding edge, without the border
+    content-box to extend the background up to the content edge, without the padding
+    inherit to apply the value of the parent
+
+background-position
+    you will want to set the position of the image placement
+    left, right, center are all valid values for the X axis
+    top, bottom for the Y axis
+        background-position: top right
+
+background-repeat
+    If the image is smaller than the background, you need to set the behavior
+    repeat-x, repeat-y or repeat or default value or no-repeat.
+
+background-origin
+    where the background should be applied
+    This property has no effect if background-attachment is "fixed".
+    to the entire element including padding (default) using padding-box
+    to the entire element including the border using border-box
+    to the element without the padding using content-box.
+
+background-attachment
+    attach the background to the viewport, so that scrolling will not affect the background
+    By default the value is scroll.local and fixed are other values.
+
+background-size
+    auto, cover and contain. auto is the default.
+    cover expands the image until the entire element is covered by the background.
+    contain stops expanding the background image when one dimension (x or y) covers
+    the whole smallest edge of the image, so it's fully contained into the element.
+    You can also specify a length value, and if so it sets the width of the background 
+    image (and the height is automatically defined)
+        background-size: 100%;
+        background-size: 800px 600px;
+
+
+The shorthand property background allows to shorten definitions and group them on a single line.
+    background: url(bg.png) top left no-repeat;
+
+If you use an image, and the image could not be loaded, you can set a fallback color:
+    background: url(image.png) yellow;
+
+You can also set a gradient as background:
+    background: linear-gradient(#fff, #333);
+

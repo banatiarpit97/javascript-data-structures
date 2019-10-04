@@ -1,0 +1,24 @@
+It is middleware that helps us call APIS asynchronously from redux(action creators)
+
+It only makes one small modification to our rules of action creators
+Now, we can also either return object or functions from action creators
+
+    import { createStore, applyMiddleware } from 'redux';
+    import listManager from './reducers';
+    import thunk from 'redux-thunk';
+
+    let store = createStore(listManager, applyMiddleware(thunk));
+
+
+    const creator = () => {
+        return async function(dispatch, getState) {
+            //dispatch and getState params are passed automatically when this
+            //action creator is called
+
+            const res = await fetch(url);
+            dispatch({
+                type: 'ADD',
+                payload: res
+            });
+        }
+    };

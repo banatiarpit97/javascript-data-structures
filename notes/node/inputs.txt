@@ -1,0 +1,30 @@
+    process.stdin.resume();
+    process.stdin.setEncoding("utf-8");
+    var stdin_input = "";
+
+    process.stdin.on("data", function (input) {
+        stdin_input += input;                               // Reading input from STDIN
+    });
+
+    process.stdin.on("end", function () {
+        process.stdout.write("Hi, " + input + ".\n");       // Writing output to STDOUT
+    });
+///////////////////////////////////////////
+Node since version 7 provides the readline module to perform exactly this: 
+get input from a readable stream such as the process.stdin stream, which during the 
+execution of a Node program is the terminal input, one line at a time.
+
+    const readline = require('readline').createInterface({
+        input: process.stdin,
+        output: process.stdout
+    })
+    readline.question(`What's your name?`, (name) => {
+        console.log(`Hi ${name}!`)
+        readline.close()
+    })
+
+//////////////////////////////////////////
+A more complete and abstract solution is provided by the Inquirer.js package.
+    npm install inquirer
+Inquirer.js lets you do many things like asking multiple choices, having radio
+buttons, confirmations, and more.

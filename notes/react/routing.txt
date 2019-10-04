@@ -1,0 +1,196 @@
+React at its core is a very simple library, and it does not dictate 
+anything about routing.
+
+1. The browser should change the URL when you navigate to a different screen
+2. Deep linking should work: if you point the browser to a URL, the application 
+should reconstruct the same view that was presented when the URL was generated.
+3. The browser back (and forward) button should work like expected.
+
+These problems can be solved using history api
+
+Routing links together your application navigation with the navigation 
+features offered by the browser: the address bar and the navigation buttons.
+
+react-router is a core library that contains many sub parts like
+react-router-dom, react-router-native...
+We never directly install react-router, we install its sub parts
+
+npm install -S react-router-dom
+
+React Router provides two different kind of routes:
+
+BrowserRouter	https://application.com/dashboard
+HashRouter	https://application.com/#/dashboard
+MemoryRouter https://application.com/
+
+BrowserRouter does not have an #' symbol in it, hence if it causes some difficulty
+while deploying our app.
+When we deploy BrowserRouter app, suppose we hit a url https://application.com/dashboard
+the server will look for a file named 'dashboard', since it dows not find it,
+server will return 404.But what we want is server to send index.html every time
+becuase our index.html include index.js that has all the logic for routing in
+SPA.React dev server is already setup to send index.html but many tradiotional
+servers are not(though some modern servers support this)
+HashRouter appends an '#' symbol before our route, this enables server to ignore
+everything after '#' because it is meant for client side code to handle and
+hence it is easy to deploy
+MemoryRouter does not change url and so we can not share urls with other people
+
+BrowserRouter wraps all your Route components. It listens to history for changes.
+Link components are - as you can imagine - used to generate links to your routes
+Route components are responsible for showing - or hiding - the components they contain.
+
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { BrowserRouter, Router } from 'react-router-dom'
+ReactDOM.render(
+  <BrowserRouter>
+      <div>
+        	<Route exact path="/" component={Dashboard} />
+          <Route path="/about" component={About} />
+      </div>
+  </BrowserRouter>,
+  document.getElementById('app')
+)
+A BrowserRouter component can only have one child element, 
+so we wrap all we’re going to add in a div element.
+
+
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { BrowserRouter as Router, Link } from 'react-router-dom'
+ReactDOM.render(
+  <Router>
+      <div>
+        <aside>
+          <Link to={`/dashboard`}>Dashboard</Link>
+          <Link to={`/about`}>About</Link>
+        </aside>
+        <!-- -->
+      </div>
+  </Router>,
+  document.getElementById('app')
+)
+
+We use special <Link> and not <a href> because if use 'a' tag, browser will
+send index.html and all current html, js code will be dumped
+So we will see our requested route but the window will reload(non SPA) and
+the variables set will also be lost(we can say app will be restarted)
+Link does not reload the page, it updates the history api, BrowserRouter
+sees the updated history and communicates the same to Route components,
+Hence route components will be re rendered.
+
+Link can only be used in components present inside BrowserRouter/HashRouter...
+
+import { Route } from 'react-router-dom'
+	<Route exact path="/" component={Dashboard} />
+  <Route path="/about" component={About} />
+
+Notice the exact attribute. Without this, path="/" would also match 
+/about, since / is contained in the route.
+
+You can have a route respond to multiple paths simply using a regex, because path can be a regular expressions string:
+	<Route path="/(about|who)/" component={Dashboard} />
+/////////////////////////////////////////////////////////////////////////////////////////////
+Inline rendering
+Instead of specifying a component property on Route, you can set a render prop:
+
+<Route
+  path="/(about|who)/"
+  render={() => (
+    <div>
+      <h2>About</h2>
+      ...
+    </div>
+  )}
+/>
+/////////////////////////////////////////////////////////////////////////////////////////
+Match dynamic route parameter
+
+const Post = ({match}) => (
+  <div>
+    <h2>Post #{match.params.id}</h2>
+    ...
+  </div>
+)
+
+<Route exact path="/post/:id" component={Post} />
+
+In your Route component you can lookup the dynamic parameters in match.params.
+/////////////////////////////////////////////////////////////////
+More than 1 route can match our url, in that case all the routes that
+matches url will be shown
+  <BrowserRouter>
+      <div>
+        	<Route path="/" component={Dashboard} />
+          <Route path="/about" component={About} />
+      </div>
+  </BrowserRouter>
+
+  if url is '/about', then both routes will match(no exact keyword passed)
+  then DOM will be
+    <div>
+      <Dashboard />
+      <About />
+    </div>
+////////////////////////////////////////////////////////////////
+If we use BrowserRouter, it creates a history object by default and pass it every component
+that is directly rendered by the router as props.history i.e. only to first level children
+
+But if we want to access this history inside nested components then we need to withRouter HOC
+provided by react-router-dom.
+
+  import { withRouter } from "react-router";
+  class ShowTheLocation extends React.Component {
+    render() {
+      return <div>You are now at {props.history.location.pathname}</div>;
+    }
+  }
+  export default withRouter(ShowTheLocation);
+///////////////////////////////////////////////////////////////////
+
+We generally do the programatic routing from action creators after dispatching the action if
+the async/api request was successful.
+To do that we need the history object inside action creators
+For this, instead of letting the BrowserRouter create history for us, we create it ourselves and
+tell the Router to use our history object.This has an advantage that we can import this 
+history object anywhere inside our app and use it.
+But there is one problem that BrowserRouter does not accept a external history object so instead
+we use Router from react-router-dom
+
+  import {Router} from 'react-router-dom'
+  import { createBrowserHistory } from 'history'; //history package comes by default with react-router
+  const history = createBrowserHistory();
+
+  <Router history={history}>
+    <Router path='/' exact component={login}>
+  <Route>
+  //everything is like BrowserRouter, except the name and we pass the history object
+
+////////////////////////////////////////////////////////////////////////
+<Switch>
+Renders the first child <Route> or <Redirect> that matches the location.How is this different 
+than just using a bunch of <Route>s?<Switch> is unique in that it renders a route exclusively.
+In contrast, every <Route> that matches the location renders inclusively. 
+  
+  import { Switch, Route } from 'react-router'
+  <Switch>
+    <Route exact path="/" component={Home}/>
+    <Route path="/about" component={About}/>
+    <Route path="/:user" component={User}/>
+    <Route component={NoMatch}/>
+  </Switch>
+/////////////////////////////////////////////////////////////////////////
+<NavLink>
+A special version of the <Link> that will add styling attributes to the rendered element 
+when it matches the current URL.
+  <NavLink to="/faq" activeClassName="selected">
+    FAQs
+  </NavLink>
+  
+  <NavLink
+    to="/faq"
+    activeStyle={{
+      color: "red"
+    }}
+  >FAQs</NavLink>

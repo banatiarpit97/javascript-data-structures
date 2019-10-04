@@ -70,3 +70,12 @@ The animation-fill-mode property can have the following values:
             (depends on animation-direction), and retain this during the animation-delay period
     both - The animation will follow the rules for both forwards and backwards, extending the 
             animation properties in both directions
+
+//////////////////////////////////////
+JavaScript events for CSS Animations
+Using JavaScript you can listen for the following events:
+    animationstart
+    animationend
+    animationiteration
+Be careful with animationstart, because if the animation starts on page load, your JavaScript code is always executed after the CSS has been processed, so the animation is already started and you cannot intercept the event.
+

@@ -1,0 +1,16 @@
+It’s very useful when you have multiple elements that overlap each other, and you 
+need to decide which one is visible, as nearer to the user, and which one(s) 
+should be hidden behind it.
+
+This property takes a number (without decimals) (Negative numbers too)and uses that 
+number to calculate which elements appear nearer to the user, in the Z axis.
+
+The higher the z-index value, the more an element is positioned nearer to the user.
+
+The default value is auto, a special keyword. Using auto, the Z axis order is 
+determined by the position of the HTML element in the page - the last sibling 
+appears first, as it's defined last.
+
+By default elements have the static value for the position property. 
+In this case, the z-index property does not make any difference - it must be set 
+to absolute, relative or fixed to work.

@@ -22,9 +22,11 @@
 
 .reverse() -> reverses array or string[will alter original array but not original string(strings are immutable)]
 
-.sort((a,b) => {return a>b}) -> will sort array,	
-				2 elements 'a' and 'b' will be compared, if condition in return statement is true then it will swap those elements
-				nott stable
+.sort((a,b) => {return a-b}) -> will sort array,	
+				2 elements 'a' and 'b' will be compared, 
+				if condition in return statement is greater than 0 then it will swap those elements
+				not stable
+				Must return a number(negative, 0, positive, returning true/false won't work so no return a>b)
 
 Array.from(arr_name, (a) => {return a*a}) -> will create another array from existing array, 2nd param is optional and is used if along copying, we have to make certain changes to array elements also
 						does not change original array

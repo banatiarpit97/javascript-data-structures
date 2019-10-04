@@ -172,3 +172,18 @@ but if key contains '-', then it needs to be in quotes.
 //////////////////////////////////////////////////////////////////////////////////////
 EVERY OBJECT IN JS HAVE A PROPERTY CALLED '__proto__' THAT POINTS TO UPPER prototype
 WHETER IT IS A NORMAL OBJECT OR PART OF FUNCTION+OBJECT COMBO, EVERY OBJECT WILL HAVE THIS PROP
+////////////////////////////////////////////////////////////////////////////////////
+while destructuring objects, if we want to add a prop with dynamic name, wraap it in square brackets
+
+    sounds = {dog: 'bark'}
+    animal = 'cat';
+    sound = 'meow';
+
+    newSounds = { ...sounds, [animal]:sound }
+
+while destructuring objects, if we want to rename a property ob the object, we use :
+    sounds = {dog: 'bark'}
+    const {dog:animal} = sounds;
+    dog //undefined
+    animal  //bark
+////////////////////////////////////////////////////////////////////////////////////////

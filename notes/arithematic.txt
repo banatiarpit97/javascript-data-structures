@@ -32,7 +32,7 @@ Math.sign(n)    //1 if n is positive or 0, -1 if negative
 Math.trunc(n)   //removes decimal digts(without rounding)
 Math.sqrt(n)
 Math.cbrt(n)
-Math.pow(n, m)  //n raise to the power of max(m has to be integer)
+Math.pow(n, m)  //n raise to the power of m(m has to be integer)
 Math.exp(n)
 Math.log(n)
 Math.log2(n)    //log of base 2

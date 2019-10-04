@@ -1,0 +1,66 @@
+In Vue.js you can output any data value using parentheses:
+
+<template>
+  {{ count * 10 }}
+</template>
+But you’re limited to a single JavaScript expression.
+
+In addition to this technical limitation, you also need to consider that 
+templates should only be concerned with displaying data to the user, 
+not perform logic computations.
+
+To do something more than a single expression, and to have more declarative 
+templates, you use a computed property.
+
+Computed properties are defined in the computed property of the Vue component
+
+<template>
+  <p>{{ count }}</p>        //no need to use parentheses
+                            //Vue.js automatically invokes the function
+</template>
+<script>
+    export default {
+        data() {
+            return {
+                items: [1, 2, 3]
+            }
+        },
+        computed: {
+            count: function() {
+                return 'The count is ' + this.items.length * 10
+            }
+        }
+    }
+</script>
+////////////////////////////////////////////////////////////////////
+
+Computed properties vs. methods
+
+First, methods must be called, not just referenced, so you’d need to do:
+
+    <p>{{ count() }}</p>        //when count is method
+    <p>{{ count }}</p>        //when count is computed
+
+But the main difference is that computed properties are cached.
+The result of the count computed property is internally cached until the 
+items data property changes.
+Important: Computed properties are only updated when a reactive source updates. 
+Regular JavaScript methods are not reactive, so a common example is to use Date.now():
+
+<template>
+  <p>{{ now }}</p>
+</template>
+<script>
+    export default {
+        computed: {
+            now: function () {
+                return Date.now()
+            }
+        }
+    }
+</script>
+
+It will render once, and then it will not be updated even when the component re-renders. 
+It’s just updated on a page refresh, when the Vue component is quit and reinitialized.
+
+In this case, a method is better suited for your needs.

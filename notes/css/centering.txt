@@ -1,0 +1,19 @@
+horizontally
+Text
+Text is very simple to center horizontally using the text-align property set to center
+
+Blocks
+The modern way to center anything that is not text is to use Flexbox
+    display: flex;
+    justify-content: center;
+
+without flexbox:
+    margin: 0 auto;
+    width: 50%;
+
+/////////////////////////////////////////////
+Vertically
+
+flexbox:
+    display: flex;
+    align-items: center;

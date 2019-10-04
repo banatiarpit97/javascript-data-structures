@@ -1,0 +1,27 @@
+Portals are used in react when we want to break the flow of DOM tree.
+If we don't want to render a component in the flowing hierarchy, we use portals to
+render that component somewhere else in the DOM tree.
+
+All the components are children of '#root' div and the hierarchy continues.
+But in some cases like modals, we want our modal component to render inside/under
+the body directly rather than in nested components. This would help us avoid the
+styling of the parents.(because we want to position the modal according the body
+and not some other component)
+
+to create a portal, wrap the the complete jsx returned from component inside
+ReactDOM.portal function as 1st arguement.
+The second arguement is the HTML node inside which we want to place our component.
+
+const modal = () => {
+    return ReactDOM.portal(
+        <div>
+            <p>Modal</p>
+        </div>,
+        document.querySelector('#modalDiv)
+    );
+}
+
+We don't put any component directly inside body(i.e. second arguement is not body node)
+becuase if we do that, our new component would replace everything else present inside body.
+Instead what we do create a sibling div element of '#root' div and inject our component
+inside it.

@@ -1,0 +1,190 @@
+Angular router helps in:
+    Dynamically load components based on url
+    maintain state
+    create history so that back, forward buttons work
+    redirect to another url
+    resolve data before a page is displayed
+    run scripts when a page is activated/deactivated
+    lazy load components
+////////////////////////////////////////////////////////////////
+
+use cli to generate routing module:
+    ng g module app-routing --flat --module=app
+
+--flat puts file in src/app instead of its own folder
+--module=app tells cli to register it in imports array of AppModule
+///////////////////////////////////////////////////////////////
+
+Steps folllowed by router on url change:
+
+1) Parse the url
+    takes browser url and parse it as a tree
+    / - slashes divide url segments
+    () - secondary routes
+    : - named router outlet
+    ; - matrix parameter
+    ? - separates query strng paramater
+    # - fragment
+    // - separates multiple secondary routes
+
+2) Redirect
+    before creating router state, it checks for any redirects:
+        local redirect - does not start with '/', replaces only single URL segment
+            {path: 'one', redirectTo: 'two'}
+        absolute redirect - starts with '/', replaces entire URL
+            {path: 'one', redirectTo: '/two'}
+
+    only 1 redirect is applied
+
+3) Identify router state
+    traverses url tree made in step1, and matches url segments against the paths 
+    configured in router configuration.
+    If a URL segment matches the path of route, the route's child are matched against
+    remaining segment until all url segments are matched.
+    if no complete match is found, router backtracks to find a match in the next sibling
+    route. 
+
+4) run route guards
+    done to:
+        prevent unauthorized access
+        save pending changes before leaving a component
+        fetch some data before displaying the component
+
+5) Resolve
+    resolves the required data for the router state
+
+6) Activate
+    activates angular component to display the page
+
+7) Manage
+    after new state has been displayed, listens for url/state changes
+////////////////////////////////////////////////////////////////
+
+Router outlet
+<router-outlet> is a dynamic component
+role of <router-outlet> is to mark where the router displays the view, where components will be inserted
+
+RouterOutlet is one of the router directives that became available to AppComponent because AppModule imports
+AppRoutingModule which exports AppRoutingModule
+
+There can be more than 1 router outlets in our app, only one of them(default/primary)
+can be unnamed, every other outlet should be named
+    <router-outlet name="second"></router-outlet>
+
+Named outlet will open as secondary route within a ()
+secondary route will get appended with unnamed  router outlet path
+routerLinkActive will work on both named and unnamed routes that are opened
+Not necessary for named outlet to be nested, it can be a sibling of unnamed outlet
+
+    <a [routerLink]="[{outlets: {second: ['bookdetail']}}]>
+
+    {path: '', component: StudentsComponent, outlet: 'second'},
+
+    url in browser will be - book(second:bookdetail)    //where book is a primary route
+//////////////////////////////////////////////////////////////////
+
+Router link
+routerLink is the selector for RouterLink directive that turns user clicks into router navigation
+With this directive, we can link routes of our application from html template
+    <a [routerLink] = "['/login']" routerLinkActive="active-link">Login</a>
+    <a [routerLink] = "['/login', 'route-param1', 'route-param2']" routerLinkActive="active-link">Login</a>
+
+    'active-link' should be a class defined in class
+
+Navigating to route from code:
+    import {Router} from '@angular/router';
+    constructor(router:Router){
+        this.router.navigate(['/login'])
+        this.router.navigate(['/login', 'route-param1', 'route-param2'])
+    }
+////////////////////////////////////////////////////////////////
+redirection
+
+When applicatin starts, it navigates to empty route by default, to navigate to some
+component, we provide redirect:
+    {path:'', redirectTo: 'login', pathMatch: 'full'}
+        //pathMatch: 'full' so that it matches exactly the 
+            empty string and not partially empty string
+
+A redirect route requires a pathMatch property to tell the router how to match url 
+to the path of a route.Router throws an error if not provided.
+/////////////////////////////////////////////////////////////////
+Wildcard route
+
+used to match invalid url and handle them
+its path consist of '**'
+placed at the end, so that if no route matches the url, then this is matched
+if placed at start, then only this will be matched everytime
+    {path: '**', component: PageNotFoundComponent},
+
+/////////////////////////////////////////////////////////////////
+Child routes
+
+    {   path: 'students', 
+        children: [
+            {path: '', component: StudentsComponent},
+                //will be accessible throught '/students'
+            {path: 'detail', component: StudentDetailComponent},
+                //will be accessible throught '/students/detail'
+        ]
+    }
+
+    routerLink for child routes:
+        <a [routerLink] = "['./login']">Login</a>   //. before slash
+
+/////////////////////////////////////////////////////////////////
+
+    import {Routes, RouterModule} from '@angular/router';
+
+    const routes:Routes = [
+        {path:'', redirectTo: 'login', pathMatch: 'full'},      
+            //default route, that loads at start of app
+        {path: 'login', component: LoginComponent},
+        {path: 'register', component: RegisterComponent},
+        {path: '**', component: PageNotFoundComponent},
+    ];
+
+    @NgModule({
+        imports: [RouterModule.forRoot(routes)],
+        exports: [RouterModule]
+    })
+    export class AppRoutingModule {}
+
+/////////////////////////////////////////////////////////////////
+
+Parameterized routes:
+
+Route can receive params through snapshot property of ActivatedRoute
+or by subscribing to its property param
+There is also a property paramMap that allows to get a particular paramater using 
+'get()' method or get all paramaters using 'getAll()' method
+
+    {path: 'country/:id', component: LoginComponent},
+
+    in component:
+        import {ActivatedRoute} from '@angular/core';
+        ...
+        constructor(route:ActivatedRoute){
+            console.log(route.snapshot.params.id);
+            console.log(route.snapshot.paramMap.get(id));
+            route.paramMap.subscribe(params => console.log(params.get(id)));
+            route.params.subscribe(params => console.log(params.id));
+        }
+/////////////////////////////////////////////////////////////////
+
+You might have noticed that the CLI adds RouterModule.forRoot(routes) to the 
+app-routing.module.ts imports array. This lets Angular know that this module, 
+AppRoutingModule, is a routing module and forRoot() specifies that this is the 
+root routing module. It configures all the routes you pass to it, gives you 
+access to the router directives, and registers the RouterService. 
+Use forRoot() in the AppRoutingModule—that is, one time in the app at the 
+root level.
+
+The CLI also adds RouterModule.forChild(routes) to feature routing modules. 
+This way, Angular knows that the route list is only responsible for providing 
+additional routes and is intended for feature modules. You can use forChild() 
+in multiple modules.
+
+forRoot() contains injector configuration which is global; such as configuring 
+the Router. forChild() has no injector configuration, only directives such as 
+RouterOutlet and RouterLink.

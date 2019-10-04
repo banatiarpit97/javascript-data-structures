@@ -1,0 +1,61 @@
+
+SPECIFICITY
+The more specific rule will win. If two or more rules have the same specificity, 
+the one that appears last wins.
+
+We have 4 slots, and each one of them starts at 0: 0 0 0 0 0. 
+The slot at the left is the most important, and the rightmost one is the least important.
+
+Slot 1
+The first slot, the rightmost one, is the least important.
+We increase this value when we have an element selector. An element is a tag name. 
+If you have more than one element selector in the rule, you increment accordingly the value.
+    p {}                    /* 0 0 0 1 */
+    p span {}               /* 0 0 0 2 */
+    div p > span {}         /* 0 0 0 3 */
+
+Slot 2
+The second slot is incremented by 3 things:
+class selectors
+pseudo-class selectors
+attribute selectors
+    .name {}                 /* 0 0 1 0 */
+    .users .name {}          /* 0 0 2 0 */
+    a[href$='.pdf'] {}       /* 0 0 1 1 */
+    :hover {}                /* 0 0 1 0 */
+
+One nice trick with classes is that you can repeat the same class and increase the specificity.
+    .name {}              /* 0 0 1 0 */
+    .name.name {}         /* 0 0 2 0 */
+    .name.name.name {}    /* 0 0 3 0 */
+
+Slot 3
+The second slot is incremented by: the id.
+    #name {}                    /* 0 1 0 0 */
+    .user #name {}              /* 0 1 1 0 */
+    #name span {}               /* 0 1 0 1 */
+
+Slot 4
+Slot 4 is affected by inline styles. Any inline style will have precedence over any rule 
+defined in an external CSS file, or inside the style tag in the page header.
+    <p style="color: red">Test</p> /* 1 0 0 0 */
+
+Importance
+Specificity does not matter if a rule ends with !important:
+    p {
+    font-size: 20px!important;
+    }
+Adding !important in a CSS rule is going to make that rule more important than any other rule, 
+according to the specificity rules. The only way another rule can take precedence is to have 
+!important as well, and have higher specificity in the other less important slots.
+
+Tips
+In general you should use the amount of specificity you need, but not more.
+
+!important is a highly debated tool that CSS offers us. Many CSS experts advocate against using it.
+But generally, !important should have no place in your CSS files.
+
+Using the id attribute to style CSS is also debated a lot, since it has a 
+very high specificity. A good alternative is to use classes instead, which have 
+less specificity, and so they are easier to work with, and they are more powerful 
+(you can have multiple classes for an element, and a class can be reused multiple times).

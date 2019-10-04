@@ -1,15 +1,48 @@
 <link href="styles.css" rel="stylesheet" media="all and (max-width: 1024px)">
 
-@import url(styles.css) all and (max-width: 1024px) {...}
+'all' means all the media
+    @import url(styles.css) all and (max-width: 1024px) {...}
 
-@media all and (min-width: 800px) and (max-width: 1024px) {...}
+'print' used when printing
+    @media print and (min-resolution: 300dpi) {...}
 
-@media not screen and (color) {...}
+'screen' used when the page is presented on a screen(default)
+'speech' used for screen readers
 
-@media only screen and (orientation: portrait) {...}
+    @media all and (min-width: 800px) and (max-width: 1024px) {...}
+    @media not screen and (color) {...}
+    @media only screen and (orientation: portrait) {...}
+    @media all and (orientation: landscape) {...}
+    @media all and (min-device-aspect-ratio: 16/9) {...}
+    @media all and (min-resolution: 100dpi);
+/////////////////////////
+Logic operators
 
-@media all and (orientation: landscape) {...}
+We can combine rules using and:
+    @media all and (min-resolution: 100dpi);
 
-@media all and (min-device-aspect-ratio: 16/9) {...}
+We can perform an “or” type of logic operation using commas:
+    @import url(myfile.css) screen, print;
 
-@media print and (min-resolution: 300dpi) {...}
+We can use not to negate a media query:
+    @import url(myfile.css) not screen;
+not can only be used to negate an entire media query, so it must be placed at the 
+beginning of it (or after a comma).
+
+/////////////
+We can use them in @import statements like this:
+    @import url(myfile.css) screen;
+    @import url(myfile.css) screen, print;
+
+//////////////////////////////////////
+FEATURE QUERIES
+Feature queries are a recent and relatively unknown ability of CSS, but a well supported one.
+
+We can use it to check if a feature is supported by the browser using the @supports keyword.
+    @supports (display: grid) {
+    /* apply this CSS */
+    }
+We can also use the logical operators and, or and not to build complex feature queries:
+    @supports (display: grid) and (display: flex) {
+       /* apply this CSS */
+    }

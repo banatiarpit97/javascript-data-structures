@@ -1,0 +1,60 @@
+Vue happily lands inside your app with a simple script tag to start with, 
+and it can grow along with your needs, spreading from 3 lines to managing 
+your entire view layer.
+
+Vue was built by picking the best ideas of frameworks like Angular, 
+React and Knockout, and by cherry-picking the best choices those frameworks made. 
+And by excluding some less brilliant ones, it kind of started as a “best-of” 
+set and grew from there.
+
+One big difference with React is JSX. While you can technically use JSX in Vue, 
+it’s not a popular approach and instead the templating system is used. Any HTML 
+file is a valid Vue template. 
+
+Basic App:
+
+<html>
+  <body>
+    <div id="example">
+      <p>{{ hello }}</p>
+    </div>
+    <script src="https://unpkg.com/vue"></script>
+    <script>
+        new Vue({
+            el: '#example',
+            data: { hello: 'Hello World!' }
+        })
+    </script>
+  </body>
+</html>
+
+What this code does is instantiate a new Vue app, linked to the #example 
+element as its template. It's defined using a CSS selector usually, but 
+you can also pass in an HTMLElement.
+
+Then, it associates that template to the data object. 
+That is a special object that hosts the data we want Vue to render.
+
+In the template, the special {{ }} tag indicates that this is some part 
+of the template that's dynamic, and its content should be looked up in 
+the Vue app data.
+///////////////////////////////////////////////////////
+Angular Like:
+  template strings - {{}}
+  Way of defining components - Vue.component('name')
+  Way of injecting local components - 
+    new Vue({
+      el: '#app',
+      components: {
+        Sidebar
+      }
+    })
+  Directives
+  Filters
+
+React Like:
+  State/data
+  Props
+  Virtual Dom
+  redux/vuex
+  

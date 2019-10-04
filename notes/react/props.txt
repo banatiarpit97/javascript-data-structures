@@ -17,3 +17,21 @@ will become:
     <h1>hello</h1>
     <Page></Page>
 </div>
+///////////////////////////////////////////////////////////
+communication from child to parent:
+
+    class Parent extends react.component{
+        state = {name:value};
+        handleChange(value){
+            this.setState({name: value});
+        }
+
+        render() {
+            return <Child change = {this.handleChange.bind(this)}/>
+        }
+    }
+
+    const Child = (props) => {
+        return <input onChange = {(e) => props.change(e.target.value)} />;
+    }
+///////////////////////////////////////////////////////////

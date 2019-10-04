@@ -1,0 +1,110 @@
+Guards are always implemented as services so we use @Injectable()
+Guards always return true or false which indicated the decision to access or not
+Guards can also return observable/promise which will resolve into boolean
+Guards must be imported to Root Module and are registered in providers
+////////////////////////////////////////////////////////////
+types:
+
+CanActivate:
+    decides whether a route can be activated or not
+    checks to see if user can visit the route or not
+
+    ng g g [guard-name]
+
+    import {Injectable} from '@angular/core';
+    import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
+    import {Observable} from 'rxjs/Observable';
+
+    @Injectable()
+    export class ActivateGuard implements CanActivate {
+        canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot){
+            return true;
+        }
+    }
+
+    in routing config:
+        import {ActivateGuard} from './activate.guard';
+
+        ...
+        {path: 'messages', component: MessageComponent, canActivate: [ActivateGuard]},
+
+////////////////////////////////////////////////////////////////////
+CanActivateChild:
+    decides whether child routes can be activated or not
+    checks to see if user can visit the child routes or not
+
+    import {Injectable} from '@angular/core';
+    import {CanActivateChild, ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
+    import {Observable} from 'rxjs/Observable';
+
+    @Injectable()
+    export class ActivateChildGuard implements CanActivateChild {
+        canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot){
+            return true;
+        }
+    }
+
+    in routing config:
+        import {ActivateChildGuard} from './activate-child.guard';
+
+        ...
+        {
+            path: 'messages', 
+            component: MessageComponent, 
+            canActivateChild: [ActivateChildGuard], 
+            children:[{path: 'add', component: MessageComponent,}]
+        },
+
+/////////////////////////////////////////////////////////////////////
+CanDeactivate:
+    decides whether a route can be deactivated or not
+    checks to see if user can exit the route or not
+    usually used to warn a user when navigating away from the route
+
+    import {Injectable} from '@angular/core';
+    import {CanDeactivate} from '@angular/router';
+    import {Observable} from 'rxjs/Observable';
+
+    @Injectable()
+    export class DeactivateGuard implements CanDeactivate {
+        canDeactivate(){
+            return true;
+        }
+    }
+
+    in routing config:
+        import {DeactivateGuard} from './deactivate.guard';
+
+        ...
+        {path: 'messages', component: MessageComponent, CanDeactivate: [DeactivateGuard]},
+
+///////////////////////////////////////////////////////////////////////
+Resolve:
+    performs route data retrieval before any activation of route
+    we need to ensure that data is available in the navigating route or not
+    if data is not available, then there is no point of going to that route
+
+    import {Injectable} from '@angular/core';
+    import {Resolve, ActivatedRouteSnapshot} from '@angular/router';
+    import {Observable} from 'rxjs/Observable';
+
+    @Injectable()
+    export class ActivateGuard implements Resolve {
+        canActivate(route: ActivatedRouteSnapshot){
+            let id = route.paramMap.get('id');
+            return true;
+        }
+    }
+
+    in routing config:
+        import {ActivateGuard} from './activate.guard';
+
+        ...
+        {path: 'messages', component: MessageComponent, canActivate: [ActivateGuard]},
+
+/////////////////////////////////////////////////////////////////////////
+CanLoad:
+    checks to see if user can navigate to the module which is lazily loaded
+
+//////////////////////////////////////////////////////////////////////////
+

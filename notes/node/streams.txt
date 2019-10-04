@@ -1,0 +1,254 @@
+streams are used to handle large data.
+If we read/write/process all the data together, then it would take a lot of time
+instead what we do is, we fetch the data in parts, so while the previous part is being processed, 
+the next part can be fetched at the same time.
+
+Why streams:
+Memory efficiency: you don’t need to load large amounts of data in memory before you are 
+able to process it
+Time efficiency: it takes way less time to start processing data as soon as you have it, 
+rather than waiting till the whole data payload is available to start
+
+This concurrency is possible because processing of data takes place in js thread but fetching
+of data from file or so takes place in another thready created by c++ library libuv.
+
+By defult, the size of chunk that will be fetched at a time is 64kb but it can be modified by passing
+a arguement to creteStream method(refer to docs)
+//////////////////////////////////
+const f = fs.creatReadStream('./a,json);
+f.on('data', (data) => {console.log(data);})
+
+what this does:
+1. tells libuv to create a thread to read file.
+2. libuv does that and returns an object that contains method like 'on'
+3. js uses these methods to perform taks on particular events.
+4. we pass libuv a function that will be auto called from c++ when that event takes place
+    because only c++ can know about these events happening not js
+5. libuv calls this function and insert an arguement in it that conatisn the data fetched
+///////////////////////////////////////////////////////////
+
+Streams are not a concept unique to Node.js. They were introduced in the Unix operating 
+system decades ago, and programs can interact with each other passing streams through 
+the pipe operator (|).
+
+The Node.js stream module provides the foundation upon which all streaming APIs are build.
+//////////////////////////////////////////////////////////////
+Pipes:
+
+The return value of the pipe() method is the destination stream, which is a very 
+convenient thing that lets us chain multiple pipe() calls, like this:
+    src.pipe(dest1)
+
+Pipe is only available on readable/duplex streams but not on writable streams
+So how to read data from writable stream -> When we pipe readable to writable, it returns
+a readable stream using which we can pipe it forwards
+    readable.pipe(writable1).pipe(writable2)
+    
+////////////////////////////////////////////////////////////
+Many Node.js core modules provide native stream handling capabilities, most notably:
+
+process.stdin returns a stream connected to stdin
+process.stdout returns a stream connected to stdout
+process.stderr returns a stream connected to stderr
+fs.createReadStream() creates a readable stream to a file
+fs.createWriteStream() creates a writable stream to a file
+net.connect() initiates a stream-based connection
+http.request() returns an instance of the http.ClientRequest class, which is a writable stream
+zlib.createGzip() compress data using gzip (a compression algorithm) into a stream
+zlib.createGunzip() decompress a gzip stream.
+zlib.createDeflate() compress data using deflate (a compression algorithm) into a stream
+zlib.createInflate() decompress a deflate stream
+
+While an HTTP response is a readable stream on the client, it’s a writable stream on the server.
+/////////////////////////////////////////////////////////
+Types of streams
+
+Readable: a stream you can pipe from, but not pipe into (you can receive data, but 
+not send data to it). When you push data into a readable stream, it is buffered, 
+until a consumer starts to read the data.
+
+Writable: a stream you can pipe into, but not pipe from (you can send data, but not receive from it)
+
+Duplex: a stream you can both pipe into and pipe from, basically a combination of a 
+Readable and Writable stream
+
+Transform: a Transform stream is similar to a Duplex, but the output is a transform of its input
+
+
+    const { Readable, Writable, Duplex, Transform } = require("stream");
+
+    const inStream = new Readable({
+        read(size) {    //fired when consumer is reading a readable stream i.e. on demand push
+            this.push(a');
+            this.push(null);    // No more data
+        }
+    });
+    or
+    const inStream = new Readable();
+    inStream.push("a"); //not on demand push(in this case we need to push before someone reads)
+    inStream.push(null);
+    //////////
+
+    const writableStream = new Stream.Writable()    //Writable
+    writableStream._write = (chunk, encoding, next) => {
+        console.log(chunk.toString())
+        next()
+    }
+    or
+    writableStream.write('hey!\n')
+    //////////
+
+    const inoutStream = new Duplex({
+        write(chunk, encoding, next) {
+            console.log(chunk.toString());
+            next();
+        },
+
+        read(size) {
+            this.push('a');
+        }
+    });
+    //////////
+
+    It’s important to understand that the readable and writable sides of a duplex stream 
+    operate completely independently from one another. This is merely a grouping of two 
+    features into an object.
+
+    A transform stream is the more interesting duplex stream because its output is computed 
+    from its input.
+    For a transform stream, we don’t have to implement the read or write methods, we only 
+    need to implement a transform method, which combines both of them. It has the signature 
+    of the write method and we can use it to push data as well.
+
+    const upperCaseTr = new Transform({
+        transform(chunk, encoding, callback) {
+            this.push(chunk.toString().toUpperCase());
+            callback();
+        }
+    });
+
+    The chunk is usually a buffer unless we configure the stream differently.
+    The encoding argument is needed in that case, but we can usually ignore it.
+    The callback is a function that we need to call after we’re done processing the data 
+    chunk. It’s what signals whether the write was successful or not. To signal a failure, 
+    call the callback with an error object.
+
+    Signaling a writable stream that you ended writing
+        writableStream.end()
+
+    Streams Object Mode
+    By default, streams expect Buffer/String values. There is an objectMode flag that we can 
+    set to have the stream accept any JavaScript object.
+    const commaSplitter = new Transform({
+        readableObjectMode: true,   //when output is json
+        writableObjectMode: true,   //when input is json
+        transform(chunk, encoding, callback) {...}
+    })
+///////////////////////////////////////////////////////////
+Events:
+
+    Besides reading from a readable stream source and writing to a writable destination, 
+    the pipe method automatically manages a few things along the way. For example, it handles 
+    errors, end-of-files, and the cases when one stream is slower or faster than the other.
+
+    readable.on("data", chunk => {
+        writable.write(chunk);
+    });
+
+    readable.on("end", () => {
+        writable.end();
+    });
+
+Events on readable stream:
+    data, end, error, close, readable
+
+Events on writable stream:
+    drain, finish, error, close, pipe, unpipe
+
+Methods on readable stream
+    pipe(), unpipe(), wrap(), destroy()
+    read(), unshift(), resume(), pause(), isPaused(), setEncoding()
+
+Methods on writable stream
+    write(), destroy(), end()
+    cork(), uncork(), setDefaultEncoding()
+////////////////////////////////////////////////////////////
+Readable streams have two main modes that affect the way we can consume them:
+    paused/pull mode
+    flowing/push mode
+
+All readable streams start in the paused mode by default, but they can be easily switched to 
+flowing and back to paused when needed. Sometimes, the switching happens automatically.
+
+When a readable stream is in the paused mode, we can use the read() method to read from the 
+stream on demand. However, for a readable stream in the flowing mode, the data is continuously 
+flowing and we have to listen to events to consume it.
+
+In the flowing mode, data can actually be lost if no consumers are available to handle it. 
+This is why when we have a readable stream in flowing mode, we need a data event handler. 
+In fact, just adding a data event handler switches a paused stream into flowing mode and 
+removing the data event handler switches the stream back to paused mode. Some of this is 
+done for backward compatibility with the older Node streams interface.
+
+To manually switch between these two stream modes, you can use the resume() and pause() methods.
+
+When consuming readable streams using the pipe method, we don’t have to worry about these modes 
+as pipe manages them automatically.
+
+///////////////////////////////////////////////////////////
+examples:
+    server.on("request", (req, res) => {
+        const src = fs.createReadStream("./big.file");
+        src.pipe(res);
+    });
+
+////////////////////////////////////////////////////////
+zlib stream
+
+    const zlib = require("zlib");
+    fs.createReadStream(file)
+        .pipe(zlib.createGzip())    //compress file in chunks
+        .pipe(fs.createWriteStream(file + ".gz"));
+
+The cool thing about using pipes is that we can actually combine them with events if we need 
+to. Say, for example, I want the user to see a progress indicator while the script is working 
+and a “Done” message when the script is done. Since the pipe method returns the destination 
+stream, we can chain the registration of events handlers as well:
+
+    fs.createReadStream(file)
+        .pipe(zlib.createGzip())
+        .on("data", () => process.stdout.write("."))
+        .pipe(fs.createWriteStream(file + ".zz"))
+        .on("finish", () => console.log("Done"));
+
+    or
+
+    const reportProgress = new Transform({
+        transform(chunk, encoding, callback) {
+            process.stdout.write(".");
+            callback(null, chunk);
+        }
+    });
+
+    fs.createReadStream(file)
+        .pipe(zlib.createGzip())
+        .pipe(reportProgress)
+        .pipe(fs.createWriteStream(file + ".zz"))
+        .on("finish", () => console.log("Done"));
+
+///////////////////////////////////////////////////////////////////////
+crypto streams
+
+    const crypto = require("crypto");
+
+    fs.createReadStream(file)
+        .pipe(zlib.createGzip())
+        .pipe(crypto.createCipher("aes192", "a_secret"))    //encrypt file
+        .pipe(fs.createWriteStream(file + ".zz"))
+        .on("finish", () => console.log("Done"));
+
+    fs.createReadStream(file)
+        .pipe(crypto.createDecipher("aes192", "a_secret"))  //decrypt file
+        .pipe(zlib.createGunzip())
+        .pipe(fs.createWriteStream(file.slice(0, -3)))
+        .on("finish", () => console.log("Done"));

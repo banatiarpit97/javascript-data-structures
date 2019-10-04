@@ -1,0 +1,26 @@
+We have these properties:
+    color
+    background-color
+    border-color
+
+color value:
+    Named colors
+        like blue, black plus tranparent, and currentColor
+
+    RGB and RGBa
+        rgb(255, 255, 255)  //value can be between 0 and 255
+        rgba(0, 0, 0, 0.5);     //4th value is alpha i.e. traansparency/opacity
+
+    Hexadecimal notation
+        #000000 or #000
+        The hexadecimal notation lets us express a number from 0 to 255 in just 2 digits, 
+        since they can go from 0 to “15” (f).
+        We can add the alpha channel by adding 1 or 2 more digits at the end, 
+        for example #00000033.
+        Not all browsers support the shortened notation, so use all 6 digits 
+        to express the RGB part.
+
+    HSL and HSLa(Hue Saturation Lightness)
+        In this notation, black is hsl(0, 0%, 0%) and white is hsl(0, 0%, 100%).
+        You also have hsla() which adds the alpha channel to the mix, again a number 
+        from 0 to 1: hsl(0, 0%, 0%, 0.5)

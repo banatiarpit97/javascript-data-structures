@@ -1,0 +1,165 @@
+Every CSS rule terminates with a semicolon. 
+Semicolons are not optional, except after the last rule.
+//////////////////////////////
+
+There is no fixed rule for formatting. This CSS is valid:
+
+p
+      {
+  font-size:           20px   ;
+                      }
+a{color:blue;}
+///////////////////////////////
+
+Ways of adding css to webpage:
+
+1: Using the link tag(preffered)
+    in head tag:
+        <link rel="stylesheet" type="text/css" href="myfile.css">
+
+2: using the style tag
+    <style>
+        ...our CSS...
+    </style>
+
+3: inline styles
+    <div style="">...</div>
+////////////////////////////////////////////////
+
+Cascade is the process, or algorithm, that determines the properties applied to each 
+element on the page. Trying to converge from a list of CSS rules that are defined
+ in various places.
+
+It does so taking in consideration:
+
+specificity
+importance
+inheritance
+order in the file
+
+It also takes care of resolving conflicts.
+//////////////////////////////////////////////////////////////////////
+If you add border-collapse: collapse; to the table element, all borders are collapsed into one
+///////////////////////////////////////////////
+ERRORS:
+CSS tries very hard to do what you want.
+If a line has an error, it skips it and jumps to the next line without any error.
+If you forget the semicolon on one line:
+    the line with the error AND the next one will not be applied, but the third 
+    rule will be successfully applied on the page. Basically, it scans all 
+    until it finds a semicolon, but when it reaches it, the rule is now 
+    font-size: 20px color: black;, which is invalid, so it skips it.
+//////////////////////////////////////////////////
+NORMALIZING CSS
+The default browser stylesheet is the set of rules that browsers have to apply to give 
+some minimum style to elements.
+Most of the time those styles are very useful.
+Since every browser has its own set, it’s common to find a common ground.
+Rather than removing all defaults, like one of the CSS reset approaches does, the 
+normalizing process removes browser inconsistencies, while keeping a basic set of rules 
+you can rely on.
+Normalize.css http://necolas.github.io/normalize.css is the most commonly used solution 
+for this problem.
+You must load the normalizing CSS file before any other CSS.
+/////////////////////////////////////////////////////
+VENDOR PREFIXES
+Vendor prefixes are one way browsers use to give CSS developers access to newer 
+features not yet considered stable.
+Before going on, keep in mind that this approach is declining in popularity. People now 
+favour using experimental flags, which must be enabled explicitly in the user’s browser.
+The prefixes used are:
+    -webkit- (Chrome, Safari, iOS Safari / iOS WebView, Android)
+    -moz- (Safari)
+    -ms- (Edge, Internet Explorer)
+    -o- (Opera, Opera Mini)
+Since Opera is Chromium-based and Edge will soon be too, -o- and -ms- will probably 
+soon go out of fashion. But as we said, vendor prefixes as a whole are going out of fashion, too.
+
+Writing prefixes is hard, mostly because of uncertainty. Do you actually need a prefix for 
+one property? Several online resources are outdated, too, which makes it even harder to do 
+right. Projects like Autoprefixer can automate the process in its entirety without us 
+needing to find out if a prefix is needed any more, or the feature is now stable and the 
+prefix should be dropped. It uses data from caniuse.com, a very good reference site for all 
+things related to browser support.
+
+If you use React or Vue, projects like create-react-app and Vue CLI, two common ways to 
+start building an application, use autoprefixer out of the box, so you don't even have to 
+worry about it.
+///////////////////////////////////////////////////////////////
+Print CSS
+Some common things you might want to do when printing is to hide some parts of the document, 
+maybe the footer, something in the header, the sidebar.
+Maybe you want to use a different font for printing, which is totally legit.
+If you have a large CSS for print, you’d better use a separate file for it. 
+Browsers will only download it when printing:
+    <link rel="stylesheet"
+        src="print.css"
+        type="text/css"
+        media="print" />
+
+CSS @media print
+An alternative to the previous approach is media queries. Anything you add inside this block:
+    @media print {
+        /* ... */
+    }
+is going to be applied only to printed documents.
+/////////
+Links
+HTML is great because of links. It’s called HyperText for a good reason. When printing 
+we might lose a lot of information, depending on the content.
+
+CSS offers a great way to solve this problem by editing the content, appending the 
+link after the <;a> tag text, using:
+    @media print {
+        a[href*='//']:after {
+            content:" (" attr(href) ") ";
+            color: $primary;
+        }
+    }
+I target a[href*='//'] to only do this for external links. I might have internal links 
+for navigation and internal indexing purposes, which would be useless in most of my use cases. 
+If you also want internal links to be printed, just do:
+    @media print {
+        a:after {
+            content:" (" attr(href) ") ";
+            color: $primary;
+        }
+    }
+////////////
+Page margins
+You can add margins to every single page. cm or in is a good unit for paper printing.
+    @page {
+        margin-top: 2cm;
+        margin-bottom: 2cm;
+        margin-left: 2cm;
+        margin-right: 2cm;
+    }
+@page can also be used to only target the first page, using @page :first, or only the 
+left and right pages using @page :left and @page: right.
+
+Page breaks
+You might want to add a page break after some elements, or before them. Use page-break-after 
+and page-break-before:
+    .book-date {
+        page-break-after: always;
+    }
+
+    .post-content {
+        page-break-before: always;
+    }
+This property has been replaced by the break-after property.
+///////////////
+Avoid breaking images in the middle
+I experienced this with Firefox: images by default are cut in the middle, and continue on 
+the next page. It might also happen to text.
+    p {
+        page-break-inside: avoid;
+    }
+and wrap your images in a p tag. Targeting img directly didn't work in my tests.
+This applies to other content as well, not just images. If you notice something is cut when 
+you don’t want, use this property.
+///////////////
+The Chrome DevTools offer ways to emulate the print layout:
+    developer-tools -> 3 dots on top-right -> more tools -> rendering
+    change rendering emulations to print
+///////////////////////////////////////////////////////////////

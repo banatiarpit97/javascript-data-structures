@@ -66,9 +66,29 @@ and getColor can be defined in ts file that would return an appropriate color as
 and getClass can be defined in ts file that would return a string, array, object to convert this
 to either of the above 3 types
 //////////////////////////////////////////////////////////////////
+Create custom directives:
+They must be declared by an NgModule in order to be usable in an app.
+A directive must belong to exactly one NgModule.
 
+Directives does not have a html template.Use components for that purpose
+    
+    import {Directive, AfterViewInit, ElementRef } from '@angular/core';
 
+    @Directive({
+    selector: 'my-directive',
+    })
+    export class MyDirective implements AfterViewInit {
+        constructor(private el:ElementRef) {}
 
+        ngAfterViewInit(){
+            this.el.nativeElement.style.color = 'red';
+        }
+    }
+
+    in out html template of Component:
+        <div>
+            <p my-directive>aaa</p>     //this will be red in color
+        </div>
 
 
 

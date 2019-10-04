@@ -1,0 +1,162 @@
+A module can be loaded in eagerly. lazily, preloaded
+/////////////////////////////////////////////////////////
+Eager Loading
+default functionality of angular app
+all modules and functions are loaded on/before startup
+Root module is always eagerly loaded
+works fine if app is small, but when number of modules is very large, app takes
+a lot of time to start
+When a module is loaded, all its imported modules, components, pipes, services
+are automatically loaded before the module importing them is loaded 
+Modules are imported in order of @NgModule
+
+Implementation:
+need to import the module in @NgModule of AppModule
+/////////////////////////////////////////////////////////
+
+Lazy Loading
+Loading modules on demand asynchronously
+Lazy loaded modules are loaded only when user visits that route/module
+Is required when size of app is very large
+
+Implementation:
+Create the feature module.  ng g module customers --routing
+Create the feature module’s routing module.
+Create components of that module    ng g c customers/customer-list
+Configure the routes.
+
+NO need to import the module in @NgModule of AppModule
+need to load modules using loadChildren property in route configuration
+
+    const routes = [
+        {
+            path: 'customers,
+            loadChildren: 'app/customers/customers.module#CustomersModule'
+        }
+    ]
+
+    customer.module.ts:
+        import { NgModule } from '@angular/core';
+        import { CommonModule } from '@angular/common';
+        import { CustomersRoutingModule } from './customers-routing.module';
+        import { CustomerListComponent } from './customer-list/customer-list.component';
+
+        @NgModule({
+        imports: [
+            CommonModule,
+            CustomersRoutingModule
+        ],
+        declarations: [CustomerListComponent]
+        })
+        export class CustomersModule { }
+
+    customers-routing.module.ts:
+        import { NgModule } from '@angular/core';
+        import { Routes, RouterModule } from '@angular/router';
+        import { CustomerListComponent } from './customer-list/customer-list.component';
+
+        const routes: Routes = [
+            {
+                path: '',
+                component: CustomerListComponent
+            }
+        ];
+
+        @NgModule({
+        imports: [RouterModule.forChild(routes)],
+        exports: [RouterModule]
+        })
+        export class CustomersRoutingModule { }
+///////////////////////////////////////////////////////////////
+Preloading strategy:
+
+Modules are loaded in background asynchronously
+Feature modules are loaded just after application start(unlike eager in which all
+modules are loaded before application start)
+Used for modules that have a high probability of being visited
+
+Implementation:
+Configure all feature all modules for lazy loading i.e. follow all the steps
+defined in lazy loading
+To connvert lazy loading preloading, angular provides preloadingStrategy property
+using PreloadAllModules, all modules configured by loadChildren will be preloaded,
+a module can either be lazy loaded or preloaded
+To preload only selective modules, need to use custom preloading strategy
+
+    import {PreloadAllModules} from '@angular/router';
+    @NgModule({
+        imports: [RouterModule.forRoot(routes, 
+            {preloadingStrategy: PreloadAllModules})
+        ]
+    })
+    export class AppRoutingModule {}
+
+Custom preloading:
+Create a service by Implementing PreloadingStrategy interface and override its 
+preload method and then Configure the service with preloadingStrategy property in
+routing module.
+To select a module for custom preloading, we need to use 'data' property in route 
+configuration
+    data: {preload: true}
+
+Implementation:
+    const routes: Routes = [
+        {
+            path: '',
+            component: CustomerListComponent,
+            data: {preload: true}
+        }
+    ];
+
+    Service:
+        @Injectable()
+        export class CustomPreloadingStrategy Implements PreloadingStrategy {
+            preload(route: Route, load: () => Observable<any>):Observable<any>{
+                if(route.data && route.data['preload']){
+                    return load();
+                }
+                else{
+                    return Observable.of(null);
+                }
+            }
+        }
+
+    @NgModule({
+        imports: [RouterModule.forRoot(routes, 
+            {preloadingStrategy: CustomPreloadingStrategy})
+        ],
+        providers: [CustomPreloadingStrategy]
+    })
+    export class AppRoutingModule {}
+
+///////////////////////////////////////////////////////////////
+Custom preloading strategy with delay:
+
+    Service:    
+        import {Observable} from 'rxjs/Observable';
+        import {timer} from 'rxjs/Observable/timer';
+        import 'rxjs/add/observable/of';
+        import 'rxjs/add/observable/mergeMap';
+
+        @Injectable()
+        export class CustomPreloadingStrategy Implements PreloadingStrategy {
+            preload(route: Route, load: () => Observable<any>):Observable<any>{
+                if(route.data && route.data['preload']){
+                    if(route.data['delay']){
+                        return timer(5000).mergeMap(() => load());
+                    }
+                    return load();
+                }
+                else{
+                    return Observable.of(null);
+                }
+            }
+        }
+
+    const routes: Routes = [
+        {
+            path: '',
+            component: CustomerListComponent,
+            data: {preload: true, delay: true}
+        }
+    ];

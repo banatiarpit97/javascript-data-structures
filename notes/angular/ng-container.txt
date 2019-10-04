@@ -1,0 +1,19 @@
+Logical container used to group nodes but  rendered in DOM tree but is rendered as 
+comment
+Helps us avoid wrapping content in extra div
+Angular does not allow to use more than 1 structural directive on an html
+element, hence we can use <ng-container> and put 1 structural directive in it
+
+Difference with ng-template:
+ng-container is always rendered whereas ng-template is only rendered when a structural 
+directive requests it
+Structural directives in ng-container can be used as usual like we do in normal
+html elements
+
+    <ng-container *ngTemplateOutlet="template; context:obj">
+
+    </ng-container>
+
+    <ng-template #template let-ob="data">
+        <h1>hello {{ob}}</h1>
+    </ng-template>

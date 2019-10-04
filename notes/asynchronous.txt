@@ -103,6 +103,11 @@ We can call a function that would take some time to execute, we then subscribe t
 This solves the inversion of control problem of callbacks.
 In this, we don't provide api our callback function, instead the api returns a promise
 based on which we continue our code.
+In promises, data in js code is updated by the apis which will fire a function on the updated data,
+so we dont pass anything to outer world as in callbacks
+
+Promises are executed before callbacks becoz they are put in different callback queues and priority
+of promises is higher.
 
 var promise1 = new Promise((resolve, reject) => {
   setTimeout(() => {
@@ -267,7 +272,7 @@ Remember, the await keyword is only valid inside async functions.
 If you use it outside of an async function's body, you will get a SyntaxError.
 
 if we add 'async' prefix to any function then that function would return promise only
-return statement is async function is same as resolve in Promise and will be handled using .then
+return statement in async function is same as resolve in Promise and will be handled using .then
 throw new Error(str) in async function is same is reject in Promise and will be handled by .catch
 
 chaining of promises can be replaced by sequence of await statements
@@ -409,3 +414,7 @@ create a observable:
         });
     //this will not work as setTimeout will be fired as soon as it is created(even before someone listens
     to it and the listeners after the fist one will be fired immediately because only one copy is present)
+
+8. Observables can be retried, replayed, delayed etc but not promises
+
+9. Observabes have a lot of operators and functions like map, debounceTime etc

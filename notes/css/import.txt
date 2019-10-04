@@ -1,0 +1,19 @@
+From any CSS file you can import another CSS file using the @import directive.
+    @import url(myfile.css)
+
+url() can manage absolute or relative URLs.
+
+@import directives must be put before any other CSS in the file, or they will be ignored.
+
+You can use media descriptors to only load a CSS file on the specific media:
+    @import url(myfile.css) all;
+    @import url(myfile-screen.css) screen;
+    @import url(myfile-print.css) print;
+    
+
+Paths in url(for import and background etc)
+    relative
+        url(../test.png);
+    Absolute
+        url(/test.png)
+        url(https://mysite.com/test.png)

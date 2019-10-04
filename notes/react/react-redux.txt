@@ -1,0 +1,82 @@
+npm i -S react-redux
+
+This is a library used to connect redux with react
+
+It provides us with 2 important inbuilt components - Provider, connect
+
+Provider provides the components inside it with information we pass it to as props.
+If we want to have more than 1 store(distributed state) in our app, 
+we need more than 1 Provider and they will wrap only selected components as needed(Check this)
+Only the components  wrapped inside that particular Provider will have access
+to the store passed to it.
+We need to wrap our top level component inside the Provider and pass our store
+to it as a prop
+
+    ReactDOM.render(
+        <Provider store={store}>
+            <App />
+        </Provider>, 
+        document.querySelector('#root')
+    );
+
+Connect is a HOC, this is used with a component when we want our component
+to access the state/store from redux.
+
+Connect communicates with Provider with the help of CONTEXT API provided by
+react to have information from the store and pass it to the component.
+
+    import { connect } from 'react-redux';
+    import { React } from 'react';
+    import { selectSong } from '../actions'
+
+    class Song extends React.Component {
+        render(){
+            return <div>Song</div>;
+        }
+    }
+
+    mapStateToProps = state => {    //state param will be passed automatically
+        //'state' is an object that contain keys for each reducer put in our
+        //combineReducer method and their value is the state returned from
+        //that particular reducer
+
+        //this function can be named anything but same name should 
+        //be passed to 1st arg of connect function
+
+        //This function copies the selected state from redux store to props
+        //object of this component 
+
+        //to get original props of the Component, mapStateToProps accepts second
+        //arguement which gives original props
+        //mapStateToProps = (state, ownProps) => {...}
+        return {
+            songs: state.songs  //now we can use this.props.songs in our component
+        }
+    }
+
+    mapDispatchToProps = dispatch => {  //dispatch param will be passed automatically
+        //this function can be named anything but same name should 
+        //be passed to 2nd arg of connect function
+
+        //This function copies the selected dispatch to props
+        //object of this component 
+        
+        return {
+            selectSong: (song) => {dispatch(selectSong)}
+        }
+        //now we can fire this action by 'this.props.selectSong'
+    }
+
+    export default connect(mapStateToProps, mapDispatchToProps)(Song);
+
+
+
+Shorthand of mapDispatchToProps:
+    ...
+    export default connect(mapStateToProps, {selectSong})(Song);    //selectSong is action creator
+    ...
+    everything else remains same
+
+what this does is, the functions passed in the object is wrapped inside dispatch function
+so that we don't have to manually call dispatch
+We can directly call this.props.selectSong() and action will be dispatched automatically

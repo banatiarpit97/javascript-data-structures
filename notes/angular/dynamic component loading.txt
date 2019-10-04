@@ -1,0 +1,82 @@
+a component is generally loaded using the component selector that is 
+identified at angular compile time. The component can also be loaded 
+dynamically at runtime with the help of ComponentFactory, 
+ComponentFactoryResolver, and ViewContainerRef.
+
+Those components which need to be loaded dynamically must also be 
+configured in entryComponents metadata of @NgModule decorator in the 
+module file.
+
+ComponentFactory is used to create an instance of components where 
+ComponentFactoryResolver resolves a ComponentFactory for a particular 
+component. It is used as follows.
+
+ViewContainerRef represents a container where we can attach one or more 
+views to a component and also show an API to create components. 
+Some important methods of ViewContainerRef are createEmbeddedView(),
+clear(),get() ,insert(),move(), createComponent() etc.
+
+CreateEmbeddedView() instantiates an embedded view and inserts it into this container.
+
+createComponent() instantiates a single component and inserts its host 
+view into the this container at a specified index.
+
+We need a container component to dynamically load other components
+Let this container be AppComponent and we dynamically load StudentComponent
+
+Inside the Component class, we can access template using ViewChild. 
+The template is a container in which we load the component dynamically. 
+Therefore, we have to access the template with the ViewConatinerRef where 
+ViewContainerRef represents a container where one or more views can be 
+attached. This can contain two types of views.
+
+Embedded views are created by creating an instance of TemplateRef using the 
+createEmbeddedView() method
+
+Host Views are created by creating an instance of a component using the 
+createComponent() method. Host Views is used to dynamically load 
+StudentComponent.
+
+Let's create a variable called entry which will refer to the template 
+element. In addition, we have also injected ComponentFactoryResolver 
+services to the component class, which will be required to dynamically 
+load the component.
+
+in AppComponent:
+    import {
+    Component,
+    ViewChild,
+    ViewContainerRef,
+    ComponentFactoryResolver,
+    ComponentRef,
+    ComponentFactory
+    } from '@angular/core';
+    import { StudentComponent } from './student/student.component';
+
+    export class AppComponent {
+        title = 'app';
+        componentRef: any;
+        @ViewChild('loadComponent', { read: ViewContainerRef }) entry: ViewContainerRef;
+        
+        constructor(private resolver: ComponentFactoryResolver) { }
+
+        dynamicLoad(){  //call this function to load comp dynamically
+            this.entry.clear();
+            const factory = this.resolver.resolveComponentFactory(StudentComponent);
+            this.componentRef = this.entry.createComponent(factory);
+            this.componentRef.instance.message = "Called by appComponent";
+                //now this.message can be used inside the dynamically loaded
+                component i.e. StudentComponent directly
+        }
+
+        ngOnDestroy(){
+            this.componentRef.destroy();    //destory dynamically loaded comp
+        }
+    }
+
+in app.module.ts:
+    import { StudentComponent } from './student/student.component';
+    @NgModule({
+        ...
+        entryComponents: [StudentInfoComponent,ParentInfoComponent]
+    })

@@ -1,0 +1,161 @@
+npm i -S redux
+
+Redux is a state manager that’s usually used along with React, but it’s not 
+tied to that library — it can be used with other technologies as well, 
+but we’ll stick to React for the sake of the explanation..
+
+Redux is a way to manage an application state, and move it to an external global store.
+
+In Redux, the whole state of the application is represented by one JavaScript object, called State or State Tree.
+We call it Immutable State Tree because it is read only: it can’t be changed directly.
+It can only be changed by dispatching an Action.
+
+Action creator -> Action -> Dispatch -> Reducers -> State
+
+Actions
+An Action is a JavaScript object consisting of type and payload(optional) that 
+describes a change in a minimal way (with just the information needed):
+  {
+    type: 'SELECTED_USER',
+    userId: 232
+  }
+
+Actions Creators are functions that create and return actions.
+  function addItem(t) {
+    return {
+      type: ADD_ITEM,
+      title: t
+    }
+  }
+
+Dispatch is inbuilt function in redux tht makes copies of our action and send 
+it to every reducer
+You usually run action creators in combination with triggering the dispatcher:
+  dispatch(addItem('Milk'))
+Dispatch is a function 'store' object -> store.dispatch(addItem('Milk'))
+/////////////////////////////////////////////////////////////////////////////////////
+Reducers
+A reducer is a pure function that calculates the next State Tree based on the 
+previous State Tree, and the action dispatched.
+	(currentState, action) => newState
+A pure function takes an input and returns an output without changing the 
+input or anything else. Thus, a reducer returns a completely new state tree 
+object that substitutes the previous one.
+
+Reducer should not do:
+1. never generate side-effects (no API calls changing anything)
+2. never call non-pure functions, functions that change their output based on factors 
+other than their input (e.g. Date.now() or Math.random())
+
+const list = (state = [], action) => {
+  switch (action.type) {
+    case 'ADD_ITEM':
+      return state.concat([{ title: action.title }])
+    case 'REMOVE_ITEM':
+      return state.map((item, index) =>
+        action.index === index
+          ? { title: item.title }
+          : item
+    default:
+      return state
+  }
+}
+
+Reducers are called automatically when we dispatch an action.
+The reducer is called with 2 args, 1st one is the prev state and second one is
+the action we dispatched.These 2 args are passed automatically.
+When the reducer is called for the first time, there is no prev state, 
+hence 1 arg is set to undefined.Thats why we set the default value for
+prev state in reducer
+
+If nothing returned or returned undefined from reducer, then react gives an
+error.Must return something(int, string, arr, obj, null...)
+
+Reducers must not reach to any outside function to set the state or return Data
+like api call, Dom node etc
+Next state should only be defined on the basis of prev state and action
+
+Prev state should never be mutated(if our reducer returns string/number
+then we don't need to think of this rule as strings and numbers are immutable in js)
+/////////////////////////////////////////////////////////////////////////////////////
+The Store
+	The Store is an object that:
+
+	holds the state of the app
+	exposes the state via getState()
+	allows us to update the state via dispatch()
+	allows us to (un)register a state change listener using subscribe()
+	A store is unique in the app.
+
+import { createStore } from 'redux'
+import listManager from './reducers'
+let store = createStore(listManager)
+
+pass a starting state:
+let store = createStore(listManager, preExistingState)
+
+store.getState()
+
+store.dispatch(addItem('Something'))
+
+const unsubscribe = store.subscribe(() =>
+  const newState = store.getState()
+)
+unsubscribe()
+/////////////////////////////////////////////////////////////////
+Middlewares:
+
+Action creator -> Action -> Dispatch -> MIDDLEWARES -> Reducers -> State
+
+These are just js functions
+They are called every time an action is dispatched
+When using Middlewares, before going to reducer, an action goes through all 
+the Middlewares
+Can stop or modify actions
+We can use 3rd party(thunk) or create our own Middlewares
+
+  import { createStore, applyMiddleware } from 'redux';
+  import listManager from './reducers';
+  import thunk from 'redux-thunk';
+
+  let store = createStore(listManager, applyMiddleware(thunk));
+///////////////////////////
+Data Flow
+Data flow in Redux is always unidirectional.
+
+You call dispatch() on the Store, passing an Action.
+The Store takes care of passing the Action to the Reducer, generating the next State.
+The Store updates the State and alerts all the Listeners.
+////////////////////////////////////////////////////
+we need to combine all or reducers before sending it the the store
+We do this using combineReducers function provided by redux
+
+  import { combineReducers, createStore } from 'redux';
+  import { reducer2 } from './reducer2';
+  import { reducer2 } from './reducer2';
+
+  let allReducers = combineReducers({
+                        red1: reducer1,
+                        red2: reducer2,
+                    })
+
+  let store = createStore(allReducers);
+/////////////////////////////////////////////////////////
+All api calls should be made from action creators before return the action object
+But it is not that simple, since react gives an error if we return anything else 
+other than object from action creator(action must be an Object)
+
+  const creator = async () => {
+    const res = await fetch(url);
+
+    return {
+      type: 'ADD',
+      payload: res
+    };
+  };
+
+This will not work as we have made our action creator async function 
+and it will return promise rather than object
+
+For this we use redux-thunk
+/////////////////////////////////////////////////////////////

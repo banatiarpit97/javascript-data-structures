@@ -1,0 +1,68 @@
+Use a class based component when:
+    state is needed
+    need to use lifecycle events
+    manage function/events properly
+
+class based component:
+    class App extends React.component {
+        constructor(props){
+            super(props);               //necessary to do this if using constructor
+            this.state = {name: 'arpit'};
+        }
+        render(){                       
+            //wil give an error if render method is not present in class
+            return <div>{this.state.name}</div>;
+        }
+    }
+
+function based component(Pure component):
+    const App = (props) => {
+        return <div>{props.name}</div>;
+    }
+
+third way:(not used much)
+React.createClass({
+    render() {
+        return (
+            <div>
+                <h1>hey</h1>
+            </div>
+        )
+    }
+})
+
+//////////////////////////////////////////////////////////////////
+providing default value for props:
+    const App = (props) => {
+        return <div>{props.name}</div>;
+    }
+    App.defaultProps = {
+        name: 'Arpit'
+    }
+
+if we don't provide the prop to this component, then default value will be used.
+//////////////////////////////////////////////////////////////////////
+It is not always necessary to define constructor in class based component, we
+can directly define render function or any other function
+But if we need to use the constructor, then its forst line should be super()
+If we want to use props inside our constructor, then pass it as a arguement to
+constructor and super.But if we don't need to use props we can define our constructor
+and super without any arguement.
+
+    class App extends React.component {
+        render(){                       
+            //wil give an error if render method is not present in class
+            return <div>{this.state.name}</div>;
+        }
+    }   //valid
+
+    class App extends React.component {
+        constructor(){
+            super();
+        }
+        render(){                       
+            //wil give an error if render method is not present in class
+            return <div>{this.state.name}</div>;
+        }
+    }   //valid
+///////////////////////////////////////////////////////////////////////

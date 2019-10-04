@@ -1,0 +1,68 @@
+Node.js provides a console module which provides tons of very useful ways to 
+interact with the command line.
+It is basically the same as the console object you find in the browser.
+
+The most basic and most used method is console.log(), which prints the string you 
+pass to it to the console.
+If you pass an object, it will render it as a string.
+
+We can also format pretty phrases by passing variables and a format specifier.
+    console.log('My %s has %d years', 'cat', 2)
+
+%s format a variable as a string
+%d or %i format a variable as an integer
+%f format a variable as a floating point number
+%O used to print an object representation
+//////////////
+console.clear() clears the console (the behavior might depend on the console used)
+
+/////////////
+console.count() will count the number of times a string is printed, and print the count next to it.
+
+///////////
+print the call stack trace of a function
+    console.trace()
+
+//////////
+calculate how much time a function takes to run, using time() and timeEnd()
+    const doSomething = () => console.log('test')
+    const measureDoingSomething = () => {
+        console.time('doSomething()')
+        //do something, and measure the time it takes
+        doSomething()
+        console.timeEnd('doSomething()')
+    }
+    measureDoingSomething()
+
+/////////
+console.log is great for printing messages in the Console. 
+This is what’s called the standard output, or stdout.
+It uses process.stdout stream to output messages
+Directly using this stream like process.stdout.write('') has performance issues, so use console.log
+
+console.error prints to the stderr stream.
+It uses process.stderr stream.
+
+While printing log and error messages on the terminal will not be any different to us
+but system monitoring tools see them very differently, as they both use different streams, 
+these tools listen to spicific stream for logging into files etc
+So always use console.error for printing error messages
+////////
+
+You can color the output of your text in the console by using escape sequences. 
+An escape sequence is a set of characters that identifies a color.
+    console.log('\x1b[33m%s\x1b[0m', 'hi!')
+
+However, this is the low-level way to do this. The simplest way to go about coloring 
+the console output is by using a library. Chalk is such a library, and in addition 
+to coloring it also helps with other styling facilities, like making text bold, 
+italic or underlined.
+You install it with npm install chalk, then you can use it:
+    const chalk = require('chalk')
+    console.log(chalk.yellow('hi!'))
+//////////////////////////////
+
+Progress is an awesome package to create a progress bar in the console. 
+Install it using npm install progress.
+
+

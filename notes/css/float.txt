@@ -1,0 +1,14 @@
+The float property supports 3 values:
+    left
+    right
+    none (the default)
+
+A floated element is removed from the normal flow of the page, and the other 
+content flows around it.
+
+
+Clearing
+    left to clear left floats
+    right to clear right floats
+    both to clear both left and right floats
+    none (default) disables clearing

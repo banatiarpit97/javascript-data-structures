@@ -1,0 +1,57 @@
+When you set some properties on a selector in CSS, they are inherited by all 
+children of that selector.
+I said some, because not all properties show this behaviour.
+/////////////////////////////////////////////////
+
+if you have a property that’s not inherited by default, and you want it to
+In the children, you set the property value to the special keyword inherit.
+
+On the contrary, you might have a property inherited and you want to avoid so,
+You can use the revert keyword to revert it. 
+In this case, the value is reverted to the original value the browser 
+gave it in its default stylesheet.
+
+initial: use the default browser stylesheet if available. If not, and if 
+the property inherits by default, inherit the value. Otherwise do nothing.
+
+unset: if the property inherits by default, inherit. Otherwise do nothing.
+//////////////////////////////////////////////////////////////////
+
+Properties that inherit
+
+border-collapse
+border-spacing
+caption-side
+color
+cursor
+direction
+empty-cells
+font-family
+font-size
+font-style
+font-variant
+font-weight
+font-size-adjust
+font-stretch
+font
+letter-spacing
+line-height
+list-style-image
+list-style-position
+list-style-type
+list-style
+orphans
+quotes
+tab-size
+text-align
+text-align-last
+text-decoration-color
+text-indent
+text-justify
+text-shadow
+text-transform
+visibility
+white-space
+widows
+word-break
+word-spacing

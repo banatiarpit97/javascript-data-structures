@@ -1,0 +1,98 @@
+Compared to CSS Grid (which is bi-dimensional), flexbox is a one-dimensional layout model. 
+It will control the layout based on a row or on a column, but not together at the same time.
+
+At the time of writing (Feb 2018), it’s supported by 97.66% of the users. All the most 
+important browsers have implemented it for years, so even older browsers (including IE10+) 
+are covered
+
+Enable Flexbox
+A flexbox layout is applied to a container, by setting
+    display: flex;
+    display: inline-flex;
+
+Container properties
+Some flexbox properties apply to the container, which sets the general rules for its items. 
+They are
+
+flex-direction
+flex-direction, determines if the container should align its items as rows, or as columns:
+    flex-direction: row places items as a row, in the text direction (left-to-right for western countries)
+    flex-direction: row-reverse places items just like row but in the opposite direction
+    flex-direction: column places items in a column, ordering top to bottom
+    flex-direction: column-reverse places items in a column, just like column but in the opposite direction
+
+justify-content
+Change the horizontal alignment
+justify-content has 5 possible values:
+    flex-start: align to the left side of the container.
+    flex-end: align to the right side of the container.
+    center: align at the center of the container.
+    space-between: display with equal spacing between them.
+    space-around: display with equal spacing around them
+
+align-items
+Change the vertical alignment
+align-items has 5 possible values:
+    flex-start: align to the top of the container.
+    flex-end: align to the bottom of the container.
+    center: align at the vertical center of the container.
+    baseline: display at the baseline of the container.
+    stretch: items are stretched to fit the container.
+
+flex-wrap
+By default, items in a flexbox container are kept on a single line, shrinking them to fit 
+in the container.
+To force the items to spread across multiple lines, use flex-wrap: wrap. This will distribute 
+the items according to the order set in flex-direction. Use flex-wrap: wrap-reverse to reverse 
+this order.
+
+flex-flow
+A shorthand property called flex-flow allows you to specify flex-direction and flex-wrap in a 
+single line, by adding the flex-direction value first, followed by flex-wrap value, 
+for example: flex-flow: row wrap.
+////////////////////////////////////////////////////
+
+Properties that apply to each single item
+Up to this point, we’ve seen the properties you can apply to the container.
+
+Single items can have a certain amount of independence and flexibility, and you can alter 
+their appearance using those properties:
+    
+order
+Items are ordered based on the order they are assigned. By default every item has order 0 
+and the appearance in the HTML determines the final order.
+You can override this property using order on each separate item. This is a property you 
+set on the item, not the container. You can make an item appear before all the others by 
+setting a negative value.
+
+align-self
+An item can choose to override the container align-items setting, using align-self, which 
+has the same 5 possible values of align-items:
+    flex-start: align to the top of the container.
+    flex-end: align to the bottom of the container.
+    center: align at the vertical center of the container.
+    baseline: display at the baseline of the container.
+    stretch: items are stretched to fit the container.
+
+flex-grow
+The defaut for any item is 0.
+If all items are defined as 1 and one is defined as 2, the bigger element will take the 
+space of two “1” items.
+
+flex-shrink
+The defaut for any item is 1.
+If all items are defined as 1 and one is defined as 3, the bigger element will shrink 3x 
+the other ones. When less space is available, it will take 3x less space.
+
+flex-basis
+If set to auto, it sizes an item according to its width or height, and adds extra 
+space based on the flex-grow property.
+If set to 0, it does not add any extra space for the item when calculating the layout.
+If you specify a pixel number value, it will use that as the length value 
+(width or height depends on if it’s a row or a column item)
+
+flex
+This property combines the above 3 properties:
+    flex-grow
+    flex-shrink
+    flex-basis

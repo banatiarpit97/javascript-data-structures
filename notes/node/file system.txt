@@ -1,0 +1,186 @@
+    var fs = require("fs");  
+
+
+    // Asynchronous read  
+    fs.readFile('input.txt', function (err, data) {  
+        if (err) {  
+            return console.error(err);  
+        }  
+        console.log("Asynchronous read: " + data.toString());  
+    });  
+
+    // Synchronous read  
+    var data = fs.readFileSync('input.txt');  
+    console.log("Synchronous read: " + data.toString());  
+    console.log("Program Ended");  
+
+////////////////////////////////////////////////////
+Node.js Open a file
+    fs.open(path, flags[, mode], callback)   
+
+path: This is a string having file name including path.
+
+flags: Flag specifies the behavior of the file to be opened.
+
+mode: This sets the file mode (permission and sticky bits), but only if the 
+file was created. It defaults to 0666, readable and writeable.
+
+callback: This is the callback function which gets two arguments (err, fd).
+
+    fs.open('input.txt', 'r+', function(err, fd) {  
+        if (err) {  
+            return console.error(err);  
+        }  
+        console.log("File opened successfully!");       
+    }); 
+
+File data comes through buffer i.e. combination of 0 and 1
+
+r - we open the file for reading.
+r+ open the file for reading and writing
+w+ open the file for reading and writing, positioning the stream at the beginning of the file. 
+    The file is created if not existing
+a open the file for writing, positioning the stream at the end of the file. 
+    The file is created if not existing
+a+ open the file for reading and writing, positioning the stream at the end of the file. 
+    The file is created if not existing
+////////////////////////////////////////////////////////
+Node.js File Information Method
+    fs.stat(path, callback)  
+
+stats.isfile()	
+    returns true if file type of a simple file.
+stats.isdirectory()	
+    returns true if file type of a directory.
+stats.isblockdevice()	
+    returns true if file type of a block device.
+stats.ischaracterdevice()	
+    returns true if file type of a character device.
+stats.issymboliclink()	
+    returns true if file type of a symbolic link.
+stats.isfifo()	
+    returns true if file type of a fifo.
+stats.issocket()	
+    returns true if file type of asocket.
+
+///////////////////////////////////////////
+CRUD operations:
+
+create and write:
+    function(dir,file,data,callback){
+        fs.open('./data.json', 'wx', function(err, fileDescriptor){
+            if(!err && fileDescriptor){
+                var stringData = JSON.stringify(data);
+                fs.writeFile(fileDescriptor, stringData,function(err){
+                    if(!err){
+                        fs.close(fileDescriptor,function(err){
+                            if(!err){
+                                callback(false);
+                            } else {
+                                callback('Error closing new file');
+                            }
+                        });
+                    } else {
+                        callback('Error writing to new file');
+                    }
+                });
+            } else {
+                callback('Could not create new file, it may already exist');
+            }
+        });
+    };
+
+By default, this API will replace the contents of the file if it does already exist.
+You can modify the default by specifying a flag:
+    fs.writeFile('/Users/flavio/test.txt', content, { flag: 'a+' }, (err) => {})
+    or
+    fs.appendFile('file.log', content, (err) => {
+        if (err) {
+            console.error(err)
+            return
+        }
+    })
+
+Read:
+    function(dir,file,callback){
+        fs.readFile('./data.json', 'utf8', function(err,data){
+            if(!err && data){
+                callback(false,parsedData);
+            } else {
+                callback(err,data);
+            }
+        });
+    };
+
+Update:
+    function(dir,file,data,callback){
+        fs.open('./data.json', 'r+', function(err, fileDescriptor){
+            if(!err && fileDescriptor){
+                var stringData = JSON.stringify(data);
+                fs.truncate(fileDescriptor,function(err){
+                    if(!err){
+                        fs.writeFile(fileDescriptor, stringData,function(err){
+                            if(!err){
+                            fs.close(fileDescriptor,function(err){
+                                if(!err){
+                                    callback(false);
+                                } else {
+                                    callback('Error closing existing file');
+                                }
+                            });
+                            } else {
+                                callback('Error writing to existing file');
+                            }
+                        });
+                    } else {
+                        callback('Error truncating file');
+                    }
+                });
+            } else {
+                callback('Could not open file for updating, it may not exist yet');
+            }
+        });
+    };
+
+Delete:
+    function(dir,file,callback){
+        fs.unlink('data.json', function(err){
+            callback(err);
+        });
+    };
+//////////////////////////////////////////////////////////////////////
+Folders:
+
+Use fs.access() to check if the folder exists and Node.js can access it with its permissions.
+
+Use fs.mkdir() or fs.mkdirSync() to create a new folder:
+
+Use fs.readdir() or fs.readdirSync to read the contents of a directory.
+    This piece of code reads the content of a folder, both files and subfolders, and 
+    returns their relative path:
+
+Use fs.rename() or fs.renameSync() to rename folder.
+    The first parameter is the current path, the second the new path:
+
+Use fs.rmdir() or fs.rmdirSync() to remove a folder.
+    Removing a folder that has content can be more complicated than you need.
+    So use 3rd party modules like 'fs-extra'
+
+///////////////////////////////////////////////////////////////////////
+    fs.readFile('./data.json', function(err,data){
+        console.log(data)   //will print the buffer content
+        process.stdout.write(data)  //will print actual content of file(String)
+    }); //will get data in buffer by default
+
+    This happens because process.stdout is a low level stream, we send buffer to it and
+    it will convert it into a string.
+    console.log is a wrapper around process.stdout which does some processing before sending 
+    data to process.stdout like adding a new line at the end, converting data to string etc
+    So console send string rather than buffer and process show that string
+
+    fs.readFile('./data.json', 'utf8', function(err,data){
+        console.log(data)   //will print the actual content of file(String)
+        process.stdout.write(data)  //will print actual content of file(String)
+    }); //will get data in string becuase of utf8
+    //little less efficient as we should leave the transforming processes to os
+    //we should rather send the buffer data to process.stdout and let it convert itself

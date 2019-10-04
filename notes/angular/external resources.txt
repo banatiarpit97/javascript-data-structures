@@ -1,0 +1,9 @@
+Images:
+    put in assets and directly use itn i components using its relative path
+    like '../assets/images/1.jpg'
+
+CSS and Js libraries like bootstrap
+    1. inlude cdn link in index.html
+    2. install using node/npm and give path of file present in node_modules in
+        'styles' array for css and 'scripts' array for js in angular.json
+        Now this file can be used in any components without any imports

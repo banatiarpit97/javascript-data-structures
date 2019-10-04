@@ -1,0 +1,26 @@
+Positioning is what makes us determine where elements appear on the screen, 
+and how they appear.
+
+Static positioning
+This is the default value for an element. Static positioned elements are displayed in 
+the normal page flow.
+
+Relative positioning
+If you set position: relative on an element, you are now able to position it with an 
+offset, using the properties top, left, bottom, right
+in relative positioning, the space originally occupied by an element was preserved 
+even if it was moved around
+
+Absolute positioning
+Setting position: absolute on an element will remove it from the document's flow.
+We can now move the box around as we please, using the top, right, bottom, left properties
+The coordinates are relative to the closest container that is not static.
+
+Fixed positioning
+Like with absolute positioning, when an element is assigned position: fixed it's removed 
+from the flow of the page.
+The difference with absolute positioning is this: elements are now always positioned 
+relative to the window, instead of the first non-static container.
+Another big difference is that elements are not affected by scrolling. Once you put a 
+sticky element somewhere, scrolling the page does not remove it from the visible part of the page
+

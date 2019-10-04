@@ -1,10 +1,24 @@
+JavaScript is generally considered an interpreted language, but modern JavaScript 
+engines no longer just interpret JavaScript, they compile it.
+
+In this new world, compiling JavaScript makes perfect sense because while it might take 
+a little bit more to have the JavaScript ready, once done it’s going to be much more performant 
+that purely interpreted code.
+
+
+
+
 JIT - just in time compiler.It defers the compilation.
         if it encounters a function definition, it will not compile the function right away.
         it just stores function in memory.
         function will be compiled when it is called the first time.
 
 V8 takes Javascript code as input and compiles it to Machine code.
-V8 is written is c++;
+V8 is written is c++
+
+JavaScript is generally considered an interpreted language, but modern JavaScript 
+engines no longer just interpret JavaScript, they compile it.
+
 
 Javascript compiler takes 2 passes to run the source code.
 in first pass, it does things as declaration, hoisting of var, function etc...
@@ -72,3 +86,9 @@ js is included at last in body becoz:
         this will delay the display of website
 //////////////////////////////////
 global variable of script file is available to all the script files declared after it
+///////////////////////////////////////////////////////////////////
+spa feels much faster than usual because we dont have to wait for client-server
+communication
+SEO does not work well in spa
+SEO relies on js, hence might feel slow on old devices and some customers
+have their js disabled in their browser

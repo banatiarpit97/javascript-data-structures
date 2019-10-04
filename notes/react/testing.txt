@@ -1,0 +1,168 @@
+Jest
+comes automatically installed with create-react-app
+
+to add in other projects:
+  npm install --save-dev jest
+  yarn add --dev jest
+
+{
+  "scripts":{
+    "test":"jest"
+  }
+}
+
+Matchers:
+that let us test values:
+
+toBe()  checks using ===
+toEqual compares variables.If array or object, compares each element/property
+toBeNull  
+toBeDefined
+toBeUndefined
+toBeCloseTo compare float values, avoids rounding errors
+toBeTruthy
+toBeFalse
+toBeGreaterThan
+toBeGreaterThanOrEqual
+toBeLessThan
+toBeLessThanOrEqual
+toMatch compare string with regex
+toHaveLength  checks length of array
+toHaveProperty(key, value)  checks if obj has proprty and optionally checks its value
+toThrow checks if function you pass throws an exception
+toBeInstanceOf  checks if obj is instance of a class
+
+all the matchers can be negated using .not.
+
+
+For promises, we use .resolve, .reject
+expect(Promise.resolve('lemon')).resolves.toBe('lemon')
+expect(Promise.reject(new Error('octopus'))).rejects.toThrow('octopus')
+
+To do something once before all the tests run, use the beforeAll() function:
+beforeAll(() => {
+  //do something
+})
+
+To perform something before each test runs, use beforeEach():
+beforeEach(() => {
+  //do something
+})
+
+Just as you can do with setup, you can also perform something after each test runs:
+afterEach(() => {
+  //do something
+})
+
+and after all tests end:
+afterAll(() => {
+  //do something
+})
+
+You can create groups of tests, in a single file, that isolate the setup and teardown functions:
+describe('first set', () => {
+  beforeEach(() => {
+    //do something
+  })
+  afterAll(() => {
+    //do something
+  })
+  test(/*...*/)
+  test(/*...*/)
+})
+/////////////////////////////////////////////////////////////////////////////
+
+Testing asynchronous code:
+You can’t have a test in a callback, because Jest won’t execute it — 
+the execution of the test file ends before the callback is called. 
+To fix this, pass a parameter to the test function, which you can 
+conveniently call done. Jest will wait until you call done() before ending that test:
+
+test(`uppercase 'test' to equal 'TEST'`, (done) => {
+  uppercase('test', (str) => {
+    expect(str).toBe('TEST')
+    done()
+  }
+})
+
+With functions that return promises, we simply return a promise from the test:
+test(`uppercase 'test' to equal 'TEST'`, () => {
+  return uppercase('test').then(str => {
+    expect(str).toBe('TEST')
+  })
+})
+
+Promises that are rejected can be tested using .catch():
+test(`uppercase 'test' to equal 'TEST'`, () => {
+  return uppercase('').catch(e => {
+    expect(e).toMatch('Empty string')
+  })
+})
+
+To test functions that return promises we can also use async/await, 
+which makes the syntax very straightforward and simple:
+test(`uppercase 'test' to equal 'TEST'`, async () => {
+  const str = await uppercase('test')
+  expect(str).toBe('TEST')
+})
+
+//////////////////////////////////////////////////////////////////////////////////
+Mocking
+
+so that:
+
+1. your tests run faster, giving a quick turnaround time during development
+2. your tests are independent of network conditions, or the state of the database
+3. your tests do not pollute any data storage because they do not touch the database
+4. any change done in a test does not change the state for subsequent tests, and 
+5. re-running the test suite should start from a known and reproducible starting point
+6. you don’t have to worry about rate limiting on API calls and network requests
+
+expect().toHaveBeenCalled(): check if a spied function has been called
+expect().toHaveBeenCalledTimes(): count how many times a spied function has been called
+expect().toHaveBeenCalledWith(): check if the function has been called with a specific set of parameters
+expect().toHaveBeenLastCalledWith(): check the parameters of the last time the function has been invoked
+
+When you import a package, you can tell Jest to “spy” on the execution of a 
+particular function, using spyOn(), without affecting how that method works.
+
+const mathjs = require('mathjs')
+const spy = jest.spyOn(mathjs, 'log')
+const result = mathjs.log(10000, 10)
+expect(mathjs.log).toHaveBeenCalled()
+expect(mathjs.log).toHaveBeenCalledWith(10000, 10)
+
+Jest provides a convenient way to mock an entire package. Create a __mocks__folder 
+in the project root, and in this folder create one JavaScript file for each of your packages.
+
+Say you import mathjs. Create a __mocks__/mathjs.js file in your project root, and add this content:
+More simply, you can mock a single function using jest.fn():
+
+module.exports = {
+  log: jest.fn(() => 'test')
+}
+
+You can also use jest.fn().mockReturnValue('test') to create a 
+simple mock that does nothing except returning a value.
+
+You can find pre-made mocks for popular libraries. For example this 
+package https://github.com/jefflau/jest-fetch-mock allows you to mock fetch() 
+calls, and provide sample return values without interacting with the actual server in your tests.
+////////////////////////////////////////////////////////////////////////////////
+Snapshot testing
+Snapshot testing is a pretty cool feature offered by Jest. It can memorize how 
+your UI components are rendered, and compare it to the current test, raising an error if there’s a mismatch.
+
+This is a simple test on the App component of a simple create-react-app 
+application (make sure you install react-test-renderer):
+
+import React from 'react'
+import App from './App'
+import renderer from 'react-test-renderer'
+it('renders correctly', () => {
+  const tree = renderer.create(<App />).toJSON()
+  expect(tree).toMatchSnapshot()
+})
+
+The first time you run this test, Jest saves the snapshot to the __snapshots__folder.
+You can also update the snapshot by running jest -u

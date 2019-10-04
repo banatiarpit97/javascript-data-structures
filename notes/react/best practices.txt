@@ -1,0 +1,19 @@
+avoid putting conditionals in render function of component, instead create a separate
+function that has conditional statements in it and return the required jsx and call this
+function from 'render'
+
+    renderContent(){
+        if(){
+            return ...
+        }
+        else if(){
+            return ...
+        }
+    }
+
+    render(){
+        return (
+            return <div>{this.renderContent()}</div>
+        );
+    }
+////////////////////////////////////////////////////////////////////////

@@ -1,0 +1,19 @@
+The display property of an object determines how it is rendered by the browser.
+
+All the HTML tags are displayed inline out of the box except some elements like 
+div, p, ul and section, which are set as block by the user agent (the browser).
+
+Inline:
+Inline elements don’t have any margin or padding applied.
+Same for height and width.
+
+inline-block
+Similar to inline, but with inline-block width and height applied as you specify.
+
+block
+With display: block, elements are stacked one after each other, vertically, and every 
+element takes up 100% of the page.
+
+none
+Using display: none makes an element disappear. It's still there in the HTML, 
+but just not visible in the browser

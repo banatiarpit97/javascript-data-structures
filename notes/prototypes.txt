@@ -111,7 +111,7 @@ function semicircle(radius){
     Circle.call(this, radius);
     //call is used to access property or method of another object but with context of current one.
 }
-semicircle.prototype = Object.create(circle.prototype); 
+semicircle = Object.create(circle.prototype); 
 //now semicircle inherits from prototype of circle i.e. we made semicircle a child of circle's prototype.[inheritance]
 //Object.create is used to link prototype to objects.
 //Object.create always return an empty object and bind that empty object to the parameter passed to

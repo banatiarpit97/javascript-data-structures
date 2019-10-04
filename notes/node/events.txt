@@ -1,3 +1,12 @@
+node uses async function to maintain the concurrency. 
+Node uses observer pattern. Node thread keeps an event loop and after the 
+completion of any task, it fires the corresponding event which signals the 
+event listener function to get executed.
+
+callback functions are called when an asynchronous function returns its result
+where as event handling works on the observer pattern.
+
+
 var events = require('events');
 
 var eventEmitter = new events.EventEmitter();
@@ -9,6 +18,76 @@ eventEmitter.on('connection', () => {
 
 // Fire the connection event 
 eventEmitter.emit('connection');
+/////////////////////////////////////////////////////////
+Passing arguements:
+    eventEmitter.on('start', (start, end) => {
+        console.log(`started from ${start} to ${end}`)
+    })
+    eventEmitter.emit('start', 1, 100)
+//////////////////////////////////////////////////////////
+
+functions:
+
+emitter.addListener()
+    Alias for emitter.on().
+
+emitter.emit()
+    Emits an event. It synchronously calls every event listener in the order they were registered.
+
+emitter.eventNames()
+    Return an array of strings that represent the events registered on the current EventListener:
+
+emitter.getMaxListeners()
+    Get the maximum amount of listeners one can add to an EventListener object, 
+    which defaults to 10 but can be increased or lowered by using setMaxListeners():
+
+emitter.listenerCount()
+    Get the count of listeners of the event passed as parameter:
+
+emitter.listeners()
+    Gets an array of listeners of the event passed as parameter:
+
+emitter.off()
+    Alias for emitter.removeListener() added in Node 10.
+
+emitter.on()
+    Adds a callback function that’s called when an event is emitted.
+
+emitter.once()
+    Adds a callback function that’s called when an event is emitted for the first time 
+    after registering this. This callback is only going to be called once, never again.
+
+emitter.prependListener()
+    When you add a listener using on or addListener, it's added last in the queue of listeners, 
+    and called last. Using prependListener it's added, and called, before other listeners.
+
+emitter.prependOnceListener()
+    When you add a listener using once, it's added last in the queue of listeners, 
+    and called last. Using prependOnceListener it's added, and called, before other listeners.
+
+emitter.removeAllListeners()
+    Removes all listeners of an event emitter object listening to a specific event:
+
+emitter.removeListener()
+    Remove a specific listener. You can do this by saving the callback function to a variable, 
+    when added, so you can reference it later:
+
+emitter.setMaxListeners()
+    Sets the maximum amount of listeners one can add to an EventListener object, 
+    which defaults to 10 but can be increased or lowered:
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 functions :
 
