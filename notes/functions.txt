@@ -199,3 +199,8 @@ is neither top level nor inside other functions.
 
 15. js has first class functions which can be assigned to a variable and passed around
     to other functions called higher order functions.Because of this, callbacks are possible
+
+16. If we want to pass a parameter for one time use only, instead pass a callback fn and just call that fn there.
+
+16. function foo(){console.log(1)}
+    typeof(foo) //'function'

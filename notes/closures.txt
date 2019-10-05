@@ -207,6 +207,13 @@ Our code in the file is automatically wrapped in an IIFE(can be seen in debuggin
 
 When we pass a callback function as an argument to another function, the callback is executed
 at some point inside the containing function’s body just as if the callback were defined in the
+
+/////////////////////////////////////////////////////////////////////////
+since the callback has access to the latest value of variables, setTimeout when executed will have access
+to the value of variables at the time when setTimeout will execute
+var a = 1;
+setTimeout(() => {console.log(a)}, 1000);	//prints 3
+a = 3;
 containing function. This means the callback is a closure.As we know, closures have access 
 to the containing function’s scope, so the callback function can access the containing functions’
 variables, and even the variables from the global scope.
