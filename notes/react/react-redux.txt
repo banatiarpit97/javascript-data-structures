@@ -80,3 +80,22 @@ Shorthand of mapDispatchToProps:
 what this does is, the functions passed in the object is wrapped inside dispatch function
 so that we don't have to manually call dispatch
 We can directly call this.props.selectSong() and action will be dispatched automatically
+
+//////////////////////////////////////////////////////
+react-redux has introduced hooks to replace 'connect' HOC:
+
+useSelector:
+    to replace mapStateToProps
+    const App = props => {
+        const count = useSelector(store => store.count);
+        //store is the complete store passed to Provider, this is the same store passed to mapStateToProps
+    }
+    useSelector can be called multiple times to get diff state from store
+
+useDispatch:
+    to replace mapDispatchToProps
+    const App = props => {
+        const dispatch = useDispatch();
+        dispatch({type: 'INCREASE_COUNT', payload: 1});
+        //dispatch is the same as passed to mapDispatchToProps
+    }

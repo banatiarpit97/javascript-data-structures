@@ -149,3 +149,20 @@ heirarchy, the closest method takes precendence
 //////////////////////////////////////////////////////////////////
 if you only have a getter, the property can not be set, any attempt to do so
 will be ignored
+//////////////////////////////////////////////////////////////////
+'this' can not be used in child class's constructor until we call super().
+
+class child extends parent{
+    constructor(props){
+        super();
+        console.log(this.props) //undefined
+        console.log(props) //print actual props
+    }
+}
+
+class child extends parent{
+    constructor(props){
+        super(props);
+        console.log(this.props) //print actual props
+    }
+}

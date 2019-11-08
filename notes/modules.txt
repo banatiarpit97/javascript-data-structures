@@ -36,3 +36,16 @@ Ways to export:
             func1,
             func2
         }
+
+/////////////////////////////////////////////////////////////////////////////
+what works:
+	export {a:1}
+	import {a} from ''
+
+	export default a;
+	import a from ''
+
+
+what does not work:
+	export default {a:1}
+	import {a} from ''

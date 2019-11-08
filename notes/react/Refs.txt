@@ -13,10 +13,14 @@ To create a ref:
         constructor(props){
             super(props);
 
-            this.imagRef = React.createRef();
+            this.imageRef = React.createRef();
         }
 
         render(){
-            return <img ref={this.imagRef} src='' />;
+            return <img ref={this.imageRef} src='' />;
+
+            // we can directly use ref using a callback function
+            //<img ref={imgDom => {this.imageRef=imgDom}} src='' />;
+            //imgDom is the automatically assisgned a ref, no need to do createRef before
         }
     }

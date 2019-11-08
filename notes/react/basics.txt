@@ -84,3 +84,15 @@ Change without mutation:
     Removing prop from object
     bad -> delete state.name
     good -> {...state, name: undefined}
+
+
+////////////////////////////////////////////////////////
+state initialization(useState) only happens when component is rendered for the first time, after that
+whenever component re-renders, previous value of state variable is maintained
+////////////////////////////////////////////////////////
+if we use a component more than once then all the implementations would have their separate and unique state variables
+/////////////////////////////////////////////////////
+React strict mode:
+wrap components inside <StrictMode />
+    it will warn us for depreacated features and prevent side effects by
+    identifying potential risks
