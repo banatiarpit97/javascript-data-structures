@@ -250,6 +250,8 @@ PROBLEMS IN PROMISES :
                 })
             })
         }
+
+if you want to execute something in both then and catch, instead do that in finally
 ////////////////////////////////////////////////////////////////////////////
 
 ASYNC-AWAIT functions(uses implicit promises):

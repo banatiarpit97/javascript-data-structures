@@ -1,0 +1,37 @@
+to limit the rate of function call.
+This is used when we want to decrease the number of times we call a function
+in response to an event.
+
+The function will only be called when the time between the occurence of the event
+is greater than the specified delay.
+
+eg- searchbar
+api call should only be made after specified delay when the user has typed or
+if the specified delay has been completed between keystrokes.
+
+let the delay be 300ms and typed text be arpit--300ms--banati
+so the api call would be for 'arpit' and then for 'arpit banati'
+if there was no debouncing, then there would be api call for each character(11 times)
+
+Unlike throttling, it is guranteed that the function will be called in the future
+at least once.
+Even if i type the complete text before the delay timer, at least 1 api call would be
+made for the complete text.
+
+'delay' is for debouncing
+'interval' is for throttling
+
+basic implementation:
+
+const debounce = function(fn, delay){
+    let timer;
+    return function(){
+        let context = this;
+        let args = arguments;
+
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            fn.apply(context, args);
+        }, delay);
+    }
+}

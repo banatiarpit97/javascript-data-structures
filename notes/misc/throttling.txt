@@ -1,0 +1,40 @@
+to limit the rate of function call.
+This is used when we want to decrease the number of times we call a function
+in response to an event.
+
+The function will only be called when the time between the function calls
+is greater than the specified delay.
+
+eg- process on scroll event
+processing should only be done at intervals of scroll event.
+
+let the interval be 300ms and user keeps on scrolling
+so the processing would be done after every 300ms,
+when processing is done, then for the next 300ms, there would be no processing
+
+Unlike debouncing, it is NOT guranteed that the function will be called in the future
+at least once.
+Suppose on first scroll, processing is done and then i stop scrolling after 290ms, then
+the processing would not take place, ignoring all the events that happened after the
+first event, they will never be regarded.
+
+'delay' is for debouncing
+'interval' is for throttling
+
+basic implementation:
+
+const throttle = function(fn, interval){
+    let flag = true;
+    return function(){
+        let context = this;
+        let args = arguments;
+
+        if(flag){
+            fn.apply(context, args);
+            flag = false;
+            setTimeout(() => {
+                flag = true;
+            }, interval);
+        }
+    }
+}

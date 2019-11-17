@@ -25,7 +25,7 @@ not deleted even when browser is closed
 ///////////////////////////////////////////////////////////////////
 session storage:
 same as local storage except that it stores data for only 1 session
-data is deleted when browser is closed
+data is deleted when browser is closed(or even when tab is closed)
 
     sessionStorage.setItem("key", "value");
     var lastname = sessionStorage.getItem("key");
@@ -33,9 +33,6 @@ data is deleted when browser is closed
     var lastname = sessionStorage.key;
     sessionStorage.removeItem("key");
     sessionStorage.clear();
-
-TO store json data in localStorage and sessionStorage, use JSON.stringify and
-JSON.parse
 
 Check support for localStorage and sessionStorage:
     if(window.localStorage){
@@ -45,6 +42,13 @@ Check support for localStorage and sessionStorage:
         
     }
 
+localStorage and sessionStorage follows same origin policy i.e. they will only work
+on same protocol, host and port
+if we set the storage on http://a.com then it won't be available on the foll:
+    https://a.com, http://blog.a.com
+
+we can only store string in the storage, so if we want to store object/arrays, then 
+we need to JSON.stringify it while storing and JSON.parse while retreiving
 ///////////////////////////////////////////////////////////////////
 Cookies:
     document.cookie = "username=John Doe";

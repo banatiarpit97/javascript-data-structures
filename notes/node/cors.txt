@@ -1,0 +1,10 @@
+frontend can only make api request to backend hosted on same origin by default.
+Same origin means same protocol(http and https are diff), 
+origin(subdomains are diff), and port.
+
+If we want to make request to another origin, server needs to set some headers to
+allow frontend to do so.
+Before making api calls(not every api call), frontend makes an options request to
+the server and server in response, set some headers like 
+Access-Control-Allow-Origin, Access-Control-Allow-Methods which will allow the
+foll requests to be completed.
