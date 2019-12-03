@@ -9,3 +9,9 @@ the attached function, we just need to pass it like we do in callbacks
 To pass arguements:
     <Header onClick = { () => handleClick(name, class) } />
 /////////////////////////////////////////////////////////////////////
+in order to solve cross browser issues, event handlers in react are passed an instance of
+Synthetic event, which is a wrapper around browser's native event, Synthetic events have same
+interface as native ones but it works same in all browsers.
+
+React does not attach event listeners to child node, instead it listens to all the
+events at top level using single event listener. This is performance boost.
