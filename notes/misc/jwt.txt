@@ -1,0 +1,14 @@
+When we login, we receive 2 tokens i.e. Access token and Refresh token.
+
+Refresh token
+    set in the cookie from backend and hence sent automatically with every request.
+    also stored in DB.
+    has longer validity or sometimes infinite validity
+
+Access token
+    stored in frontend local storage and sent to backend with every request in the headers section
+    has shorted validity
+
+When access token is expired and the backend returns response 'Unauthorized', we hit an api in which
+reads refresh token from the cookie, validates it, matches it with db and then create and return a new
+access token.
