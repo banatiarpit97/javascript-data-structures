@@ -63,3 +63,11 @@ to access external stylesheets only:
 //////////////////////////////////////////////////////////////////////////////////////////////
 window.location.href to change the route through js
 //////////////////////////////////////////////////////////////////////////////////////////////
+we can pass any attribute to any html element starting with data-
+This will tell browser to ignore/not validate this attribute
+We can pass data using these attributes from html to js
+in js, we can access these from elem.dataset, which is an object and contains
+key as name of attribute after 'data-' (like name of data-name) and value as value passed to the attribute
+
+<div data-name="arpit">     
+//document.querySelector('div').dataset is {name: 'arpit'}

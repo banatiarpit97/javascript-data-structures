@@ -1,0 +1,78 @@
+Bubbling of events - An event will propagate from itself to all its parent.
+Whether the event is handled by the element or not, it will go to each and every parent and if there
+is a handler written for the event, it will be executed.
+This is the default behaviour of the addEventListener function.
+
+Trickling/Capturing of events - An event will propagate from its parent to itself.
+Whether the event is handled by the element or not, it will go to each and every parent and if there
+is a handler written for the event, it will be executed.
+This is the NOT default behaviour of the addEventListener function.
+To use this, pass 'true' as the 3rd parameter of addEventListener.
+
+addEventListener(event, handler, useCapture);
+useCapture by default is false and thus Bubbling is the default behavior, to use
+capturing, pass true to useCapture.
+
+Only one of the two i.e. bubbling and capturing can applied to an element.
+Every element will get 2 chances to handle the event, firstly through capturing and
+secondly through bubbling, but it can handle it only once and not both times.
+
+IMP -> there is misconception that in capturing, event propagates to its children, but
+it is NOT true.
+An event can never go below i.e. to the children of the element from where it started.
+In both bubbling and capturing, the elements that receive the event remains the same
+only the ordering of their reception or the direction of propagation of event is revered.
+
+Motion or route of event propagation will always be same no matter we are using 
+capturing or bubbling, we can only chose when to execute the event handler i.e.
+at the time of capturing or bubbling.
+An event will always start of the top most parent and trickle down to element on which
+the event actually took place and from there event will start to move up till it reaches
+back to the top most parent.
+Think of the element on which the event took place as the mirror and path of event
+as path of light rays which first strikes the mirror(top to bottom as capturing) and then reflects
+back(bottom to top as bubbling)
+/////////////////////////////////////////////
+eg.-
+
+<div class="grandparent">   //clicking on this prints 'grandparent'
+    <div class="parent">   //clicking on this prints 'parent'
+        <div class="child">   //clicking on this prints 'child'
+        </div>
+    </div>
+</div>
+
+1st case(Default):
+    clicked on child -> prints child, parent, grandparent
+    clicked on parent -> prints parent, grandparent
+    clicked on grandparent -> prints grandparent
+
+2nd case(passed true to useCapture to all):
+    clicked on child -> prints grandparent, parent, child
+    clicked on parent -> prints grandparent, parent
+    clicked on grandparent -> prints grandparent
+
+3rd case(Hybrid, useCapture true for grandparent and child, useCapture false for parent):
+    clicked on child -> prints grandparent, child, parent
+    clicked on parent -> prints grandparent, parent
+    clicked on grandparent -> prints grandparent
+
+process when child is clicked in hybrid mode:
+    grandparent receives event through capturing -> executed
+    parent receives event through capturing -> passed
+    child receives event through capturing -> executed
+    child receives event through bubbling -> passed
+    parent receives event through bubbling -> executed
+    grandparent receives event through bubbling -> passed
+
+///////////////////////////////////////////////////////////
+to stop propagation of the event we use, e.stopPropagation()
+Whenever a handler this line present in it, it will not let event be forwarded.
+If the handler containing stopPropagation is executed while capturing then the event
+not be forwarded down
+If the handler containing stopPropagation is executed while bubbling then the event
+not be forwarded up
+If we are using capturing and put stopPropagation to top most element, then all the
+events will only be handled by the top most element only
+If we are using bubbling and put stopPropagation to element on which event occured,
+then all the events will only be handled by that element only

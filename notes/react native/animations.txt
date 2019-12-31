@@ -1,0 +1,142 @@
+Animated exports six animatable component types: View, Text, Image, 
+ScrollView, FlatList and SectionList, but you can also create your own 
+using Animated.createAnimatedComponent().
+
+initialise an animation:
+    const [lowerCarLeft] = useState(new Animated.Value(0));
+
+The Animated.Value function, as you may have guessed, is used to declare 
+values that will be used in animations. What will be stored in the variable 
+is not exactly the value itself, but a promise-like function that resolves 
+to the value. This ensures that things will work accordingly to animation times.
+
+Timing function:
+Animated.timing() will receive two parameters:
+    The value to be animated. In our case it is lowerCarLeft;
+    The configurations of the animation. It is an object that will accept values like:
+    duration (length of the animation), easing (a function that defines how the 
+    animation will accelerate and stop, more on Google Developers) and delay 
+    (how much time needs to pass before really starting the animation after it 
+    has been fired).
+
+    Just append the start() function call to the timing() to start the animation.
+
+    useEffect(() => {
+        Animated.timing(lowerCarLeft, {
+            toValue: 100,
+            duration: 2000
+        }).start();
+    }, []);
+
+using the animated value:
+    <View style={{left: lowerCarLeft}}>
+
+Convert pixel value to percentages, degrees etc:
+If you try to append a “%” at the end of the style declaration, like 
+left: lowerCarLeft+'%' (or other variations), you’ll see that it won’t work at all.
+That’s because, as said before, this variable doesn’t store the value itself, but 
+a promise-like function that resolves to the correct value. A string can’t just 
+be concatenated to a function like this.
+If you try to animate the value as string directly (changing the variable 
+declaration and the toValue inside timing()), from “0%” to “100%” it won’t work 
+either. React Animated can’t animate a string, for it is kind of impossible to 
+tell what the path from point 0 (start) to point 100 (end) is when you’re not 
+working with numbers.
+
+Linear Interpolation
+This feature lets you map inputs to different outputs. In our case, we will be 
+able to say: Point 0 represents the string “0%” and point 100 represents the 
+string “100%”. But it can be anything, such as point 0 represents the string 
+“0deg” and point 100 represents the string “360deg”. You could also map to 
+other numeric value and so on.
+
+    <View style={{
+        left: lowerCarLeft.interpolate({
+            inputRange: [0, 100],
+            outputRange: ['0%', '100%']
+        })
+    }}
+
+reverse animation:
+If you try to change the interpolation inputRange: [0, 100] to [100, 0] just because 
+you also switched the left starting at 100% and ending at 0%, it won’t work. 
+Keep in mind that in the interpolation you are not referring to the animation values.
+You are referring to the point in time in the animation. [100, 0] means that the 
+animation would happen backwards; therefore it is not accepted by the interpolator 
+method. If you just stick to [0, 100] it will know that in point 0, the value ‘100%’ 
+should be returned, and in point 100 the value ‘0%’ should be returned.
+
+Parallel animations:
+We need to make them run together, with only one method call. React-Native 
+Animated provides us the function parallel() for this purpose (there are other 
+functions here). You can pass a parameter to it which is an array of all the 
+values you want to animate, and then call start() on the chain, so they all go 
+together. Like this:
+    Animated.parallel([
+        Animated.timing(lowerCarLeft, {
+            toValue: 100,
+            duration: 2000
+        }),
+        Animated.timing(upperCarLeft, {
+            toValue: -50,
+            duration: 2000
+        })
+    ]).start();
+
+If one animation is stopped or interrupted, then all other animations in the 
+group are also stopped. Animated.parallel has a stopTogether option that can be 
+set to false to disable this.
+
+infinite loop/animation end callback:
+The trick here is that the method start() can receive a callback that is 
+executed when the animation ends. At this moment we can repeat the animation's 
+code for it to run again.
+    runAnimation = () => {
+        lowerCarLeft.setValue(-50);     //reset the values for next round of animation
+        upperCarLeft.setValue(100);
+
+        Animated.parallel([
+            Animated.timing(lowerCarLeft, {
+                toValue: 100,
+                duration: 2000
+            }),
+            Animated.timing(upperCarLeft, {
+                toValue: -50,
+                duration: 2000
+            })
+        ]).start(() => runAnimation()); //animation end callback
+    };
+
+    useEffect(() => {
+        runAnimation();
+    });
+
+Combining animated values
+You can combine two animated values via addition, multiplication, division, or 
+modulo to make a new animated value.
+There are some cases where an animated value needs to invert another animated value 
+for calculation. An example is inverting a scale (2x --> 0.5x):
+
+    const a = new Animated.Value(1);
+    const b = Animated.divide(1, a);
+    Animated.spring(a, {
+        toValue: 2,
+    }).start();
+
+Listening to animated values:
+spring.stopAnimation(callback) will stop the animation and invoke callback with 
+the final value. This is useful when making gesture transitions.
+
+spring.addListener(callback) will invoke callback asynchronously while the 
+animation is running, providing a recent value. This is useful for triggering 
+state changes, for example snapping a bobble to a new option as the user drags 
+it closer, because these larger state changes are less sensitive to a few frames 
+of lag compared to continuous gestures like panning which need to run at 60 fps.
+
+Animated is designed to be fully serializable so that animations can be run in a 
+high performance way, independent of the normal JavaScript event loop. This does 
+influence the API, so keep that in mind when it seems a little trickier to do 
+something compared to a fully synchronous system. Check out 
+Animated.Value.addListener as a way to work around some of these limitations, 
+but use it sparingly since it might have performance implications in the future.
+

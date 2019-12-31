@@ -92,6 +92,22 @@ We can also destructure arrays :(idea behind swapping vars)
     var arr = [1,2];
     var [n, m] = arr;
     console.log(n, m)   //1 2
+
+destructure an array and assign an element to a previously declared variable:
+    let vowel;
+    [vowel] = ["a", "e", "i", "o", "u"];
+    console.log(vowel); // a
+
+destructure an object and assign a property to a previously declared variable:
+    let name;
+    { name } = { name: "Alice" };   //gives an error
+
+    The problem was that the braces surrounding the name variable were parsed as 
+    a block. To be parsed as destructuring property assignment, the assignment 
+    expression needs to be surrounded by parentheses, like this:
+        let name;
+        ({ name } = { name: "Alice" });
+        console.log(name); // Alice
 ////////////////////////////////////////////////////////////////////////////
 
 in ES6, if name and value of property of object is same, we can emit colon and property
