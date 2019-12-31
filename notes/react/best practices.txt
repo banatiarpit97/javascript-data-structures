@@ -17,3 +17,9 @@ function from 'render'
         );
     }
 ////////////////////////////////////////////////////////////////////////
+if we want force to re-render a component and that component is getting its data from an array 
+or object, we don't need to change or add properties of that object, instead we can just clone
+that object into a new one using spread operator like a={...b}.
+
+Since react/redux checks refernce of an array/object to detect changes and re-render a component,
+we can re-render a component without changing its properties

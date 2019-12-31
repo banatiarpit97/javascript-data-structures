@@ -1,0 +1,33 @@
+The Cache interface provides a storage mechanism for Request / Response object pairs that are cached.
+Note that the Cache interface is exposed to windowed scopes as well as workers.
+You don't have to use it in conjunction with service workers, even though it is defined in the service worker spec.
+
+can be accessed using caches or window.caches
+
+functions:
+    caches.match()
+    caches.has()
+    caches.open()
+    caches.delete()
+    caches.keys()
+
+To work with cache, we first need to open the stored caches object:
+
+    caches.open('v1')
+        .then(cache => {
+            cache.add('url');
+        });
+
+    the cache object returned from the promise has foll functions:
+
+        cache.match(request, options)
+        cache.matchAll(request, options)
+        cache.add(request)
+        cache.addAll([requests])
+        cache.put(request, response)    //we can only store the complete response and not a part of it, we can clone it
+        cache.delete(request, options)
+        cache.keys(request, options)
+
+        cache.add is equivalent to calling fetch(), then using put();
+
+This cache can be removed by user or can be blocked by user but this api would return the updated cache always
