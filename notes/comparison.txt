@@ -1,7 +1,15 @@
 Even if objects/arrays have same elements in them, they will not be 
-equal(triple) to another object/array.
-Triple equal with array an objects checks for same reference rather than
+equal(double or triple) to another object/array.
+equal with array an objects checks for same reference rather than
 same content
+
+{} == {}    //false(same for ===)
+
+a={name: 'arpit}, b={name: 'arpit};
+a == b  //false(same for ===)
+
+a={name: 'arpit}, b=a;
+a == b  //true(same for ===)
 
 var a = new String('abc')
 var b = new String('abc')

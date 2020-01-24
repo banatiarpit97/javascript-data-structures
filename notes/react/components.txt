@@ -40,6 +40,11 @@ providing default value for props:
         name: 'Arpit'
     }
 
+    we can also give default value to props while destructuring:
+        const App = ({name="arpit", age=22}) => {
+            return <div>{name}</div>;
+        }
+
 if we don't provide the prop to this component, then default value will be used.
 //////////////////////////////////////////////////////////////////////
 It is not always necessary to define constructor in class based component, we
@@ -66,3 +71,8 @@ and super without any arguement.
         }
     }   //valid
 ///////////////////////////////////////////////////////////////////////
+renaming the props while destructuring:
+    const App = ({name: firstName}) => {
+        return <div>{firstName}</div>;
+    }
+////////////////////////////////////////////////////////////////////////

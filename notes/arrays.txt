@@ -92,10 +92,7 @@ rest - When we want to combine many elements in an array
 		second = 2
 /////////////////////////////////////////////////////////////////////////////////////////
 arrays are also objects with properties '0', '1', '2'... i.e. index number
-/////////////////////////////////////////////////////////
-array destructuring
-	const arr = [1,2]
-////////////////////////////////////////////////////////////
+
 typeof([])  //'object'
 ////////////////////////////////////////////////////////////
 'find' methods iterates over an array and stopes/returns automatically when any item is matched with the condition
@@ -105,3 +102,16 @@ if we want to change a single entry in an array, use 'map'
 	const [one,two] = arr
 	one	//is 1
 	two	//is 2
+///////////////////////////////////////////////////
+when we try to read an element in array at a specific index that is not present, 
+then it return undefined 
+	a=[1,2]
+	a[3]	//undefined
+	a[-1]	//undefined
+if we try to access any non-integer index, then also it returns undefined
+but we if we try to assign that index a value, it is treated as string and an item
+is added to array like object
+	a=[1,2]
+	a[1.5]	//undefined
+	a[1.5] = 3
+	a	//[1,2, '1.5':3]

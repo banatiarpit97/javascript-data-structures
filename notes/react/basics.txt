@@ -96,3 +96,34 @@ React strict mode:
 wrap components inside <StrictMode />
     it will warn us for depreacated features and prevent side effects by
     identifying potential risks
+
+/////////////////////////////////////////////////////////
+we can render html/jsx tags conditionally using props:
+    const App = ({tag=React.fragment}) => {
+        return (
+            <tag>hey</tag>
+        )
+    }
+
+///////////////////////////////////////////////////////////
+<ul>
+  {["first", "second"].map((item) => (
+    <li>{item}</li>
+  ))}
+</ul>
+
+That's equivalent to providing a literal array.
+
+<ul>
+  {[
+    <li>first</li>,
+    <li>second</li>,
+  ]}
+</ul>
+////////////////////////////////////////////////////////////
+
+React.Children.only. only allows us to return this.props.children if 
+there is only one child. Otherwise, it throws an error.
+    render() {
+        return React.Children.only(this.props.children)
+    }
