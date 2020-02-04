@@ -1,0 +1,47 @@
+In Svelte you can define a listener for a DOM event directly in the template, using the on:
+<event> syntax.
+    <button on:click={(e) => {alert('clicked', e)}}>Click me</button>
+    or
+    <script>
+        const doSomething = (e) => {
+            alert('clicked', e)
+        }
+    </script>
+    <button on:click={doSomething}>Click me</button>
+
+//////////////////////////////////////////
+Svelte passes the event handler as the argument of the function, which is handy if you need to
+stop propagation or to reference something in the Event object
+//////////////////////////////////////////
+Modifiers:
+    Svelte provides us modifiers, a way to apply it directly without manually
+    doing it. like stopPropagation and preventDefault.
+    You apply a modifier like this: 
+        <button on:click|stopPropagation|preventDefault={doSomething}>Click me</button>
+
+There are other modifiers, which are more niche. capture enables capturing events instead of
+bubbling, once only fires the event once, self only fires the event if the target of the event is
+this object (removing it from the bubbling/capturing hierarchy).
+
+////////////////////////////////////////////////
+Custom events:
+    What's interesting is that we can create custom events in components, and use the same
+    syntax of built-in DOM events.
+    To do so, we must import the createEventDispatcher function from the svelte package and
+    call it to get an event dispatcher
+    Once we do so, we can call the dispatch() function, passing a string that identifies the event
+    (which we'll use for the on: syntax in other components that use this), the second argument to
+    dispatch is the value we want to pass through that event:
+
+        <script>
+            import { createEventDispatcher } from 'svelte';
+
+            const dispatch = createEventDispatcher();
+            dispatch('eventName', value);
+        </script>
+
+        and use it like:
+            <ComponentName on:eventName={event => {console.log(event)}} />
+                //event contains the data, we passed using dispatch function.
+
+    we can pass anything using dispatch i.e. string, number, object, array...

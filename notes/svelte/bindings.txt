@@ -1,0 +1,87 @@
+Using Svelte you can create a two-way binding between data and the UI.
+
+use let/var for bindings and not const, since value of const can not be changed
+////////////////////////////////////////////////////////////////
+bind:value:
+    if js variables changes, value of input will also change and if value of input
+    changes, value of js variable will also be same
+    <script>
+        let name = ''
+    </script>
+    <input bind:value={name}>
+
+    /////////////////
+    bind:value also works for the select form field to get the selected value automatically
+    assigned to the value of a variable:
+    <script>
+        let selected
+    </script>
+        <select bind:value={selected}>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+        </select>
+
+bind:checked:
+    <script>
+        let isChecked   //boolean
+    </script>
+    <input type=checkbox bind:checked={isChecked}>
+
+bind:group:
+    bind:group is handy with checkboxes and radio inputs, because those are very often used in
+    groups. Using bind:group you can associate a JavaScript array to a list of checkboxes, and
+    have it populated based on the choices made by the user
+        <script>
+            let goodDogs = []
+            let dogs = ['Roger', 'Syd']
+        </script>
+
+        <ul>
+            {#each dogs as dog}
+                <li>{dog} <input type=checkbox bind:group={goodDogs} value={dog}></li>
+            {/each}
+        </ul>
+
+bind:indeterminate:
+    bind:indeterminate allows us to bind to the indeterminate state of an element (if you want to
+    learn more head to https://css-tricks.com/indeterminate-checkboxes/)
+
+Other bindings
+    Depending on the HTML tag you are working on, you can apply different kinds of bindings.
+    bind:files is a binding valid on type="file" input elements, to bind the list of selected files.
+    The details HTML element allows the use of bind:open to bind its open/close value.
+    The audio and video media HTML tags allow to bind several of their properties:
+    currentTime , duration , paused , buffered , seekable , played , volume , playbackRate .
+    textContent and innerHTML can be bound on contenteditable fields
+
+Read-only bindings
+    offsetWidth , offsetHeight , clientWidth , clientHeight can be bound, read only, on any
+    block level HTML element, excluding void tags (like br ) and elements that are set to be inline
+    ( display: inline ).
+
+bind:this :
+    like ref in react
+    allows you to get a reference to an HTML element and bind it to a JavaScript variable
+        <script>
+            let myInputField
+        </script>
+        <input bind:this={myInputField} />
+
+binding to component props: (imp)
+    To sync values between parent and child component
+    using normal prop system, if parent value changes, then the updated value reaches the child
+    but if child chnges the prop value, there is no way for parent to know that. Using prop binding
+    we can achieve that.
+    Using bind: in front of the prop, you can bind a value to any prop that a component exposes.
+
+        <script>
+            export let inMovement = false
+        </script>
+        <button on:click={() => inMovement = true }>Start car</button>
+
+        <script>
+            import Car from './Car.svelte';
+        let carInMovement;
+        </script>
+        <Car bind:inMovement={carInMovement} />

@@ -1,0 +1,29 @@
+the css styles we write inside the <style> tag is scoped to that perticular component
+only and will not affect any other component
+
+//////////////////////////////////////////////////////////
+using scss in svelte:
+    npm i -D svelte-preprocess
+
+    in webpack.config.js:
+        const autoPreprocess = require('svelte-preprocess');
+        const { scss }  = require('svelte-preprocess');
+        in 'options' object of svelte-loader, add - preprocess: autoPreprocess({scss: true})
+
+    add lang attribute in style tag of component:
+        <style lang="scss">
+            h1 {
+                color: purple;
+            }
+        </style>
+
+    for vscode to detect scss:
+        in svelte.config.js:
+            const sveltePreprocess = require('svelte-preprocess');
+            const { scss }  = require('svelte-preprocess');
+            
+            module.exports = {
+                preprocess: sveltePreprocess({scss: true}),
+            };
+
+/////////////////////////////////////////////////////////////////

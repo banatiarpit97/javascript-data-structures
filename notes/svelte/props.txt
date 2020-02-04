@@ -1,0 +1,23 @@
+props are variables passed to the child component from the parent component
+They are one-way form of communication
+
+These are used just like html attributes:
+    <Car color="red" />
+
+instead of passing a static value, we can pass a state variable of the parent component,
+and whenever the state variable changes, child component is re rendered with it updated
+value.
+
+///////////////////////////////////////////////////////////////////
+To define props inside the child component, we use the export keyword.exported variables inside
+a component are the props that can be passed from its parent.
+
+    define it like:
+    <script>
+        export let color;
+    </script>
+
+    and use it like
+        <Car color="red" />
+
+/////////////////////////////////////////////////////////////////////////

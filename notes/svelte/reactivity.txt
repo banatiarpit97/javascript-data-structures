@@ -1,0 +1,19 @@
+Just like useEffect in react
+
+If we want something to happen, when a particular state variable changes, then we use '$:'
+    <script>
+        let count = 0
+        const incrementCount = () => {
+            count = count + 1
+        }
+        $: console.log(`${count}`)
+    </script>
+
+    this can be a block of statements also:
+        $: {
+            console.log(`the count is ${count}`)
+            console.log(`double the count is ${count * 2}`)
+        }
+
+    we can multiple '$:' in our component, and we can use them to fire functions, update other
+    variables etc

@@ -1,0 +1,60 @@
+we can import other components inside <script> of svelte component and use it like any
+html tag:
+    <script>
+        import Car from './car.svelte';
+    </script>
+
+    <div><Car /></div>
+
+///////////////////////////////////////////////////////////////
+exporting functions from .svelte component file:
+    by default, svelete file export the component defined inside it
+    but if we want to export any other function from that file, we can simply add another
+    script tag like:
+        <script context="module">
+            export function changeColor() {
+                //...logic to change color..
+            }
+        </script>
+
+    import it like:
+        import Car, {changeColor} from './car.svelte';
+
+    we can still have normal script tag with the context script tag that will be used 
+    by the component itself;
+
+////////////////////////////////////////////////////////////////
+Component state:
+    any variable defined inside the script tag of svelett file can be used as a state
+    variable.
+    To change these state variables(or to re render the component), we don't have to use
+    any specific function, we only need to use the assignment(=) operator.
+    We can use let, const, var to define the state variable, but const variable can not be changed
+    and needs to initialised while defining
+
+    <script>
+        let name = "Arpit";
+        function changeName(){
+            name = 'Banat';
+        }
+    </script>
+
+    <button on:click={changeName}>change name</button>
+
+    For strings and numbers, we have to use the assignemnt operator to change their values
+    since they are immutable, bot for objects and arrays there is certain limitation.
+    We can not use function like push, pop, shift, splice etc, since they change the inner data
+    structure, svelte can not detect that, we need to use the assignment operator:
+        a = [1,2,3];
+        a[2] = 4;   //will work
+        a.push(5);  //won't work
+
+        if we have to use these functions, then we can reasign these variables with updated value:
+            a.push(5);
+            a = a;
+        or we can use spread operator:
+            a = [...a, 5];
+
+        apart from assignment, increment operator also works - i++, a[1]++;
+
+////////////////////////////////////////////////////////////////////////////////

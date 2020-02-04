@@ -96,12 +96,6 @@ React strict mode:
 wrap components inside <StrictMode />
     it will warn us for depreacated features and prevent side effects by
     identifying potential risks
-/////////////////////////////////////////////////////
-Children are rendered before the parent i.e. componentDidMount of children is executed before 
-the parent. Firstly componentDidMount of all the children will run in theor order and then the 
-componentDidMount of parent will run.
-Think of it like this ->  parent is completely rendered only when all of its children will be rendered
-
 /////////////////////////////////////////////////////////
 we can render html/jsx tags conditionally using props:
     const App = ({tag=React.fragment}) => {
@@ -132,3 +126,11 @@ there is only one child. Otherwise, it throws an error.
     render() {
         return React.Children.only(this.props.children)
     }
+
+////////////////////////////////////////////////////////////////////
+Child components are rendered before parent components
+componentDidMount of child is run before that of parent, its because react renders the components recursively. i.e. React.createComponent('parent', null, React.createComponent('child', null, ...)
+and so on.
+We can also think of this in a way that parent can only be rendered completely if all its children are rendered and hence children need to rendered before.
+
+But constructor method of parent will always run before the child.and in children, constructor will run in sequential manner i.e. top to bottom

@@ -1,0 +1,35 @@
+entry point of the app is main.js, this file import the top most component of our app
+and appends it inside body of html:
+    
+    import App from './App.svelte';
+
+    const app = new App({
+        target: document.body,
+        props: {
+            name: 'world'
+        }
+    });
+
+    window.app = app;
+    export default app;
+    
+//////////////////////////////////////////////////////////
+all of the components are defined in the file having extension .svelte
+This file contains evertything required for the component:
+    script tag for js code of component
+    style tag for css/scss code of component
+    html content of component
+
+        <script>
+            export let name;
+        </script>
+
+        <style lang="scss">
+            h1 {
+                color: purple;
+            }
+        </style>
+
+        <h1><span class="yoyo">Hello {name}!</span></h1>
+
+//////////////////////////////////////////////////////////////////////

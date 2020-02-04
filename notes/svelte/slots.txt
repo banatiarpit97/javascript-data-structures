@@ -1,0 +1,41 @@
+this is the same as props.children in react with extra features.
+
+Any content we put inside the opening and closing tags of the imported component, the content
+is available to the child component as a slot.
+
+Parent component:
+    <script>
+        import Button from './Button.svelte'
+    </script>
+    <Button>Insert this into the slot</Button>
+
+Child component(button):
+    <button><slot /></button>
+
+/////////////////////////////////////////////////////
+we can provide deafult content for the slot in the child component:
+    <button>
+        <slot>
+          Default text for the button   //this will be shown if nothing is passed as slot by parent
+        </slot>
+    </button>
+
+/////////////////////////////////////////////////////////
+there can be more than 1 slot for a component, we can differentiate between them using
+name(named slots):
+give name of slot in parent as -> <p slot="name">
+give name of slot in child as -> <slot name="name">
+
+    parent:
+        <Button>
+            Insert this into the slot   //deafult slot
+            <p slot="before">Add this before</p>    //'before' slot
+            <p slot="after">Add this after</p>      //'after' slot
+        </Button>
+
+    child:
+        <slot name="before" />
+        <button>
+            <slot />
+        </button>
+        <slot name="after">Default content for named slot</slot>

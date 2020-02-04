@@ -1,0 +1,11 @@
+Compared to React, Vue, Angular and other frameworks, an app built using Svelte is
+compiled beforehand so you don't have to serve the whole framework to every one of your
+site visitors. As a result, the fruition of the experience is smoother, consumes less bandwidth,
+and everything feels faster and more lightweight.
+At deployment, Svelte disappears and all you get is plain (and fast!) JavaScript.
+
+clone a template project:
+    npx degit sveltejs/template-webpack app-name
+
+To start the dev server:
+    npm run dev

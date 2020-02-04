@@ -1,0 +1,29 @@
+onMount -> fired after the component is rendered
+        -> used to fetch data from api
+
+onDestroy -> fired after the component is destroyed
+          -> clean up data or stop timers
+
+beforeUpdate -> fired before the DOM is updated
+afterUpdate -> fired after the DOM is updated
+
+We don't have access to any of those methods by default, but we need to import them from
+the svelte package:
+    <script>
+        import { onMount, onDestroy, beforeUpdate, afterUpdate } from 'svelte'
+    </script>
+
+/////////////////////////////////////////////////////////
+we can pass async functions inside these lifecycle events:
+    onMount(async () => {
+        //do something on mount
+    })
+
+//////////////////////////////////////////////////////////
+if we return a function from onMount, it works as onDestroy
+    onMount(async () => {
+        //do something on mount
+        return () => {
+            //do something on destroy
+        }
+    })

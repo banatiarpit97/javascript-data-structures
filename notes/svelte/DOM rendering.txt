@@ -1,0 +1,65 @@
+If condition:
+    <script>
+        let isRed = true
+    </script>
+
+    {#if isRed}
+        <p>Red</p>
+    {:else if isGreen}
+        <p>Green</p>
+    {:else}
+        {#if isDog}             //nesting
+            <p>It is a dog</p>
+        {/if}
+        <p>Not red</p>
+    {/if}
+
+/////////////////////////////////////////////////////////////
+loop:
+    <script>
+        let goodDogs = ['Roger', 'Syd']
+    </script>
+    
+    {#each goodDogs as goodDog, index}
+        <li>{index}: {goodDog}</li>
+    {/each}
+
+    When dynamically editing the lists removing and adding elements, you should always pass an
+    identifier in lists, to prevent issues:
+        <script>
+            let goodDogs = [
+                { id: 1, name: 'Roger'},
+                { id: 2, name: 'Syd'}
+            ]
+        </script>
+
+        {#each goodDogs as goodDog (goodDog.id)}
+            <li>{goodDog.name}</li>
+        {/each}
+
+        <!-- with the index -->
+        {#each goodDogs as goodDog, index (goodDog.id)}
+            <li>{goodDog.name}</li>
+        {/each}
+
+///////////////////////////////////////////////////////////////
+await:
+    Svelte provides us the {#await} syntax in templates to directly work with promises at the
+    template level.
+    We can wait for promises to resolve, and define a different UI for the various states of a
+    promise: unresolved, resolved and rejected.
+
+        <script>
+            const fetchImage = (async () => {
+                const response = await fetch('https://dog.ceo/api/breeds/image/random')
+                return await response.json()
+            })()
+        </script>
+
+        {#await fetchImage}
+            <p>...waiting</p>
+        {:then data}            //data is resolved promise value
+            <img src={data.message} alt="Dog image" />
+        {:catch error}          //error is rejected error value
+            <p>An error occurred!</p>
+        {/await}
