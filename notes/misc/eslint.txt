@@ -1,0 +1,37 @@
+setup:
+    npm install eslint -g
+
+in the project directory:
+    eslint --init
+    answer the questions asked by the setup and a config file named
+    .eslintrc will be created that contains all the rules defined by us
+    plus it extends the basic eslint rules at the end
+
+about eslint config:
+    'rules' is an object that contain key as name of the rule(like 'indent')
+    and value of each key is an array.first item of the array is a number 
+    (0-ignore, 1-warning, 2-error) and second items denotes the actual value of rule
+    ('tabs', 'spaces' for indent)
+
+    after rules there is an 'env' object that that tells about the envirnment our app
+    will run like es6: true, node: false, browser: true...
+
+    after env, there is a property called 'extends' and its value is "eslint:recommended"
+
+to check files for linting:
+    eslint {filename}
+    or add in npm scripts: "lint": eslint **.js and use the command npm run lint
+
+setup for react:
+    answer 'react' in frameworks after running eslint --init and yes to jsx
+
+    in config file:
+        "esmaFeatures":{jsx: true} will be added
+        plugins: ['react'] will be added
+
+        'eslint-plugin-react' is automatically installed in npm dev dependencies
+
+        add a rule:
+            check the plugin docs to see the rule name
+            add it to rules section like:
+                'react/prop-types': 1   

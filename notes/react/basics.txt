@@ -101,3 +101,34 @@ Children are rendered before the parent i.e. componentDidMount of children is ex
 the parent. Firstly componentDidMount of all the children will run in theor order and then the 
 componentDidMount of parent will run.
 Think of it like this ->  parent is completely rendered only when all of its children will be rendered
+
+/////////////////////////////////////////////////////////
+we can render html/jsx tags conditionally using props:
+    const App = ({tag=React.fragment}) => {
+        return (
+            <tag>hey</tag>
+        )
+    }
+
+///////////////////////////////////////////////////////////
+<ul>
+  {["first", "second"].map((item) => (
+    <li>{item}</li>
+  ))}
+</ul>
+
+That's equivalent to providing a literal array.
+
+<ul>
+  {[
+    <li>first</li>,
+    <li>second</li>,
+  ]}
+</ul>
+////////////////////////////////////////////////////////////
+
+React.Children.only. only allows us to return this.props.children if 
+there is only one child. Otherwise, it throws an error.
+    render() {
+        return React.Children.only(this.props.children)
+    }

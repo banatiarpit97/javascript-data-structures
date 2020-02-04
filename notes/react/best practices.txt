@@ -23,3 +23,44 @@ that object into a new one using spread operator like a={...b}.
 
 Since react/redux checks refernce of an array/object to detect changes and re-render a component,
 we can re-render a component without changing its properties
+////////////////////////////////////////////////////////////////////////
+if we want to render something based on width of screen, we can make a
+separate component fior that:
+    const WindowWidth = ({children}) => {
+        const [width, setWidth] = useState(0);
+
+        useEffect(() => {
+            setWidth(window.innerWidth);
+            window.addEventListener('resize', ({ target }) => setWidth(target.innerWidth));
+        }, []);
+
+        return children(width);
+    }
+
+    and use it like:
+        <WindowWidth>
+            {width => width > 600 ? <div>big screen</div> : <div>small screen</div>}
+        </WindowWidth>
+
+////////////////////////////////////////////////////////////////////
+We can pass complete props to a child using desctructuring:
+    const App = (props) => {
+        return <Child {...props} />
+    }
+
+this can also be used to pass attributes to a element:
+    //props = {name: 'arpit', className="big", 'data-age'="20"}
+    const App = ({name, ...props}) => { 
+        return <div {...props}>{name}</div>
+    }
+
+this can be used to make some proxy elements:
+    Buttons are everywhere in web apps. And every one of them must have the 
+    type attribute set to "button". Writing this attribute hundreds of times is error prone. 
+
+    const Button = props => (<button type="button" {...props}>)
+
+    and use like:
+        <Button className="CTA">Send Money</Button>
+
+

@@ -258,6 +258,13 @@ PROBLEMS IN PROMISES :
         }
 
 if you want to execute something in both then and catch, instead do that in finally
+
+res.json() and res.text() returns a promise
+
+response returned from promise can only be converted to json or text once i.e.
+we can only call res.json() or res.text() once for every response
+If we need to do it more than once, we can clone the response like
+res.clone().json()
 ////////////////////////////////////////////////////////////////////////////
 
 ASYNC-AWAIT functions(uses implicit promises):

@@ -1,0 +1,34 @@
+Event delegation is handling events at the parent rather than at children.
+This is possible because of event bubbling i.e. event propagates up to its parents.
+
+Why do we use this:
+Instead of adding listeners to each children, we can add 1 listener to the
+parent and all the events on its children will be handled by it.
+
+Advantages:
+less memory requirements
+less code
+no need to worry about dynamically added children
+
+disadvantages:
+all events are not bubbled i.e. blur, focus, scroll, resize etc
+if we use stop propagation, then event delegation will not work.
+
+eg.
+<ul>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+</ul>
+now instead of applying click handler to all the li, we can add 1 handler to ul
+that will take care of all li.
+using e.target, we can get the actual element/child on which event took place.
+
+document.querySelector('ul').addEventListener('click', function(e){
+    if(e.target.innerHTML === '1'){
+        ...
+    }   
+    if(e.target.innerHTML === '2'){
+        ...
+    }
+})

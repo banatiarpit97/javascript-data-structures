@@ -6,22 +6,41 @@ if we use defualt exprt then anonymous function can also be exported otherwise n
     this module imprt behaves like defer script load
     type="module" is loaded in strict mode
 ////////////////////////////////////////////////////////////////////////////
-While importing, it is necesarry to give absolute or relative path
-import {foo} from '/index.js'     or
-import {foo} from './index.js'     
-import {foo} from 'index.js'     //wrong
-////////////////////////////////////////////////////////////////////////////
-renaming an import using 'as'
-import {foo as arpit} from '/index.js'
-////////////////////////////////////////////////////////////////////////////
-importing default export
-import boo from './index.js'
+// Name Export | Name Import
+export const name = 'value'
+import { name } from '...'
 
-importing non-default or named export
-import {foo} from './index.js'
+// Default Export | Default Import
+export default 'value'
+import anyName from '...'
 
-both:
-import boo, {foo} from './index.js'
+// Mixing exports 
+export const name = 'value';
+export default 'value'
+import anyName, { name } from '...';
+
+// Export List + Rename | Import List + Rename
+export {
+  name1,
+  name2 as newName2
+}
+import {
+  name1 as newName1,        
+  newName2
+} from '...'
+
+console.log(name1) //undefined, original name can not be used after renaming
+console.log(newName1) //actual value
+console.log(name2) //undefined, original name can not be used after renaming
+console.log(newName2) //actual value
+
+//Import all
+export const name = 'value';
+export default 'defaultValue';
+
+import * as anyName from '...';
+console.log(anyName.name); // 'value'
+console.log(anyName.default); // 'defaultValue'
 ////////////////////////////////////////////////////////////////////////////
 Modules are fetched usin CORS that is they must have a valid cors header
 ////////////////////////////////////////////////////////////////////////////
@@ -49,3 +68,24 @@ what works:
 what does not work:
 	export default {a:1}
 	import {a} from ''
+///////////////////////////////////////////////////////////////
+No Variable Declaration with Default
+export default const name = 'value'; // Error,don't try to give me a name!
+
+//////////////////////////////////////////////////////////////
+One important thing to note is that these lists are NOT objects. 
+Yes, I know it looks like it. But it isn't. I made this confusion when I 
+first learned modules. It's not an object, it's an export list!
+    // Export list ≠ Object
+    export {
+        name: 'name'
+    }
+
+//////////////////////////////////////////////////////
+Can not combine inline export with export list
+export const name = 'value';
+
+// You're already exporting name ☝️, don't export me again
+export {
+  name
+}
