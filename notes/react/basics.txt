@@ -96,3 +96,8 @@ React strict mode:
 wrap components inside <StrictMode />
     it will warn us for depreacated features and prevent side effects by
     identifying potential risks
+/////////////////////////////////////////////////////
+Children are rendered before the parent i.e. componentDidMount of children is executed before 
+the parent. Firstly componentDidMount of all the children will run in theor order and then the 
+componentDidMount of parent will run.
+Think of it like this ->  parent is completely rendered only when all of its children will be rendered

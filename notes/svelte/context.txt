@@ -1,0 +1,25 @@
+Perhaps 2 components are so distant
+in the components tree that we'd have to move state up to the top-level component.
+
+if you want to let multiple components communicate with descendants, but you don't want to
+pass props around.
+
+///////////////////////////////////////////////////////////////////
+set value in context:
+    <script>
+        import { setContext } from 'svelte'
+
+        const someObject = {}
+        setContext('someKey', someObject)
+    </script>
+
+//////////////////////////////////////////////////////////////
+get value from context:
+    <script>
+        import { getContext } from 'svelte'
+
+        const someObject = getContext('someKey')
+    </script>
+
+//////////////////////////////////////////////////////////////
+we can only read the context value in the descendants of the component in which context was set.

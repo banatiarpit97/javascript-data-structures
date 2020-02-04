@@ -177,3 +177,4 @@ Now import this function inside component file and call this function inside the
 functional component.(IT NEEDS TO BE CALLED INSIDE THE FUNCTION ONLY) and we will have
 the shared state and logic
 ///////////////////////////////////////////////////////////////////
+useEffect does not work with ref value, we have to use w=it with state variables

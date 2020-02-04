@@ -1,0 +1,71 @@
+if we don't want to pass props around and also don't want to use context(since context can only be viewed by 
+the descendants), we have a third option called stores.
+
+Stores are global and can be accessed from anywhere in our app
+
+We can define the stores in a separate file(.js file, no need for .svelte file)
+////////////////////////////////////////////////////////////////////////
+
+writable store:
+    import { writable } from 'svelte/store';
+    export const username = writable('Guest');
+    ////////////////////
+    value of this variable can be set to a new value using set() , passing the new value:
+        username.set('new username')
+    ////////////////////
+    it can be updated using the update() function, which differs from set() because you don't just pass 
+    the new value to it - you run a callback function that is passed the current value as its argument:
+        username.update(existing => {
+            console.log(existing);
+            return 'new username';
+        })
+    ////////////////////
+    To get the value of the store variable once, you can use the get() function exported by svelte/store :
+        import { writable, get } from 'svelte/store';
+        
+        export const username = writable('Guest');
+        get(username);
+    ////////////////////
+    instead of using 'get' function, we can append '$' to the store variable and it will work the same
+        get(username) is same as $username
+        if we use $username in our component, the component will re render with the latest value of username
+        whenever value of username changes
+    ////////////////////
+    instead of using $ for listening to changes of store variable, we can also use the subscribe method in our component:
+        username.subscribe(newValue => {
+            console.log(newValue)
+        })
+
+////////////////////////////////////////////////////////////////////////
+Readable store:
+    they can't be updated from the outside - there's no set() or update() method. Instead, once you set 
+    the initial state, they can't be modified from the outside.
+        import { readable } from 'svelte/store';
+        export const count = readable(0);
+
+    //////////
+    You can provide a function after the default value, that will be responsible for updating it. This
+    function receives the set function to modify the value:
+        export const count = readable(0, set => {
+            setInterval(() => {
+                set(get(count) + 1);
+            }, 1000);
+        });
+    ///////////////
+    using readable store value is same as writable.
+
+////////////////////////////////////////////////////////////////////////
+Derived store:
+    A derived store allows you to create a new store value that depends on the value of an existing store.
+
+    You can do so using the derived() function exported by svelte/store which takes as its first
+    parameter the existing store value, and as a second parameter a function which receives that
+    store value as its first parameter:
+        import { writable, derived } from 'svelte/store';
+
+        export const username = writable('Guest');
+        export const welcomeMessage = derived(username, $username => {
+            return `Welcome ${$username}`
+        })
+    ///////////////
+    using derived store value is same as writable and readable.
