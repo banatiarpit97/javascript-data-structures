@@ -13,6 +13,9 @@ If we want something to happen, when a particular state variable changes, then w
         $: {
             console.log(`the count is ${count}`)
             console.log(`double the count is ${count * 2}`)
+            if(count > 10){
+                count = 9;
+            }
         }
 
     we can multiple '$:' in our component, and we can use them to fire functions, update other

@@ -1,3 +1,12 @@
+We can use js inside html template using {}
+    <p>hello {name}</p> will insert the value of js variable 'name'
+we can also use js function like Date etc:
+    <p>hello {name.toUpperCase()}</p>
+We can also use dynamic values on attributes of html elements:
+    <img src={src} />
+    if name of attribute and variable are same, we can use shorthand:
+        <img {src} />
+///////////////////////////////////////////////////////////
 If condition:
     <script>
         let isRed = true
@@ -26,6 +35,7 @@ loop:
 
     When dynamically editing the lists removing and adding elements, you should always pass an
     identifier in lists, to prevent issues:
+    Chose a key that is unique and remains for a particular element
         <script>
             let goodDogs = [
                 { id: 1, name: 'Roger'},
@@ -33,7 +43,7 @@ loop:
             ]
         </script>
 
-        {#each goodDogs as goodDog (goodDog.id)}
+        {#each goodDogs as goodDog (goodDog.id)}    
             <li>{goodDog.name}</li>
         {/each}
 
@@ -41,6 +51,14 @@ loop:
         {#each goodDogs as goodDog, index (goodDog.id)}
             <li>{goodDog.name}</li>
         {/each}
+
+        we can also destructure it before like:
+            {#each goodDogs as {name, color} (goodDog.id)}    
+
+    we can loop over any array like structure(that has length property)
+    can loop over generic iterables with each [...iterable].
+
+    Svelte uses map internally
 
 ///////////////////////////////////////////////////////////////
 await:
@@ -63,3 +81,14 @@ await:
         {:catch error}          //error is rejected error value
             <p>An error occurred!</p>
         {/await}
+
+    we can omit catch block if the promise does not reject
+
+    if we want to show nothing while promise in pending:
+        {#await promise then value}
+            <p>the value is {value}</p>
+        {/await}
+
+//////////////////////////////////////////////////////////////////
+A # character always indicates a block opening tag. A / character always indicates a 
+block closing tag. A : character, as in {:else}, indicates a block continuation tag.
