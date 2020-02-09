@@ -4,6 +4,8 @@ in the components tree that we'd have to move state up to the top-level componen
 if you want to let multiple components communicate with descendants, but you don't want to
 pass props around.
 
+Since context is not reactive, values that change over time should be represented as stores
+
 ///////////////////////////////////////////////////////////////////
 set value in context:
     <script>

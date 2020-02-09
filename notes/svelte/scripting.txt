@@ -23,6 +23,15 @@ exporting functions from .svelte component file:
     we can still have normal script tag with the context script tag that will be used 
     by the component itself;
 
+    Code contained inside it will run once, when the module first evaluates, 
+    rather than when a component is instantiated.
+    we can use this to manage different instances of the same component by defining a conetext
+    module inside that component because no matther how many instances of that component is made,
+    the context module will be common to all and will retain its value everytime
+
+    You can't have a default export in conetext module, because the component is the default export.
+
+
 ////////////////////////////////////////////////////////////////
 Component state:
     any variable defined inside the script tag of svelett file can be used as a state
@@ -67,4 +76,8 @@ Component state:
 
         apart from assignment, increment operator also works - i++, a[1]++;
 
+    When you invalidate component state in Svelte, it doesn't update the DOM immediately. 
+    Instead, it waits until the next microtask to see if there are any other changes that 
+    need to be applied, including in other components. Doing so avoids unnecessary work 
+    and allows the browser to batch things more effectively.
 ////////////////////////////////////////////////////////////////////////////////

@@ -10,3 +10,6 @@
     trust, otherwise you risk exposing your users to XSS attacks
 
 ////////////////////////////////////////////////////////////////////
+{@debug ...} tag 
+    use with a comma-separated list of values you want to inspect:
+        {@debug user}

@@ -1,5 +1,8 @@
 Using Svelte you can create a two-way binding between data and the UI.
 
+we could add an on:input event handler that sets the value of name to event.target.value, 
+but it's a bit... boilerplatey, hence the bindings.
+
 use let/var for bindings and not const, since value of const can not be changed
 ////////////////////////////////////////////////////////////////
 bind:value:
@@ -21,6 +24,20 @@ bind:value:
             <option value="2">2</option>
             <option value="3">3</option>
         </select>
+
+    Because we haven't set an initial value of selected, the binding will set it to the 
+    default value (the first in the list) automatically. Be careful though — until the 
+    binding is initialised, selected remains undefined, so we can't blindly reference 
+    e.g. selected.id in the template.
+
+    ///////////////////////////////
+    In the DOM, everything is a string. That's unhelpful when you're dealing with 
+    numeric inputs — type="number" and type="range" — as it means you have to 
+    remember to coerce input.value before using it.
+    With bind:value, Svelte takes care of it for you that means if we bind value of number
+    type input, svelte will automatically convert the variable to number.
+
+    bind:value works for textarea the same way it works for input
 
 bind:checked:
     <script>
@@ -68,6 +85,9 @@ bind:this :
         </script>
         <input bind:this={myInputField} />
 
+    Note that the value of the variable 'myInputField' will be undefined until the 
+    component has mounted, so we put the logic inside the onMount
+
 binding to component props: (imp)
     To sync values between parent and child component
     using normal prop system, if parent value changes, then the updated value reaches the child
@@ -82,6 +102,14 @@ binding to component props: (imp)
 
         <script>
             import Car from './Car.svelte';
-        let carInMovement;
+            let carInMovement;
         </script>
         <Car bind:inMovement={carInMovement} />
+
+    Use component bindings sparingly. It can be difficult to track the flow of data around 
+    your application if you have too many of them, especially if there is no 'single source 
+    of truth'.
+
+//////////////////////////////////////////////////////////////
+shorthand for bind(variable name should be same as attribute to be bound):
+    bind:value={value} can be replaced by bind:value

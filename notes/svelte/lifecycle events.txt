@@ -5,6 +5,9 @@ onDestroy -> fired after the component is destroyed
           -> clean up data or stop timers
 
 beforeUpdate -> fired before the DOM is updated
+             -> beforeUpdate will first run before the component has mounted, 
+                so we need to check for the existence of 
+
 afterUpdate -> fired after the DOM is updated
 
 We don't have access to any of those methods by default, but we need to import them from
@@ -27,3 +30,34 @@ if we return a function from onMount, it works as onDestroy
             //do something on destroy
         }
     })
+
+///////////////////////////////////////////////////////////
+It's recommended to put the fetch in onMount rather than at the top level of the <script> 
+because of server-side rendering (SSR). With the exception of onDestroy, lifecycle functions 
+don't run during SSR, which means we can avoid fetching data that should be loaded lazily 
+once the component has been mounted in the DOM.
+
+////////////////////////////////////////////////////////////
+While it's important to call lifecycle functions during the component's initialisation, 
+it doesn't matter where you call them from. So if we wanted, we could abstract the lifecycle
+function into a different file and then import that file in our component and call the function.
+
+    helper.js:
+        import {onMount} from 'svelte';
+
+        export const setup = () => {
+            onMount(() => console.log('mount'))
+        }
+    
+    component.svelte:
+        import {setup} from './helper.js';
+
+        setup();
+//////////////////////////////////////////////////////////
+tick:
+    The tick function is unlike other lifecycle functions in that you can call it any time, 
+    not just when the component first initialises. It returns a promise that resolves as 
+    soon as any pending state changes have been applied to the DOM (or immediately, if 
+    there are no pending state changes).
+
+    using await tick() will stop the execution of script until the next state is rendered

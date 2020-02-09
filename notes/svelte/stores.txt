@@ -2,6 +2,8 @@ if we don't want to pass props around and also don't want to use context(since c
 the descendants), we have a third option called stores.
 
 Stores are global and can be accessed from anywhere in our app
+values that need to be accessed by multiple unrelated components, or by a regular 
+JavaScript module can be stored in store.
 
 We can define the stores in a separate file(.js file, no need for .svelte file)
 ////////////////////////////////////////////////////////////////////////
@@ -30,11 +32,21 @@ writable store:
         get(username) is same as $username
         if we use $username in our component, the component will re render with the latest value of username
         whenever value of username changes
+        For setting the store value, instead of set, we can directly reassign $username:
+            $username = 'a' is same as username.set('a');
+        You're not limited to using $count inside the markup, either — you can use it anywhere 
+        in the <script> as well, such as in event handlers or reactive declarations.
+
+        If a store is writable — i.e. it has a set method — you can bind to its value, just 
+        as you can bind to local component state:
+            <input bind:value={$name}>
+
     ////////////////////
     instead of using $ for listening to changes of store variable, we can also use the subscribe method in our component:
-        username.subscribe(newValue => {
+        const unsubscribe = username.subscribe(newValue => {
             console.log(newValue)
-        })
+        });
+        and in onDestroy call unsubscribe();
 
 ////////////////////////////////////////////////////////////////////////
 Readable store:
@@ -45,11 +57,18 @@ Readable store:
 
     //////////
     You can provide a function after the default value, that will be responsible for updating it. This
-    function receives the set function to modify the value:
+    The second argument is a start function that takes a set callback and returns a stop function.
+    The start function is called when the store gets its first subscriber; stop is called 
+    when the last subscriber unsubscribes.
+    
         export const count = readable(0, set => {
             setInterval(() => {
                 set(get(count) + 1);
             }, 1000);
+
+            return function stop() {
+                clearInterval(interval);
+            };
         });
     ///////////////
     using readable store value is same as writable.
@@ -67,5 +86,24 @@ Derived store:
         export const welcomeMessage = derived(username, $username => {
             return `Welcome ${$username}`
         })
+
+        to use more than 1 input to create a derived store:
+            store = derived([a, ...b], callback: ([a: any, ...b: any[]]) => any)
+
     ///////////////
     using derived store value is same as writable and readable.
+
+///////////////////////////////////////////////////////////////////////
+As long as an object correctly implements the subscribe method, it's a store.
+    function createCount() {
+        const { subscribe, set, update } = writable(0);
+
+        return {
+            subscribe,
+            increment: () => update(n => n + 1),
+            decrement: () => update(n => n - 1),
+            reset: () => set(0)
+        };
+    }
+
+/////////////////////////////////////////////////////////////////////
