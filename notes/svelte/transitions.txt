@@ -1,0 +1,141 @@
+We can make more appealing user interfaces by gracefully transitioning elements 
+into and out of the DOM. Svelte makes this very easy with the transition directive.
+
+    	import { fade } from 'svelte/transition';
+        let visible = true;
+
+        ...
+        {#if visible}
+            <p transition:fade>
+                Fades in and out
+            </p>
+        {/if}
+
+    everything else will be taken care by svelte
+    While inserting html into dom or while removing it using state variables, svelte will fisrt
+    show the transition and the add/remove that html element
+
+    Note that the transition is reversible — if you toggle the state while the transition 
+    is ongoing, it transitions from the current point, rather than the beginning or the end.
+
+///////////////////////////////////////////
+Adding parameters:
+    <p transition:fly={{ y: 200, duration: 2000 }}>
+
+//////////////////////////////////////////
+Instead of the transition directive, an element can have an in or an out directive, 
+or both together.
+    <p in:fly={{ y: 200, duration: 2000 }} out:fade>
+
+In this case, the transitions are not reversed.
+
+//////////////////////////////////////////
+
+Custom CSS transition:
+    this is the source of the fade transition:
+        function fade(node, {
+            delay = 0,
+            duration = 400
+        }) {
+            const o = +getComputedStyle(node).opacity;
+
+            return {
+                delay,
+                duration,
+                css: t => `opacity: ${t * o}`
+            };
+        }
+
+    The function takes two arguments — the node to which the transition is applied, 
+    and any parameters that were passed in — and returns a transition object which can 
+    have the following properties:
+        delay — milliseconds before the transition begins
+        duration — length of the transition in milliseconds
+        easing — a p => t easing function (see the chapter on )
+        css — a (t, u) => css function, where u === 1 - t
+        tick — a (t, u) => {...} function that has some effect on the node
+
+    The t value is 0 at the beginning of an intro or the end of an outro, and 1 at the end 
+    of an intro or beginning of an outro.
+
+    Most of the time you should return the css property and not the tick property, 
+    as CSS animations run off the main thread to prevent jank where possible. 
+    Svelte 'simulates' the transition and constructs a CSS animation, then lets it run.
+
+///////////////////////////////////////////
+Custom JS animations:
+    While you should generally use CSS for transitions as much as possible, 
+    there are some effects that can't be achieved without JavaScript, 
+    such as a typewriter effect:
+        function typewriter(node, { speed = 50 }) {
+            const text = node.textContent;
+            const duration = text.length * speed;
+
+            return {
+                duration,
+                tick: t => {
+                    const i = ~~(text.length * t);
+                    node.textContent = text.slice(0, i);
+                }
+            };
+        }
+
+//////////////////////////////////
+listen to transition events:
+    It can be useful to know when transitions are beginning and ending. 
+    Svelte dispatches events that you can listen to like any other DOM event:
+
+        <p
+            transition:fly="{{ y: 200, duration: 2000 }}"
+            on:introstart="{() => status = 'intro started'}"
+            on:outrostart="{() => status = 'outro started'}"
+            on:introend="{() => status = 'intro ended'}"
+            on:outroend="{() => status = 'outro ended'}"
+        >
+
+///////////////////////////////
+Local transitions:
+    When we want child components to have their own transitions and only when they are added
+    or removed, not when their parent/container is added or removed like adding items to a list,
+    we want to show animation while adding/removing items to list but not when the complete list
+    is being added or removed
+
+    Instead, we'd like transitions to play only when individual items are added and 
+    removed — in other words, when the user drags the slider.
+
+    We can achieve this with a local transition, which only plays when the immediate 
+    parent block is added or removed:
+        <div transition:slide|local>
+
+/////////////////////////////////////
+Deffered transition:
+    A particularly powerful feature of Svelte's transition engine is the ability 
+    to defer transitions, so that they can be coordinated between multiple elements.
+
+    We can achieve this effect using the crossfade function, which creates a pair of 
+    transitions called send and receive. When an element is 'sent', it looks for a 
+    corresponding element being 'received', and generates a transition that transforms 
+    the element to its counterpart's position and fades it out. When an element is 
+    'received', the reverse happens. If there is no counterpart, the fallback transition is used.
+        
+        import { crossfade } from 'svelte/transition';
+        const [send, receive] = crossfade({
+            duration: d => Math.sqrt(d * 200),
+
+            fallback(node, params) {
+                const style = getComputedStyle(node);
+                const transform = style.transform === 'none' ? '' : style.transform;
+
+                return {
+                    duration: 600,
+                    css: t => `
+                        transform: ${transform} scale(${t});
+                        opacity: ${t}
+                    `
+                };
+            }
+        });
+        <label
+            in:receive={{key: todo.id}}
+            out:send={{key: todo.id}}
+        >

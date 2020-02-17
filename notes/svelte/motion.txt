@@ -1,0 +1,52 @@
+If we want our state variables to change gradually or have some delay, we decalre those
+variables using motion like tweened or spring.
+This helps us show some transition between states like progress bar or size change etc...
+
+Tweened:
+    if we want new value to replace old value gradually and not suddenly.
+
+    import { tweened } from 'svelte/motion';
+	const progress = tweened(0);
+
+    changing value:
+        progress.set(1);
+
+    The full set of options available to tweened:
+    delay — milliseconds before the tween starts
+    duration — either the duration of the tween in milliseconds, or a 
+                (from, to) => milliseconds function allowing you to (e.g.) specify 
+                longer tweens for larger changes in value
+    easing — a p => t function
+    interpolate — a custom (from, to) => t => value function for interpolating 
+                    between arbitrary values. By default, Svelte will interpolate between numbers, 
+                    dates, and identically-shaped arrays and objects (as long as they only contain 
+                    numbers and dates or other valid arrays and objects). 
+                    If you want to interpolate (for example) colour strings or 
+                    transformation matrices, supply a custom interpolator
+
+    You can also pass these options to progress.set and progress.update as a second argument, 
+    in which case they will override the defaults. The set and update methods both return a 
+    promise that resolves when the tween completes.
+
+    We can access/read the tweened variable by appending $ like $progress
+
+////////////////////////////////////////////////////////////
+
+Spring:
+    The spring function is an alternative to tweened that often works better for 
+    values that are frequently changing.
+
+        import { spring } from 'svelte/motion';
+        let coords = spring({ x: 50, y: 50 });
+
+    Both springs have default stiffness and damping values, which control the spring's, 
+    well... springiness. We can specify our own initial values:
+        let coords = spring({ x: 50, y: 50 }, {
+            stiffness: 0.1,
+            damping: 0.25
+        });
+
+    stiffness and damping can be directly changed or bound using coords.stiffness and coords.damping
+
+    We can use set and update like in tweened to updated actual values of spring variable.
+    We can access/read the spring variable by appending $ like $coords.x
