@@ -1,0 +1,12 @@
+    import { flip } from 'svelte/animate';
+
+    <label animate:flip>
+
+    we can also provide duration as parameter:
+        <label animate:flip={{duration: 200}}>
+
+        duration can also be a d => milliseconds function, where d is the number of 
+        pixels the element has to travel
+
+Note that all the transitions and animations are being applied with CSS, 
+rather than JavaScript, meaning they won't block (or be blocked by) the main thread.
