@@ -1,0 +1,23 @@
+They are delimited by slashes:
+    /^abc$/
+    /[A-Za-z0-9]+/
+
+Methods:
+
+    test(): Is There a Match?
+        > /^a+b+$/.test('aaab')
+        true
+
+    exec(): Match and Capture Groups
+        > /a(b+)a/.exec('_abbba_aba_')
+        [ 'abbba', 'bbb' ]
+
+        The returned array contains the complete match at index 0, the capture of the 
+        first group at index 1, and so on.
+
+    Method replace(): Search and Replace
+        > '<a> <bbb>'.replace(/<(.*?)>/g, '[$1]')
+        '[a] [bbb]'
+
+        The first parameter of replace must be a regular expression with a /g flag; otherwise, 
+        only the first occurrence is replaced

@@ -152,3 +152,12 @@ userCreator.prototype.increment = function(){
 }
 const user1 = new userCreator('arpit', 5);
 user1.increment()
+
+/////////////////////////////////////////////////////////////////////////////////
+Function inside function:
+    if we define a function inside another function than value of 'this' inside inner function
+    my be different depending on how we call it.
+
+    Function expressions are often used as arguments in function calls in JavaScript. 
+    Always be careful when you refer to this from one of those function expressions.
+

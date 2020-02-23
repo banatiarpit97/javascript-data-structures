@@ -94,6 +94,11 @@ rest - When we want to combine many elements in an array
 arrays are also objects with properties '0', '1', '2'... i.e. index number
 
 typeof([])  //'object'
+[] instanceof Array		//true
+[] instanceof Object		//true
+
+arrays in JavaScript are too flexible: they are not indexed sequences of elements, 
+but maps from numbers to elements.
 ////////////////////////////////////////////////////////////
 'find' methods iterates over an array and stopes/returns automatically when any item is matched with the condition
 //////////////////////////////////////////////////////////////
@@ -115,3 +120,11 @@ is added to array like object
 	a[1.5]	//undefined
 	a[1.5] = 3
 	a	//[1,2, '1.5':3]
+
+///////////////////////////////////////////////////////////////
+The in operator works for arrays, too:
+	> var arr = [ 'a', 'b', 'c' ];
+	> 1 in arr // is there an element at index 1?
+	true
+	> 5 in arr // is there an element at index 5?
+	false

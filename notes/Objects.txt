@@ -203,3 +203,26 @@ while destructuring objects, if we want to rename a property ob the object, we u
     dog //undefined
     animal  //bark
 ////////////////////////////////////////////////////////////////////////////////////////
+
+Extracting methods from objects:
+If you extract a method, it loses its connection with the object. On its own, the function 
+is not a method anymore, and this has the value undefined (in strict mode).
+
+    var jane = {
+        name: 'Jane',
+        describe: function () {
+            return 'Person named '+this.name;
+        }
+    };
+We want to extract the method describe from jane, put it into a variable func, 
+and call it. However, that doesn’t work:
+    > var func = jane.describe;
+    > func()
+    TypeError: Cannot read property 'name' of undefined
+
+The solution is to use the method bind() that all functions have. It creates a new function 
+whose this always has the given value:
+    > var func2 = jane.describe.bind(jane);
+    > func2()
+    'Person named Jane'
+////////////////////////////////////////////////////////////////////////////////////////
