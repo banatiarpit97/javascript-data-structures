@@ -1,0 +1,13 @@
+There are two kinds of comments:
+
+Single-line comments via // extend to the rest of the line. Here’s an example:
+    var a = 0; // init
+
+Multiline comments via /* */ can extend over arbitrary ranges of text. They cannot be nested. 
+
+    /* temporarily disabled
+    processNext(queue);
+    */
+
+    function (a /* int */, b /* str */) {
+    }

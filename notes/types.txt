@@ -1,0 +1,275 @@
+there are 6 types:
+    Undefined, Null
+    Boolean, String, Number, and
+    Object
+
+Constructors technically don’t introduce new types, even though they are said to have instances.
+
+///////////////////////////////////////////
+Static Typing Versus Dynamic Typing
+    static usually means “at compile time” or “without running a program,” while dynamic 
+    means “at runtime.”
+
+    JavaScript performs a very limited kind of dynamic type checking:
+        > var foo = null;
+        > foo.prop
+        TypeError: Cannot read property 'prop' of null
+
+    Mostly, however, things silently fail or work. For example, if you access a property 
+    that does not exist, you get the value undefined:
+        > var bar = {};
+        > bar.prop
+        undefined
+
+/////////////////////////////////////////////////////////////////////////////
+Primitive Values Versus Objects
+    booleans, numbers, strings, null, and undefined
+    All other values are objects.(plain obj, arrays, regex)
+
+    A major difference between the two is how they are compared; each object has a 
+    unique identity and is only (strictly) equal to itself(Compared by reference):
+        > var obj1 = {};  // an empty object
+        > var obj2 = {};  // another empty object
+        > obj1 === obj2
+        false
+
+        > var obj3 = obj1;
+        > obj3 === obj1
+        true
+
+    In contrast, all primitive values encoding the same value are considered the same:
+        > var prim1 = 123;
+        > var prim2 = 123;
+        > prim1 === prim2
+        true
+
+    Primitive values are always immutable:
+        str.length = 1; //no effect
+        str.foo = 3     //no effect
+
+    Object values are mutable:
+        > var obj = {};
+        > obj.foo = 123; // add property `foo`
+
+    We can NOT define our own primitive values
+    We can define new objects using Constructors
+
+/////////////////////////////////////////////////////////////////////////
+
+undefined and null
+
+JavaScript has two “nonvalues” that indicate missing information, undefined and null:
+
+undefined means “no value” (neither primitive nor object). Uninitialized variables, 
+missing parameters, and missing properties have that nonvalue. And functions implicitly 
+return it if nothing has been explicitly returned.
+used to remove an object property or array element
+
+
+null means “no object.” It is used as a nonvalue where an object is expected 
+(as a parameter, as a member in a chain of objects, etc.).
+null is returned by RegExp.prototype.exec() if there was no match for the regular 
+expression in the string
+
+undefined and null are the only values for which any kind of property access results 
+in an exception(even accessing a property of integer or string also gives undefined but not error)
+    TypeError: Cannot read property 'foo' of null
+    TypeError: Cannot read property 'foo' of undefined
+
+Number(null) = 0
+Number(undefined) = NaN
+is one of the reason null and undefined are kept different
+
+undefined is a property of the global object (and thus a global variable). 
+Under ECMAScript 3, you had to take precautions when reading undefined, because it was 
+easy to accidentally change its value. Under ECMAScript 5, that is not necessary, 
+because undefined is read-only.
+
+To protect against a changed undefined, two techniques were popular 
+(they are still relevant for older JavaScript engines):
+    Technique 1
+        undefined is guaranteed to have the right value, because it is a parameter 
+        whose value has not been provided by the function call.
+            (function (undefined) {
+                if (x === undefined) ...  // safe now
+            }());  // don’t hand in a parameter
+
+    Technique 2
+        Compare with void 0, which is always (the correct) undefined:
+            if (x === void 0)  // always safe
+
+////////////////////////////////////////////////////////////////////////////////
+
+Coercion:
+    Coercion means implicit type conversion.
+
+    JavaScript’s built-in conversion mechanisms support only the types Boolean, 
+    Number, String, and Object. There is no standard way to convert an instance of 
+    one constructor to an instance of another constructor.
+
+//////////////
+Wrapper Objects for Primitives
+The three primitive types boolean, number, and string have corresponding constructors: 
+Boolean, Number, String. Their instances (so-called wrapper objects) contain (wrap) 
+primitive values. The constructors can be used in two ways:
+
+    As constructors, they create objects that are largely incompatible with the primitive 
+    values that they wrap:
+        new String('abc')       //object
+
+    As functions, they convert values to the corresponding primitive types. 
+    This is the recommended method of conversion:
+        String(123)     //primitive value('123')
+
+It’s considered a best practice to avoid wrapper objects. You normally don’t need them, as 
+there is nothing that objects can do that primitives can’t (with the exception of being mutated)
+
+    > typeof 'abc' or typeof String('abc')  // a primitive value
+        'string'
+    > typeof new String('abc')  // an object
+        'object'
+    > 'abc' instanceof String  // never true for primitives
+        false
+    > 'abc' === new String('abc')
+        false
+    > 'abc' == new String('abc')
+        true(can not compare 2 references with == but can compare primitive and reference)
+
+//////////////
+There is one use case for wrapper objects: you want to add properties to a primitive value. 
+Then you wrap the primitive and add properties to the wrapper object. You need to unwrap 
+the value before you can work with it.
+
+Wrap a primitive by invoking a wrapper constructor:
+    new Boolean(true)
+    new Number(123)
+    new String('abc')
+
+Unwrap a primitive by invoking the method valueOf(). All objects have this method
+    > new Boolean(true).valueOf()
+    true
+    > new Number(123).valueOf()
+    123
+    > new String('abc').valueOf()
+    'abc'
+
+Converting wrapper objects to primitives properly extracts numbers and strings, but not booleans:
+    > Boolean(new Boolean(false))  // does not unwrap
+    true
+    > Number(new Number(123))  // unwraps
+    123
+    > String(new String('abc'))  // unwraps
+    'abc'
+
+///////////////////////////
+Primitives Borrow Their Methods from Wrappers
+
+Primitives don’t have their own methods and borrow them from wrappers:
+    > 'abc'.charAt === String.prototype.charAt
+    true
+
+Sloppy mode and strict mode handle this borrowing differently. In sloppy mode, 
+primitives are converted to wrappers on the fly:
+    String.prototype.sloppyMethod = function () {
+        console.log(typeof this); // object
+        console.log(this instanceof String); // true
+    };
+    ''.sloppyMethod(); // call the above method
+
+In strict mode, methods from the wrapper prototype are used transparently(functions are used without converting):
+    String.prototype.strictMethod = function () {
+        'use strict';
+        console.log(typeof this); // string
+        console.log(this instanceof String); // false
+    };
+    ''.strictMethod(); // call the above method
+
+/////////////////////
+Type coersion:
+    > '3' * '4'
+        12
+    > 3 + ' times'
+        '3 times'
+
+///////////////////
+Function for conversion:
+    Boolean()
+        Boolean(undefined, null, false, 0, NaN, '') = false
+        All other values are considered “truthy” and converted to true (including all objects)
+
+    Number()
+        undefined becomes NaN.
+        null becomes 0.
+        false becomes 0, true becomes 1.
+        Strings are parsed.
+            Number('1') = 1, Number('a') = NaN
+        Objects are first converted to primitives, which are then converted to numbers.
+            Number({}) = NaN
+
+    String()
+        > String(null)
+        'null'
+        > String(123.45)
+        '123.45'
+        > String(false)
+        'false'
+        > String(1)
+        '1'
+        > String({})
+        "[object Object]"'
+        Objects are first converted to primitives, which are then converted to strings.
+
+////////////////////////
+
+Algorithm: ToPrimitive()—Converting a Value to a Primitive
+
+To convert a value to either a number or a string, it is first converted to an 
+arbitrary primitive value, which is then converted to the final type.
+
+The ECMAScript specification has an internal function, ToPrimitive() 
+(which is not accessible from JavaScript), that performs this conversion. 
+Understanding ToPrimitive() enables you to configure how objects are converted to 
+numbers and strings. It has the following signature:
+
+    ToPrimitive(input, PreferredType?)
+    The optional parameter PreferredType indicates the final type of the conversion: 
+    it is either Number or String, depending on whether the result of ToPrimitive() 
+    will be converted to a number or a string.
+
+    If PreferredType is Number, then you perform the following steps:
+        If input is primitive, return it (there is nothing more to do).
+        Otherwise, input is an object. Call input.valueOf(). If the result is primitive, return it.
+        Otherwise, call input.toString(). If the result is primitive, return it.
+        Otherwise, throw a TypeError (indicating the failure to convert input to a primitive).
+        
+    If PreferredType is String, steps 2 and 3 are swapped. 
+
+    The PreferredType can also be omitted; it is then considered to be String for dates 
+    and Number for all other values. This is how the operators + and == call ToPrimitive().
+
+    The default implementation of valueOf() returns this, while the default implementation 
+    of toString() returns type information:
+        > var empty = {};
+        > empty.valueOf() === empty
+        true
+        > empty.toString()
+        '[object Object]'
+
+    Therefore, Number() skips valueOf() and converts the result of toString() 
+    to a number; that is, it converts '[object Object]' to NaN:
+
+    The following object customizes valueOf(), which influences Number(), but doesn’t 
+    change anything for String():
+        > var n = { valueOf: function () { return 123 } };
+        > Number(n)
+        123
+        > String(n)
+        '[object Object]'
+
+    The following object customizes toString(). Because the result can be converted to a 
+    number, Number() can return a number:
+        > var s = { toString: function () { return '7'; } };
+        > String(s)
+        '7'
+        > Number(s)
+        7
