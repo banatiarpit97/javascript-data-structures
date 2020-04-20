@@ -52,8 +52,8 @@ These auto run functions are executed by c++ but they are executed in js thread 
 executing them, we need to make sure that we don't disturb the execution of any other function
 running in js thread.
 
-Whenever a function in executed by c++, it is not directly put in call stacks of i.e. not
-executed immediately, it is forst put into callback queue and then event loop checks these
+Whenever a function is executed by c++, it's callback is not directly put in call stacks of i.e. not
+executed immediately, it is first put into callback queue and then event loop checks these
 queues if there is nothing left to run in call stack. Then function in these queues are put into
 call stack for execution.
 
@@ -70,6 +70,13 @@ There are 6 callback queues and they are checked by event loop according to thei
 4. IO queue
     stores 95% of the auto run function
     functions from fs, http etc
+    //this is little different from others, when event loop is at this stage, it doesn't just look
+    and move forward, it waits here for a while for any pending OS tasks, pending operations or timers
+    that are about to complete
+
+    This can also be divided in 2 parts:
+        1. pending OS tasks - networking, http
+        2. pending operations - like fs, timers etc
 
 5. check queue
     stores function passed to setImediate
@@ -89,3 +96,5 @@ if yes, then checks:
 8   close handle queue
 
 becoz micro queues are checked before checking any other queue
+
+A tick is one complete circle of event loop i.e checking every queue

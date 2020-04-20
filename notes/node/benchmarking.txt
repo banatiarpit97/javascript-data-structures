@@ -1,0 +1,6 @@
+we can test our server/apis using a cli tool in linux
+'ab' or 'apache2-utils'
+
+ab -c 50 -n 50 localhost:5000
+this will send total 50 request(n param) to localhost:5000(url param). c param denotes
+how many concurrent request will be sent to the server

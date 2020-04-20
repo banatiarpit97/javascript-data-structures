@@ -1,0 +1,72 @@
+Nodejs is made of 3 steps:
+    JS code we write -> NODE JS -> V8
+                                -> libuv
+
+    The Node JS part is written in half js and half c++
+    The v8 part is mostly written in c++
+    the libuv part is completely written in c++
+
+////////////////////
+
+Code That we write access the node js library. This library contains certain apis or wrappers like
+http, crypto, fs etc which communicate with libuv to perform the task.
+
+In node repo, JS code of nodejs part in located in the lib directory and c++ code is present in 
+the src directory.
+We import function from the lib directory(if you want to check implementation or arguements passed or
+value returned, check this folder)
+This directory has separate file for each function and all it does in first checks the arguemnt,
+alters it and pass it down to the correponding c++ function.
+
+c++ function are imported in js file using process.binding like
+    {PBKDF2} = process.binding('crypto')
+
+in c++ file, function are exported using env->setMethod(target, 'PBKDF2', PBKDF2)
+
+///////////////////
+
+V8 is the intermidiary of between nodejs and libuv
+Basically it converts js variables/values to c++ values.
+
+in c++ file, we can se import like useing v8::Array, this line import c++ definition or
+understanding of what an array is in JS
+
+//////////////////
+
+Libuv handles concurrency and threading part.
+
+When we run a program, we start a process i.e. an instance of a program. In program there can
+be many threads. A thread can seen as a todo list or a set of task to execute
+
+c++ functions are executed in another thread than our js code, but the response it will return 
+will be put in the event loop of js thread only. So nodejs is single threaded but its apis still
+uses other threads.
+
+If we fire these c++ functions one after another, they are not going to wait for the previous call
+to end. They will take advantage of thread pool maintained by the libuv.
+Every call to these functions will try to run in a different thread if there is a vacant thread
+available in OS.
+If we have 4 thread in our system, we can fire 4 of these functions at the same time and they will respond
+at almost same time. sequence of the responses might not be the same as requested.
+
+We can even write our own js code that can take advantage of the thread pool using clusters and workers
+
+We can define the threads present in pool maintained by libuv even if we have less or more threads
+in our system
+process.env.UV_TRHEADPOOL_SIZE = 2;
+
+Defining more or less threads than present in our system might make our code slower
+
+https module does not make use of libuv thread pool, it goes directly to the os and is handled there
+So http calls won't be using any thread and all thread will still be available for other tasks
+
+fs module works a little differently in threads. If we are using fs.readFile function, then this function
+will be assigned a thread, then it will reach the harddrive and ask for stats of that file, while
+hdd is processing this, this thread starts executing any other pending task. When any other thread
+gets free and stats from hdd has also returned, that thread will take fs to continue its processing.
+Now this thread will again contact hdd to get contents of that file, while hdd is processing, this
+thread will abandon fs and takeover any other pending task. When any other thread gets free and result
+from hdd has also returned, that thread will takeover fs and return contents of the file to js code.
+So fs module functions might get delayed due to its pauses nature if any other tasks are pending.
+We can correct it to an extent by increasing UV_TRHEADPOOL_SIZE so that every task can have its own
+thread even if its at pause.

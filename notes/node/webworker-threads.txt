@@ -1,0 +1,27 @@
+install - npm i -S webworker-threads
+
+Worker threads are used to run our js code in another thread. If we have some memory intensice task
+that might block our event loop, we can create a eorker that will run in another thread of libuv
+thread pool.
+
+const worker =  require(webworker-threads).Worker;
+
+app.get('/', (req, res) => {
+    const worker = new Worker(function(){
+        //we can NOT make it an arrow function, because 'this' inside the function refers
+        //to thread in which worker is executing
+        this.onMessage = function(){    //when worker receive data from main thread.
+            let counter = 0;
+            while(counter < 1e9){
+                counter++;
+            }
+            postMessage(counter)   //to send data to main thread from worker
+        }
+    });
+
+    worker.onMessage = function(message){   //when worker posts a message to our main thread
+        console.log(message.data);
+    }
+
+    worler.postMessage();   //to send data from main thread to worker
+})

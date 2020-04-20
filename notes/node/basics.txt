@@ -90,7 +90,7 @@ Buffers are used to store the chunks of data :
         console.log(parsedBody);
     })
 //////////////////////////////////////////////////////////////////////////////////////
-a request is interfered with another request because on each request a separate callback function
+a request is not interfered with another request because on each request a separate callback function
 is called and every function has its different scope.
 
 When we require a file/module, nodejs makes a cached copy of it.That means, if we change the 
@@ -140,7 +140,7 @@ call an api from node:
         console.log(err);
     })
 
-    req.write(payload); //if we want to some payload with the request like we do in POST request
+    req.write(payload); //if we want to send some payload with the request like we do in POST request
 
     req.end();
 ///////////////////////////////////////////////////////////////////////
@@ -188,7 +188,7 @@ convert js file to executable file:
 
     ./index.js  //no need to use node index.js
 //////////////////////////////////////////////////////
-Options request is ent automatically before any other request when client side and
+Options request is sent automatically before any other request when client side and
 server side code are running on different ports or urls
 //////////////////////////////////////////////////////
 PUT request is used when we want to update all the properties of the existing record

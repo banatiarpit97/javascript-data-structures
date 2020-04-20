@@ -1,0 +1,8 @@
+rmdir - removed a directory
+rm - removes a file
+echo - repeat input
+cat - show file contents
+less - show file contents by page(cat with pagination)
+man - command manual, gives detail about the command like 'man cat'
+kill - kill a process
+pkill - kill a process without knowing the id like 'pkill node'

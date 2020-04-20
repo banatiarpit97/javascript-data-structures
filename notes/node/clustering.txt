@@ -1,0 +1,44 @@
+Making serveral copies of our server code and running them on diferent threads.
+Using this, these threads can handle separate request at the same time.
+We can think of this as every thread/cluster has its own event loop.
+
+There is a cluster manager that manages all the instances of the server/cluster
+Whenever we run our main file, cluster manager is created for us automatically, after that
+cluster manager call cluster.fork() to create more instances of the server.
+Cluster manager can start. stop, check health, forward request to instances.
+It does administrative task and does not handle any request itself.
+
+var cluster = require('cluster');
+
+if(cluster.isMaster){   // to check if this is the main file or a child
+    cluster.fork();     //create another instance of our server code
+    cluster.fork();
+} else {
+    //normal logic like routing etc
+}
+
+Don't make more instances than threads present on your system else performance might degrade
+
+Number of times, we will call cluster.fork(), we will get that many servers. First file executed
+does not count as a cluster/server instance because we put our server logic inside the else part
+of cluster.isMaster. So if file is master, it will create children and if file is a child, it will
+run our server.
+
+///////////////////
+nodemon does not work well with clustering, try avoiding it when using clusters
+
+//////////////////
+In production, we usually use pm2 rather than create our own cluster.
+
+install on server - npm i -g pm2
+
+start server - pm2 start index.js- i 0  //this tells pm2 to figure out how many cluster should
+                                        it make accoring to our system config
+
+list of server/cluster - pm2 list
+
+detail of application - pm2 show {application_name}
+
+monitor processes - pm2 monitor
+
+delete server/clusters - pm2 delete {application_name}

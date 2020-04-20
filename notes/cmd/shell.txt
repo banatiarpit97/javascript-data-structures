@@ -1,0 +1,5 @@
+Shell is a command interpreter to interface with a system. eg - Bash
+Shell talks with the application and application talks with the kernel
+
+Terminal is a wrapper to shell, it runs shell applications
+To know the shell we are working with, type 'echo $0' in terminal

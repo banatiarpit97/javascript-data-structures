@@ -19,3 +19,7 @@ Number Object :
 parseFloat(n)   //converts string/integer to float
 parseInt(n, base)   //converts string/float to integer(base is optional, default = 10)
 parseInt(101, 2)    //converts binary to decimal(outputs 5)
+
+Creating numbers with exponentials:
+    const a = 1e2   //100
+    const b = 1.1e2   //110    
