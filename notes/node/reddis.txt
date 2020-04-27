@@ -1,0 +1,45 @@
+Used for caching.
+This introduces another layer between our server and our db. Our server forst looks at the reddis
+and returns if data is there but if not only then ot will execute DB query.
+If using mongoose and mongo, the redis layer sits between mongoose and mongo.
+
+Read and writes are very fast on redis.
+Whenever redis server is switched off or restarted, all the data on it is lost.
+We can only store strings and numbers in redis, so stringify data if storing array/objects and parse
+it while retieving
+
+install:
+    npm i -S redis
+    Using this we can access redis server from  our node script
+
+To run a local redis server on your machine install it and then start the server using services.
+run 'redis-cli ping' to check if server is started
+
+Connect to redis from node:
+    const redis = require('redis');
+    const client = redis.createClient(redisUrl); 
+    // for local server - default url will be 'redis://127.0.0.1:6379'
+
+
+Setting values:
+    client.set('key', 'value'); // key: 'value'
+    client.hset('parent', 'child', 'value') //used to create a nested object->parent:{child: 'value}
+
+
+Getting values: // accepts a callback
+    client.get('key', (err, val) => console.log(val)); // returns 'value'
+    client.hget('parent', 'child', (err, val) => console.log(val)) // returns 'value'
+
+    promisify client.get
+    const util = require('util);
+    client.get = util.promisify(client.get);
+
+Expiring cache from redis based on time:
+    client.set('key', 'value'm 'EX', 5);    //will expire this key in 5 seconds
+    client.hset('parent', 'child', 'value', 'EX'. 5)
+
+Deleting values:
+    client.del('key');
+
+Choose a key that is unique for that particular request/query, because all the redis keys are stored
+in the same scope. Use hset, hget if you want to store nested keys

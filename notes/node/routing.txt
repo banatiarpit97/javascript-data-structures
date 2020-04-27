@@ -8,9 +8,9 @@ const server = http.createServer(function (request, response) {
     const pathName = parsedUrl.pathname;    //pathname gives the path of website
                                             //path gives path+query string
     
-    if(pathName === '/' && req.method === 'GET'){
+    if(pathName === '/' && request.method === 'GET'){
         console.log(`query string is ${parsedUrl.query}`);  //available because sent 'true' above
-        console.log(`Headers are ${req.headers})
+        console.log(`Headers are ${request.headers})
         res.statusCode = 200;
         res.setHeader('Content-Type', 'applicarion/json');
         res.json({name:"arpit"});

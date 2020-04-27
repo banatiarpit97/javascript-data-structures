@@ -7,7 +7,7 @@ It performs the following tasks −
     Print − Prints the result.
     Loop − Loops the above command until the user presses ctrl-c twice.
 
-REPL can be started by simply running node on shell/console without any arguments as follows.
+REPL can be started by simply running 'node' on shell/console without any arguments as follows.
 
 You can make use variables to store values and print later like any conventional script. 
 If var keyword is not used, then the value is stored in the variable and printed. 
@@ -17,7 +17,7 @@ You can print variables using console.log().
 Statements are not independent, present Statement know about vars and functions executed before it
 we can also import modules in it like we do in files.
 
-ou can use underscore (_) to get the last result
+you can use underscore (_) to get the last result
 
 ctrl + c − terminate the current command.
 ctrl + c twice − terminate the Node REPL.

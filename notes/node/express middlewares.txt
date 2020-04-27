@@ -1,0 +1,10 @@
+we can provide middlewares in the api call.
+These middlewares are normal functions that will run before we run our api logic.
+We need to call next() on these middlewares so that either next middleware or our api logic
+is invoked.
+
+Running a middleware after our api logic:
+    const middleware = function (req, res, next) {
+        await next();
+        console.log('will run after api logic');
+    }
