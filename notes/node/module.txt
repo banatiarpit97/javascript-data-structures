@@ -1,0 +1,47 @@
+If we do console.log(module), we can see this global object.
+
+module.paths is an array that contain paths that will be searched whwnever we require a file.
+these are generally node_modules folder starting from current directory and then going up till 
+root directory of system. It means if we don't have a module in node_modules of current dir but
+have it in root of our system, node will pich that file up from there.
+
+If we don't want node to execute the file after require, we can use require.resolve('') instead of
+require(''). Used to check if module exists or not.
+
+Module contains an export value that is an object, this contains all the values exported from 
+that module. This is actally what require() returns.
+
+Module.loaded is true if complete file has been executed and false otherwise.
+
+We should not export values inside timers.
+
+Circular dependency is allowed in node, a requires b and b requires a.
+
+resolving extension in require:
+    1  .js
+    2  .json
+    3  .node
+This means if we don't use extension in require method, compiler will first look for a js file, then
+a json file and then a node file(compiled c++ file).
+Compiler automatically calls JSON.parse when importing a json file
+Compiler automatically calls process.dlopen when importing a node file
+
+If we require a file twice, it won't execute 2 times because node cahes it the first time.
+To see the cache, require.cache
+to delete the cache,    delete require.cache[path]
+
+node wrapped every file inside a function and this function receives 5 parameters from node:
+    exports which is a reference of module.exports
+    require, function used to require a file
+    module
+    __filename
+    __dirname
+So it looks like these variables are global but actually these are passed to every file by the
+node and is local to that file.
+This is the reason we can do exports.a = 1 and module.exports ={a:1} but can not do export={a:1}
+because this will lose reference to module.exports
+
+
+/////////////////////////////////////////////
+'main' key in package json defined the entry point of that module. Usually its index.json
+that is why we don't have to write 'folder/index.js', only 'folder/' works

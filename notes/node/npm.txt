@@ -116,3 +116,10 @@ Run arbitrary code snippets directly from a URL
 npx does not limit you to the packages published on the npm registry.
 You can run code that sits in a GitHub gist, for example:
     npx https://gist.github.com/zkat/4bc19503fe9e9309e2bfaa2c58074d32
+
+///////////////////////////////////////////////
+deleting packages that are not present in package.json -> npm prune
+
+///////////////////////////////////////////////////
+npm home lodash     //open homepage/docs in browser
+npm repo lodash     //opens git repo in browser

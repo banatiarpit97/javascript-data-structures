@@ -6,6 +6,13 @@ to block your entire browser.
 The environment manages multiple concurrent event loops, to handle API calls for example. 
 Web Workers run in their own event loop as well.
 
+Event loop starts when we execute a file like npm start and exits when we call process.exit()
+
+V8 consist of 2 parts - heap and call stack
+
+The Heap:
+This containst the memory allocatted to objects, arrays, function execution context etc
+
 The call stack
 The call stack is a LIFO queue (Last In, First Out).
 The event loop continuously checks the call stack to see if there’s any function that needs to run.
@@ -85,3 +92,8 @@ It’s the way we can tell the JavaScript engine to process a function asynchron
 
 Calling setTimeout(() => {}, 0) will execute the function in the next tick, much later 
 than when using nextTick().
+
+///////////////////////////////////////////////////////////
+Event loop pushed callbacks from queue to call stack one by one. Since item from queue to
+stack can only be pushed if stack is empty, so the second callback in queue has to wait for
+first callback to execute completely

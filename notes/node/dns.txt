@@ -1,0 +1,18 @@
+const dns = require('dns');
+
+dns.lookup('google.com', (err, add) => {
+    console.log(add);   //this method does not access networking module but uses underlying OS
+                        and hence uses libuv thread pool, all other methods in this module does not
+})
+
+dns.resolve4('google.com', (err, add) => {
+    console.log(add);
+})
+
+dns.resolveMx('google.com', (err, add) => {
+    console.log(add);
+})
+
+dns.reserve('1.1.1.1', (err, hostnames) => {
+    console.log(hostnames);
+})

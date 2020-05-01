@@ -1,0 +1,16 @@
+create a socket server:
+    const server = require('net').createServer();
+    server.on('connection', socket => {
+        console.log('socket connected');
+
+        socket.on('data', data => {
+            console.log(data)   //buffer
+            socket.write('hello')   //send data back to client
+        })
+
+        socket.on('end', () => {
+            console.log('socket disconnected');
+        })
+    });
+
+    server.listen(8080, () => {})

@@ -48,6 +48,31 @@ Here is an example that accesses the NODE_ENV environment variable, which is set
 development by default.
     process.env.NODE_ENV // "development"
 /////////////////////////////////////////////////////////////
+we can not modify env variable using process.env.a = 2;
+//////////////////////////////////////////////////////////
+process is an instance of EventEmitter and hence we can listen for events using process.on
+///////////////////////////////////////////////////////
+to handle all uncaugh exceptions:
+    process.on('uncaughtException', err => {
+        //this will prevent our app to exit on an error which is not a good practice so we should
+        call process.exit(1) here
+    })
+/////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 Node.js Process Properties

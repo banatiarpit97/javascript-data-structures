@@ -7,6 +7,8 @@ setImmediate()
     })
 Any function passed as the setImmediate() argument is a callback that’s executed in 
 the next iteration of the event loop.
+
+this is similat to setTimeout with 0 delay but in most cases setImmediate will run before setTimeout
 //////////////////////////////////////////////////////////////
 
 setTimeout()

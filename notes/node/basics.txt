@@ -65,13 +65,6 @@ process.argv -> array of command line arguements starting from 3rd elem
 1st elem is path of node
 2nd elem is name of the file
 
-setting up server :
-    http.createServer(function (request, response) {
-    response.writeHead(200, {'Content-Type': 'text/plain'});
-    
-    response.end('Hello World\n');
-    }).listen(8081);
-
 //////////////////////////////////////////////////////////////////////////////////////
 can not write/append to response after calling res.end();
 
@@ -198,3 +191,9 @@ the properties whether or not they were changed
 PATCH request is used when we want to update some of the properties of the existing record
 The data we send will replace only the properties we send i.e. merge latest and previous data 
 so we need to send only the properties that were changed
+
+/////////////////////////////////////////////
+variable defined in a file is local to it and not accessible to the files that import it.
+Ifwe want to make a global variable we should it using global.a = 1;
+but we should avoid using global variables.
+global contain many properties like process and Buffer.

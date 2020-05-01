@@ -28,6 +28,8 @@ in c++ file, function are exported using env->setMethod(target, 'PBKDF2', PBKDF2
 V8 is the intermidiary of between nodejs and libuv
 Basically it converts js variables/values to c++ values.
 
+V8 also contains heap and call stack of the event loop
+
 in c++ file, we can se import like useing v8::Array, this line import c++ definition or
 understanding of what an array is in JS
 

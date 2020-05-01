@@ -26,6 +26,29 @@ Passing arguements:
     eventEmitter.emit('start', 1, 100)
 //////////////////////////////////////////////////////////
 
+Creating event using classes:   
+    class exec extends EventEmitter {
+        doWork(){
+            this.emit('done');
+        }
+    }
+    const event = new exec();
+    event.on('done', () => {});
+    event.doWork();
+
+/////////////////////////////////////////////////////////////
+We can use events as hooks to listen for state changes
+we can also use events instead of callbacks, one advantage of events is that we can listen for a
+event multiple times as opposed to callbacks
+
+
+
+
+
+
+
+
+
 functions:
 
 emitter.addListener()

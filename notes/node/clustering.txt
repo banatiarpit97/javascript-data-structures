@@ -7,6 +7,8 @@ Whenever we run our main file, cluster manager is created for us automatically, 
 cluster manager call cluster.fork() to create more instances of the server.
 Cluster manager can start. stop, check health, forward request to instances.
 It does administrative task and does not handle any request itself.
+Cluster manager forwards the request using round robin algo but it also takes create
+of busy time, latency etc
 
 var cluster = require('cluster');
 
@@ -19,11 +21,24 @@ if(cluster.isMaster){   // to check if this is the main file or a child
 
 Don't make more instances than threads present on your system else performance might degrade
 
+To check the cpus available in system, use os.cpus().length 
+
 Number of times, we will call cluster.fork(), we will get that many servers. First file executed
 does not count as a cluster/server instance because we put our server logic inside the else part
 of cluster.isMaster. So if file is master, it will create children and if file is a child, it will
 run our server.
 
+/////////////////////////////////////////////////////
+cluster module uses child module internally and hence we can communicate between master and
+child process.
+cluster.workers is an object that gives all available clusters.
+Send a message to all clusters:
+    object.values(cluster.workers).forEach(worker => {
+        worker.send('hello')
+    })
+
+    listen to messages from cluster:
+        process.on('message', (msg) => {})
 ///////////////////
 nodemon does not work well with clustering, try avoiding it when using clusters
 

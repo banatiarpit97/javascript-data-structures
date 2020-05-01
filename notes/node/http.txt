@@ -1,0 +1,49 @@
+setting up server :
+    const http = require('http');
+    //C++ modules that we want to use in our js code is fetched using 'require' keyword
+    
+    http.createServer(function (request, response) {
+        //request: http.IncomingMessage
+        //response: http.ServerResponse
+        response.writeHead(200, {'Content-Type': 'text/plain'});
+        response.end('Hello World\n');
+    }).listen(8081);
+
+    const req = http.get('google.com');
+    //req: http.ClientRequest
+
+
+http is a module written in C++ to send and receive msgs over internet.
+Things that happen when above code is run:
+1. C++ http module is invoked
+2. Module opens a Network socket from client's machine to server's machine
+    All the Network request and response are handle by network card in our machine, so c++ code
+    accesses this network card through some interface to let the client connect to server machine.
+3. We pass a function in http.createServer. This function goes to C++ module which AUTO RUNS this function
+    whenever a new requests comes in to server.
+    This is necessaryy becoz, our js code does not know when a request comes in.Requests comes in
+    through network card which is accessible to only c++ code. and we also cannot echo our reply
+    continuosly since it will block our event loop. So we give this task to C++ code.
+4.  When a new request comes in, C++ code auto runs our passed function
+5.  When it executes the function, it populates the function parameters with 2 objects that can be used
+    in our js code.
+    First object is the request object, this object conatins properties like url, method... which
+    tells us about the type of request.The http request packet which is just a text file is parsed by
+    the c++ code and an object is made from that info.
+    The second object is the response object. This object conatins functions like 'end' that can be 
+    called from js code to populate the response http packet for the request. 
+
+/////////////////////////////////////////////////////////
+we have to call res.end() on every request, otherwise request will timeout after 2s
+
+///////////////////////////////////////////////////
+http.server inherits from net.server and hence is a eventEmitter
+
+http.Agent is used to pool sockets, node uses a global agent but we can make our own using new Agent()
+
+http.ServerResponse - Writable stream nd eventEmitter
+
+http.ClientRequest - Writable stream nd eventEmitter
+
+http.IncomingMessage - Readable stream nd eventEmitter
+

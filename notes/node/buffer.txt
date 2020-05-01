@@ -1,0 +1,19 @@
+Buffer is a lower level structure and holds data in binary format.
+To read data from buffer, we need to specify an encoding
+Buffer can not be resized after creation
+
+Create Buffer:
+    Buffer.alloc(8) //create a buffer of size 8 and fill data in buffer
+    Buffer.allocUnsafe(8) //create a buffer of size 8 but doesn't fill data in buffer
+    Buffer.from('arpit')
+
+Fill Buffer:
+    Buffer.allocUnsafe(8).fill()
+
+Convert buffer to string:
+    Buffer.toString();
+        or
+
+    const {StringDecoder} = requier('string_decoder');
+    decoder = new StringDecoder('utf8');
+    decoder.write(buffer);  // this works well than toString with utf data

@@ -13,6 +13,7 @@ We can also format pretty phrases by passing variables and a format specifier.
 %d or %i format a variable as an integer
 %f format a variable as a floating point number
 %O used to print an object representation
+%j used to print json
 //////////////
 console.clear() clears the console (the behavior might depend on the console used)
 
@@ -65,4 +66,22 @@ You install it with npm install chalk, then you can use it:
 Progress is an awesome package to create a progress bar in the console. 
 Install it using npm install progress.
 
+/////////////////////////////////////////////////////////////////
+console by default writes to stdout and stderr method, if we want to change that, we can by:
+    const out = fs.createWriteStream('./out.log');
+    const err = fs.createWriteStream('./err.log');
+    const console2 = new console.Console(out, err);
 
+    console2.log('arpit')
+    console2.err('arpit')
+
+////////////////////////////////////////////////////////////////
+console uses util module internally hence:
+    console.log('hello %s', 'world') is same as
+    util.format('hello %s', 'world')
+
+//////////////////////////////////////////////////////////////
+console.info is an alias for console.log
+console.warn is an alias for console.err
+
+console.assert(3 === 3);

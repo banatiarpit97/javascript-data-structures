@@ -173,9 +173,12 @@ Methods on writable stream
     write(), destroy(), end()
     cork(), uncork(), setDefaultEncoding()
 ////////////////////////////////////////////////////////////
+we can use pipes and events on streams but try not to mix them,
+if you want to use events, instead pipe to transform stream
+//////////////////////////////////////////////////////////////
 Readable streams have two main modes that affect the way we can consume them:
     paused/pull mode
-    flowing/push mode
+    flowing/push mode 
 
 All readable streams start in the paused mode by default, but they can be easily switched to 
 flowing and back to paused when needed. Sometimes, the switching happens automatically.
@@ -252,3 +255,35 @@ crypto streams
         .pipe(zlib.createGunzip())
         .pipe(fs.createWriteStream(file.slice(0, -3)))
         .on("finish", () => console.log("Done"));
+
+////////////////////////////////////////////////////////////////////
+When reading a large file:
+    fs.readFile('./file.txt', (err, data) => {  
+        //very inefficient, won't event work if file size is greater than 2gb as this loads all the data
+        // in memory
+        res.end(data)
+    })
+
+    const src = fs.createReadStream('./file.txt');  //very efficient
+    src.pipe(res);
+
+//////////////////////////////////////////////////////////////////
+Some readable streams:
+    http res on client
+    http req on server
+    fs read stream
+    zlib streams
+    crypto streams
+    tcp sockets
+    child process stdout, stderr
+    process.stdin
+    
+Some writable streams:
+    http res on server
+    http req on client
+    fs write stream
+    zlib streams
+    crypto streams
+    tcp sockets
+    child process stdin
+    process.stdout, process.stderr

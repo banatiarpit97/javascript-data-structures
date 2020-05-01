@@ -14,6 +14,7 @@
     console.log("Synchronous read: " + data.toString());  
     console.log("Program Ended");  
 
+All functions in this module has sync and async type
 ////////////////////////////////////////////////////
 Node.js Open a file
     fs.open(path, flags[, mode], callback)   
@@ -184,3 +185,14 @@ Use fs.rmdir() or fs.rmdirSync() to remove a folder.
     }); //will get data in string becuase of utf8
     //little less efficient as we should leave the transforming processes to os
     //we should rather send the buffer data to process.stdout and let it convert itself
+
+////////////////////////////////////////////////////
+change time of file - fs.utimes
+delete a file - fs.unlink
+watch a dir for change - fs.watch(dirname, (eventType, filename) => {
+    if(eventType === 'rename'){
+        //file is added or deleted
+    } else {
+        //file has changed
+    }
+})

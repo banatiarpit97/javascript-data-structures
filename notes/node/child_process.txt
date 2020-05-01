@@ -1,0 +1,42 @@
+There a 4 ways to create a child process in node:
+    spawn:
+        This will run the specific command in another child process
+
+        const {spawn} = require('child_process');
+        const child = spawn('find', ['.', '-type', 'f'], 
+                            {shell: true/false, cwd: '', env: '', detached: true/false}
+                );  //default for shell is false
+
+        this child implements EventEmitter, hence we can listen for events like
+        exit, disconnect, error, message, close.
+        stdio objects of child - child.stdin(writable), child.stdout(readable), child.stderr(readable)
+
+    exec:
+        This is like spawn with 2 differences:
+            1. exec buffers the data and pass the complete data to callback whereas spawn streams the
+                data and hence suitable for large data
+            2. exec creates a shell and spans does not by default
+
+        const {exec} = require('child_process');
+        const child = exec('find . -type f, (err, stdout, stderr) => {
+
+        })
+
+    execFile:
+        executes a file like exec but does not use a shell
+
+    fork:
+        create a child process by specifying a js file.
+
+        const {fork} = require('child_process');
+        const forked = fork('child.js');
+        forked.on('message', (msg) => {})   //listen for messages by forked process
+        forked.send({hello: 'world'})   //send message to forked process
+
+        in child.js
+            process.on('message', (msg) => {})   //listen for messages by main process
+            forkprocessed.send({hello: 'world'})   //send message to main process
+
+        This can be used to do long computation and send back a message when done
+            
+
