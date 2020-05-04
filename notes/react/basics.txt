@@ -49,9 +49,11 @@ and it will automatically display it without any map function:
     }
 
 To efficiently render an array or to prevent react from re-rendering an element from
-list again, we need to a key attribute to all the elements of the list.
+list again, we need to a 'key' attribute to all the elements of the list.
 This key should be uniwue for each element in list.
 This key attribute should be present on the root element of the repeating html/jsx template
+By giving a key, we tell react to not destroy and create this elem again, instead just rerender/
+reposition the elem
 ////////////////////////////////////////////////////////////////////
 
 append debug_session=logged_in to url to maintain state(if using redux dev tools)
@@ -93,9 +95,11 @@ whenever component re-renders, previous value of state variable is maintained
 if we use a component more than once then all the implementations would have their separate and unique state variables
 /////////////////////////////////////////////////////
 React strict mode:
-wrap components inside <StrictMode />
+import {StrictMode} from 'react';
+wrap components inside <StrictMode></StrictMode>
     it will warn us for depreacated features and prevent side effects by
-    identifying potential risks
+    identifying potential risks in development mode.
+    We can choose which components to be wrapped inside strict mode and which not
 /////////////////////////////////////////////////////////
 we can render html/jsx tags conditionally using props:
     const App = ({tag=React.fragment}) => {

@@ -1,0 +1,8 @@
+refs are used to reference the same dom element even after re renders.
+Value of ref does not change between re renders like that of instance variables in classs component.
+
+Creating a div in react component:
+    const elRef = useRef(false);
+    if(!elRef.current){
+        elRef.current = document.createElement('div');
+    }

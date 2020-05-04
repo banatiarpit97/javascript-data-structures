@@ -87,5 +87,14 @@ There are two ways:
 
 Advantage of consumer approach compared to this.context is that we can consume context
 from more than 1 provider and it can be used in functional components.
+
+In class component, we are using context by passing an arrow function inside Context.Consumer(2nd way)
+What we are actually doing is creating a react functional component, since every function in jsx
+is actually a functional component.
 ///////////////////////////////////////////////////////////////////////////////
-    
+
+Technically context value can be changed from only the component that implements context.provider
+but we can do something so that event child components can chnage the context value.
+For this, pass a state variable in context value and alongside that pass either setState function,
+hook function or create a custom function and change state in that function. Child components can
+call these functions with whatever parameters and context will change.

@@ -1,0 +1,14 @@
+config is set in .babelrc(JSON FILE)
+
+Config is an object and looks like:
+    {
+        "presets": ["@babel/preset-react", "@babel/preset-env"],
+        "plugins": ["@babel/plugin-proposal-class-properties"],
+    }
+
+presets are actually a set of plugins already configured and wrapped for use
+plugins are additional features we want to add in our app, any experimental features are put
+in plugins
+
+@babel/preset-env will check our env in package.json under browserslist array and create our bundle 
+for that environment

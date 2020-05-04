@@ -62,3 +62,5 @@ to correct the issue, we do(any of the 4 methods):
     }
     //since arrow function does not have its own 'this', it will take this of class
 
+Always prefer creating arroow function over bind since bind can be much costlier than arraw functions
+(though this prob existed some time back and chrome has optimized bind code but still costly)

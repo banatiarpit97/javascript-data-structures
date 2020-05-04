@@ -71,3 +71,5 @@ key as name of attribute after 'data-' (like name of data-name) and value as val
 
 <div data-name="arpit">     
 //document.querySelector('div').dataset is {name: 'arpit'}
+// or event.target.dataset is {name: 'arpit'}
+// value of this obj will always be string (Even if we set a number)

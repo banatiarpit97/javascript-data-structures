@@ -20,6 +20,9 @@ a component (not in an if or in any other block).
 Using hooks, state can be anything - object, array, number, string, bool...
 Using useState, state can be shared among components
 
+React keeps track of the order in which useState hooks are called, so that's why we should keep
+them on the top level so that their order always remains the same
+
   const [products, setProducts] = useState([])
   const [userData, setUserData] = useState({name: 'Max', age: 28})
 /////////////////////////////////////////////////////////////////////////////
@@ -140,6 +143,15 @@ const MyComponent = () => {
   const [user, userData] = useGetUser('flavio')
   //...
 }
+
+We can use react hooks in custom hooks. The file in which hooks are define must import React
+So it can be usefull to contain many useState, useEffect in one hook
+  const useGetUser(username) {
+    const [state, setState] = useState(username);
+    //...const user = fetch(...)
+    //...const userData = ...
+    return [user, userData, setState]
+  }
 /////////////////////////////////////////////////////////////
 From Classes to Hooks
 

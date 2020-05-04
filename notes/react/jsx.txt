@@ -6,6 +6,9 @@ Transpiling is the process of conversion from jsx to js
 Whenever we need to add js in jsx, put in {}
 All tags need to be closed unlike html5
 
+Every file that has jsx must contain React import like import React from 'react' because
+our jsx will be converted to React.createElement
+
 <div>Hey</div> in jsx
 gets converted to:
     React.createElement('div', null, 'hey')
@@ -13,6 +16,9 @@ gets converted to:
 <div><span>Hey</span></div> in jsx
 gets converted to:
     React.createElement('div', null, React.createElement('span', null, 'hey'))
+
+Render custom components:
+    React.createElement('pet', {prop1: 1, prop2: true}, React.createElement('h1', null, 'hey'))
 ////////////////////////////////////////////////////////////////////
 inline styling:
 
@@ -31,6 +37,7 @@ becomes
     <div className="top">Hey</div> in jsx
 
 because class is reserved keyword in js
+className is actually DOM api, this is used by DOM to access class
 /////////////////////////////////////////////////////////////////////
 using js variables in jsx
 
