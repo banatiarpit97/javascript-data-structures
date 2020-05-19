@@ -119,6 +119,14 @@ We can use 3rd party(thunk) or create our own Middlewares
   import thunk from 'redux-thunk';
 
   let store = createStore(listManager, applyMiddleware(thunk));
+
+  create custom Middlewares:
+    const logger = store => next => action => {
+      console.log('dispatching', action)
+      let result = next(action)   //have to call 'next' to move action to next middlewares and reducers
+      console.log('next state', store.getState())
+      return result
+    }
 ///////////////////////////
 Data Flow
 Data flow in Redux is always unidirectional.

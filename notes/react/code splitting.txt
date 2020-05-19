@@ -20,6 +20,8 @@ take care of loading it when necessary.
 Suspense is a component that you can use to wrap any lazily loaded component:
 
 import React from 'react'
+import React, {lazy, Suspense} from 'react';
+
 const TodoList = React.lazy(() => import('./TodoList'))
 export default () => {
   return (

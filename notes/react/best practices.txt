@@ -63,4 +63,25 @@ this can be used to make some proxy elements:
     and use like:
         <Button className="CTA">Send Money</Button>
 
+//////////////////////////////////////////////////////////////////
+React.memo
+Class components can bail out from rendering when their input props are the same using 
+PureComponent or shouldComponentUpdate. Now you can do the same with function components 
+by wrapping them in React.memo.
 
+    const MyComponent = React.memo(function MyComponent(props) {
+        /* only rerenders if props change */
+    });
+
+///////////////////////////////////////////////////////////////////
+If we want to add a functionality of functional components in class components without changing the 
+component itself, we can do so by wrapping the class with a function:
+    class original extends React.component{
+
+    }
+    export default wrapped = ({props}) => {
+        return <original {...props} />
+    }
+    Now in 'default' functional component, we can use hooks, react.memo etc
+
+    same can be done if we want to wrap a functional component in class component

@@ -64,3 +64,6 @@ to correct the issue, we do(any of the 4 methods):
 
 Always prefer creating arroow function over bind since bind can be much costlier than arraw functions
 (though this prob existed some time back and chrome has optimized bind code but still costly)
+
+Arrow functions also has a disadvantage that ot gets created and destoyed on every re render but
+since this is always the case when we use functional components with hooks so it is not that bad

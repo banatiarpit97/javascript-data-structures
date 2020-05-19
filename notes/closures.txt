@@ -160,6 +160,10 @@ for(let i=1;i<=5;i++){
         console.log(i);
     }, i*1000)
 }
+
+functions inside setTimeout/setInterval are only executed after the timer is complete and the
+function has been moved from event queue to call stack. This means any reference to variables inside
+that function will be latest to that time of execution and not the time of creating the timers
 ////////////////////////////////////////////////////////////////////////////
 MODULE PATTERN USING closures and iife i.e. creating modules, creating private, public memebers(abstraction):
 Characterstics of module pattern :

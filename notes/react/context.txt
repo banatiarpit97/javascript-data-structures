@@ -98,3 +98,16 @@ but we can do something so that event child components can chnage the context va
 For this, pass a state variable in context value and alongside that pass either setState function,
 hook function or create a custom function and change state in that function. Child components can
 call these functions with whatever parameters and context will change.
+
+We can do this by creating a component and using useState, useEffect, useReducer in it and make 
+that component return <Context.Consumer>.
+Then wrap all needed components in this component using this.props.children
+
+///////////////////////////////////////////////////////////////////
+Context.Provider and Context.Consumer are react components returned by context api
+
+///////////////////////////////////////////////////////////////////
+Using context instead of prop drilling might lead to disadvantages as now we can not use
+React.memo since we are not passing data through props
+
+/////////////////////////////////////////////////////////////////////

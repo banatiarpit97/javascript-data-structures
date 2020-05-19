@@ -62,6 +62,9 @@ Since nothing is provided in array, functin inside useEffect will never execute 
 Second arguement always has to be an array
 If any of the variable in the array changes, function inside useEffect will be called
 
+Take cre while changing state inside useEffect, that might create a cycle if we are listening for
+the same state variable in that useEffect
+
 Implementing componentWillUnmount:
 
 The function passed as a first argument to useEffect() can return another 
@@ -125,27 +128,31 @@ It can accept an arbitrary number of arguments, and return anything it wants.
 
 Examples:
 
-const useGetData() {
-  //...
-  return data
-}
-or
-const useGetUser(username) {
-  //...const user = fetch(...)
-  //...const userData = ...
-  return [user, userData]
-}
+  Creating a custom hook that stores a value in localStorage whenever its value is changed and
+  gets us the stored value at the start:
+  const useLocalStorage = (initialState, key){
+    const get = () => {
+      const storage = localStorage.getItem('key');
+      if(storage) return storage;
+      return initialState;
+    }
 
-In your own components, you can use the hook like this:
+    const [value, setValue] = useState(get());
 
-const MyComponent = () => {
-  const data = useGetData()
-  const [user, userData] = useGetUser('flavio')
-  //...
-}
+    useEffect(() => {
+      localStorage.setItem('key', value);
+    }, [value]);
+
+    return [value, setValue];
+  }
+
+  using in our component:
+    const comp = () => {
+      const [counter, setCounter] = useLocalStorage(0, 'count');
+    }
 
 We can use react hooks in custom hooks. The file in which hooks are define must import React
-So it can be usefull to contain many useState, useEffect in one hook
+So it can be usefull to contain many useState, useEffect, fetch calls etc in one hook
   const useGetUser(username) {
     const [state, setState] = useState(username);
     //...const user = fetch(...)
@@ -189,4 +196,55 @@ Now import this function inside component file and call this function inside the
 functional component.(IT NEEDS TO BE CALLED INSIDE THE FUNCTION ONLY) and we will have
 the shared state and logic
 ///////////////////////////////////////////////////////////////////
-useEffect does not work with ref value, we have to use w=it with state variables
+useEffect does not work with ref value, we have to use it with state variables
+
+//////////////////////////////////////////////////////////////////////
+useRef returns an object with current property having value null. This is an object because
+objects are passed by reference and by this we can reference the same value even after re-renders
+
+//////////////////////////////////////////////////////////////////
+React.memo should not be used everywhere. Since this involves a process of checking the props
+to see if that changed, there is an overhead of calculating this change. If our props are changing
+all the the time and then we also use React.memo, then we are first checking the props and then
+re rendering it, that means double work.
+
+React.memo might not work sometime because we usually pass functions in our components and if that
+functions were defined using arrow functions then every time a new function will be created and passed 
+to the child component. Since it is different from the previous function even though they do the
+same thing, react.memo can not stop the component from re rendering.
+To correct this, use useCallback in parent component while defining the function. This will give us
+the same function definition every time
+React.memo also does not work if we are creating arrays, objects, dom nodes on the fly.
+<Child a={[1,2,3]} /> won't work because even though the content of the array will always be same
+but it is new reference every time, so instead take this in a const variable and pass that variable 
+every time.
+
+No need to use React.memo in connected components. React-Redux 'connect' also does the same work
+
+///////////////////////////////////////////////////////////////////
+
+useReducer is better performant than useState sometimes. 
+in useState, we might have function to set todos like:
+  const updateTodos = (todo) => {
+    setTodos([todo, ...todos]);
+  }
+  // since this function depends on all todos, we can not wrap this in useCallback efficiently
+  but if use useReducer:
+  const updateTodos = (todo) => {
+    dispatch(todo);
+  }
+  //much easier to wrap as todos will not be a dependency in useCallback and hence less re rendering
+  of child component that depends on this function
+
+useReducer is usefull if our state is compilcated and big. Since, in useReducer there is only 1 
+object of state as in class components and change of state is also through dispatch event, it is
+much easier to maintain.
+
+/////////////////////////////////////////////////////////////////////////////
+We can use useReducer and context instead of redux.
+But there are some disadvantages:
+  1. context does not support middlewares
+  2. context does not have combineReducer function
+  3. Redux optimises our components for re rendering. It basically does what react.memo does
+
+All the above can be made available in context but for that code has to be written by the user.

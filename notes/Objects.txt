@@ -226,3 +226,13 @@ whose this always has the given value:
     > func2()
     'Person named Jane'
 ////////////////////////////////////////////////////////////////////////////////////////
+Deep copy an object:
+    If you do not use Dates, functions, undefined, Infinity, RegExps, Maps, Sets, Blobs, 
+    FileLists, ImageDatas, sparse Arrays, Typed Arrays or other complex types within your object, 
+    a very simple one liner to deep clone an object is:
+        JSON.parse(JSON.stringify(object))
+
+Shallow Copy of an object:
+    {...obj}
+    Object.assign({}, obj);
+

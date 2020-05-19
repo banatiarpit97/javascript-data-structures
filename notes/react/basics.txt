@@ -138,3 +138,81 @@ and so on.
 We can also think of this in a way that parent can only be rendered completely if all its children are rendered and hence children need to rendered before.
 
 But constructor method of parent will always run before the child.and in children, constructor will run in sequential manner i.e. top to bottom
+
+/////////////////////////////////////////////////////
+this.setState and set function of useState are asynchronous and hence we can not console the
+resulting state just after calling these function. These will be handeled by event loop and will
+happen after some time.
+
+we don't define setState function, it is probably a function React.component class which we inherit
+/////////////////////////////////////////////////////
+eg: 
+    this.state = {count: 0};
+    increment() {
+        this.setState({count: this.state+1});
+        this.setState({count: this.state+2});
+        this.setState({count: this.state+3});
+        console.log(this.state.count)   // 0 as asynchronous setState method
+    }
+    render(){
+        return <h1>{this.state.count}</h1>  //will be 3
+    }
+
+    when we put more than 1 setState calls together that reference the state variable,
+    we actually referenced 0 as initial state value because value won't be updated synchronously
+    react batches these calls and result would be:
+        state = {
+            ...firstCall,   //1
+            ...secondCall,  //2
+            ...thirdCall,   //3
+        } 
+        so the last call will dominate here
+
+    To correct second prob:
+        pass a function as second arguement to setState call.
+        this.setState({count: this.state+1}, () => console.log(this.state));    //1
+
+    To correct second prob:
+        this.setState((state, props) => ({count: this.state+1}));
+        this.setState((state, props) => ({count: this.state+2}));
+        this.setState((state, props) => ({count: this.state+3}));
+
+        instead of passing an object, we can pass a function that will receive state and props as
+        arguement. This will solve our prob as before we were merging the objects, but these are
+        functions and hence can not be merged, they will be called one after the another.
+        Since this function gets state and props both, we can separate it out of the component,
+        this will help us share this function and write easy tests.
+        If we return undefined from the function, state will not change otherwise it will replace
+        the prev state.
+
+        second arguement returned by setState can also take a function just like setState method.
+        The difference is that, this function only accepts the part of state managed by that useState
+        and not the complete state. It also does not get props as second arguement.
+        If we return undefined from this function, state will change to undefined unlike setState.
+
+/////////////////////////////////////////////////////////
+If we want to preserve the state of our app or a single page, we can store the complete state object
+in local storage and fetch that the next time user visits. This is how time travel works in redux
+dev tools extension
+
+//////////////////////////////////////////////////////////
+put a variable in state only of we are using that variable in render method otherwise store it 
+in instance variables/js variable
+
+//////////////////////////////////////////////////////////////////////
+timers like setInterval/setTimeout are not cleared on re-renders/unmount, so we need to do 
+that manually in componentDidUpdate, componentWillUnmount
+
+//////////////////////////////////////////////////////////////////////
+if we are using objects/arrays in state/useState, we need to return a new object/array for component
+to re render. Mutating that structure directly won't help.
+
+///////////////////////////////////////////////////////////////////////////////
+Prop drilling is process when a component takes a prop from its parent and passes it down to its
+child without using it.
+
+//////////////////////////////////////////////////////////////////////////////
+Put state in lowest component that needs it, this will prevent the parent from re rendering
+unnecessarily
+
+///////////////////////////////////////////////////////////////////////////////
