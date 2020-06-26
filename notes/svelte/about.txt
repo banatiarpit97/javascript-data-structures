@@ -4,6 +4,13 @@ site visitors. As a result, the fruition of the experience is smoother, consumes
 and everything feels faster and more lightweight.
 At deployment, Svelte disappears and all you get is plain (and fast!) JavaScript.
 
+Svelte is also faster at DOM manupilations because it does not use techniques like Virtual DOM,
+it knows exactly which element to update when.
+
+Also some common problems like state management, transitions, scoped css etc are built in the
+framework itself, it probably easy to build these since svelte is just a compiler, it knows
+how to parse
+
 clone a template project:
     npx degit sveltejs/template-webpack app-name
 

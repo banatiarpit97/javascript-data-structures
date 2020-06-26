@@ -1,0 +1,20 @@
+Function to sleep 
+
+    function sleep(ms){
+        return new Promise(resolve => {
+            setTimeout(resolve, ms);
+        })
+    }
+    and then call this function like:
+    await sleep(1500)   //so js will sleep or get stuck for 1500ms
+
+///////////////////////////////////////////////////////
+Preload an image so that user does not have to wait:
+    function preload(src){
+        return new Promise(resolve => {
+            let img = new Image();
+            img.onload = () => resolve(img);
+            img.onerror = reject;
+            img.src = src;
+        })
+    }

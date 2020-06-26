@@ -61,3 +61,6 @@ tick:
     there are no pending state changes).
 
     using await tick() will stop the execution of script until the next state is rendered
+
+    if we want to apply some changes as soon as the next state update happens use this.
+    we need this because updating state is async and batched

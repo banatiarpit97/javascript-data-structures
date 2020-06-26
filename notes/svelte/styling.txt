@@ -1,5 +1,10 @@
 the css styles we write inside the <style> tag is scoped to that perticular component
 only and will not affect any other component
+Svelte adds a hash 'svelte-something' to classname and element which helps the scoping
+
+Unused css is automatically stipped off from result.
+
+If we import a component, styles of parent component won't affect the child component
 
 //////////////////////////////////////////////////////////
 using scss in svelte:
@@ -27,3 +32,12 @@ using scss in svelte:
             };
 
 /////////////////////////////////////////////////////////////////
+
+defining global styles in component:
+ <style>
+    :global(p){
+        color: red;
+    }
+ </style>
+
+ Though we should not do this, instead put styles in global.css

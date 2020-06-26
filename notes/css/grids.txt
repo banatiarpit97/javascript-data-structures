@@ -1,4 +1,4 @@
-At the time of writing, April 2019, all major browsers (except IE, which will never have 
+All major browsers (except IE, which will never have 
 support for it) are already supporting this technology, covering 92% of all users.
 
 CSS Grid is not a competitor to Flexbox. They interoperate and collaborate on complex 

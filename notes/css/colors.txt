@@ -24,3 +24,5 @@ color value:
         In this notation, black is hsl(0, 0%, 0%) and white is hsl(0, 0%, 100%).
         You also have hsla() which adds the alpha channel to the mix, again a number 
         from 0 to 1: hsl(0, 0%, 0%, 0.5)
+
+    prefer hsl over rgb when interpolating values

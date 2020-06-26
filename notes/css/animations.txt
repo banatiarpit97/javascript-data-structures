@@ -1,3 +1,9 @@
+Always prefer CSS animations(keyframes) over JS animations becuase css animations happends in a
+different thread.
+Sometimes its not possible to use css animation like when we need to calculate value, then
+use requestAnimationFrame
+
+
 /* The animation code */
     @keyframes example {
         from {background-color: red;}       //represents 0%

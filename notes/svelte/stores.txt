@@ -48,6 +48,9 @@ writable store:
         });
         and in onDestroy call unsubscribe();
 
+    under the hood, svelte is converting the $ syntax and sunscriing the state for us and also
+    unsubscribing on destroy
+
 ////////////////////////////////////////////////////////////////////////
 Readable store:
     they can't be updated from the outside - there's no set() or update() method. Instead, once you set 
@@ -107,3 +110,5 @@ As long as an object correctly implements the subscribe method, it's a store.
     }
 
 /////////////////////////////////////////////////////////////////////
+we can bind to store value like normal variable:
+    <input bind:value={$name} />

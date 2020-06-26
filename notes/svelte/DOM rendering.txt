@@ -4,6 +4,7 @@ we can also use js function like Date etc:
     <p>hello {name.toUpperCase()}</p>
 We can also use dynamic values on attributes of html elements:
     <img src={src} />
+    <img alt="{name} is dancing" />
     if name of attribute and variable are same, we can use shorthand:
         <img {src} />
 ///////////////////////////////////////////////////////////

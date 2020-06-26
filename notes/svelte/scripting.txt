@@ -31,7 +31,6 @@ exporting functions from .svelte component file:
 
     You can't have a default export in conetext module, because the component is the default export.
 
-
 ////////////////////////////////////////////////////////////////
 Component state:
     any variable defined inside the script tag of svelett file can be used as a state

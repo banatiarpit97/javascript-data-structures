@@ -33,3 +33,9 @@ This file contains evertything required for the component:
         <h1><span class="yoyo">Hello {name}!</span></h1>
 
 //////////////////////////////////////////////////////////////////////
+firstly the script tag is run, then html/render part and then onMount
+///////////////////////////////////////////////////
+
+State is not updated synchronously or instantly, state updates are batched for performance.
+framework wait for the next microtask i.e. event loop to gather all the state changes and then
+update them together.

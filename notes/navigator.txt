@@ -1,0 +1,3 @@
+Returns the online status of the browser. The property returns a boolean value, 
+with true meaning online and false meaning offline. The property sends updates 
+whenever the browser's ability to connect to the network changes.

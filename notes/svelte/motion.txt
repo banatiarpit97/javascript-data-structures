@@ -35,6 +35,8 @@ Tweened:
 Spring:
     The spring function is an alternative to tweened that often works better for 
     values that are frequently changing.
+    If we need to change a value in between the current transition, use spring instead because
+    its a continous motion and hence just change the next path easily
 
         import { spring } from 'svelte/motion';
         let coords = spring({ x: 50, y: 50 });

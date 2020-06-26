@@ -1,0 +1,4 @@
+Graphql is just a spec, it is not a package or framework.
+Many libraries and frameworks are build on this spec.
+
+We can run graphql on frontend without graphql backend, we can proxy rest apis

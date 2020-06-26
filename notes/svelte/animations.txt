@@ -8,5 +8,8 @@
         duration can also be a d => milliseconds function, where d is the number of 
         pixels the element has to travel
 
+flip - first, last, invert, play
+flip can be used when we want an elemnt to move from its previous pos to new pos gracefully
+
 Note that all the transitions and animations are being applied with CSS, 
 rather than JavaScript, meaning they won't block (or be blocked by) the main thread.

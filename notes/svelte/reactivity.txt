@@ -1,5 +1,16 @@
 Just like useEffect in react
 
+<script>
+        let count = 0;
+        let double = count*2;
+        const incrementCount = () => {
+            count = count + 1
+        }
+    </script>
+    This won't work because script tag is only run once per component, so doubled won't be calculated
+    again.
+////////////////////////////////////////////////////////////
+
 If we want something to happen, when a particular state variable changes, then we use '$:'
     <script>
         let count = 0
@@ -20,3 +31,17 @@ If we want something to happen, when a particular state variable changes, then w
 
     we can multiple '$:' in our component, and we can use them to fire functions, update other
     variables etc
+
+////////////////////////////////////////////////////
+$: syntax might be strange but it is perfect js.
+This is actually a label used in loops to break inside nested loops like 'break label'.
+It behaved differently in svelte but is valid syntax and is has to be since svelte use js parser.
+
+///////////////////////////////////////////////////////
+order of $: statements does not matter, svelte will fifure out which to calculate first
+
+    let count = 0;
+    $: quadrapled = doubled*2;
+    $: doubled = count*2;
+
+    doubled will be calculated first and then quadrapled since quadrapled depends on doubled

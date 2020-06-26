@@ -77,6 +77,9 @@ Read-only bindings
     block level HTML element, excluding void tags (like br ) and elements that are set to be inline
     ( display: inline ).
 
+    clientWidth and clientHeight are measured by introducing an iframe inside that elem and
+    then listening to window event of iframe. So use this sparingly as iframes are costly
+
 bind:this :
     like ref in react
     allows you to get a reference to an HTML element and bind it to a JavaScript variable
