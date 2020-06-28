@@ -1,7 +1,7 @@
-EVery time DOM changes, browser has to do 2 intensive operations:
-Repaint - content changes to an element that does not affect layout/positioning
-relative to other elements
-Reflow - recalculate the layout of a portion of page or whole page
+Every time DOM changes, browser has to do 2 intensive operations:
+    Reflow - recalculate the layout of a portion of page or whole page
+    Repaint - content changes to an element that does not affect layout/positioning
+    relative to other elements
 
 React uses virtual DOM to help browser use less resources when changes need to
 be done on page
@@ -9,7 +9,8 @@ be done on page
 When we change state using setState, react marks the component dirty
 Then react updates virtual dom of dirty components, runs the diffing algo to make changes
 
-This alog is fast because react batches much of the changes, all elements that
-need to be changed at the same time and hence changes are rendered just once
+This algo is fast because react batches much of the changes, all elements that
+need to be changed at the same time and hence changes are rendered just once.
+reflow and repaint are expensive that's why updates are batched.
 
 React uses unidirectional data flow, from parent to child only

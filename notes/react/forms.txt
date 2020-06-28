@@ -36,7 +36,7 @@ in onSubmit function of form.
 
 the error is because of this binding, in onSubmit event, we provide the functin using
 this.handleSubmit. But when this function is called, it is called normally like
-handleSubmit  i.e. without any implicit 'this' arguement, hence state is not accessible
+handleSubmit()  i.e. without any implicit 'this' arguement, hence state is not accessible
 inner working might be something like:
     const fn = this.handleSubmit;
     fn();   //no 'this' arguement passed
@@ -62,7 +62,7 @@ to correct the issue, we do(any of the 4 methods):
     }
     //since arrow function does not have its own 'this', it will take this of class
 
-Always prefer creating arroow function over bind since bind can be much costlier than arraw functions
+Always prefer creating arrow function over bind since bind can be much costlier than arraw functions
 (though this prob existed some time back and chrome has optimized bind code but still costly)
 
 Arrow functions also has a disadvantage that ot gets created and destoyed on every re render but

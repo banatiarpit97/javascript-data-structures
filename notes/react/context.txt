@@ -1,4 +1,4 @@
-COntext also helps us send data from parent to child components
+Context also helps us send data from parent to child components
 But unlike props we can send the data to any nested child directly i.e. without going
 through all the hirearchy in between
 ////////////////////////////////////////////////////////////////////

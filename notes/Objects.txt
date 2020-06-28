@@ -4,7 +4,7 @@ var a = { }  or
 
 var a =  new Object(); then a.prop = value;
 
-var a = Object.create(null)     //creates an empty object
+var a = Object.create(null)     //creates a completely empty object(no .proto)
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -64,11 +64,7 @@ a.name -> will give "yoyo"
 
 to create copy of objects and not aliases :
 var b = Object.create(a);
-
-////////////////////////////////////////////////////////////////////////////
-
-Everything in js is objects like int, string, etc thats why we can invoke functions using '.' notation
-string.length, string.toUppercase() etc
+or b = {...a}
 
 ////////////////////////////////////////////////////////////////////////////
 Object destructuring in ES6
@@ -180,8 +176,14 @@ Borrowing methods from objects:
     }
     first.avgScore = second.avg();
     //if we borrow method like above, 'this' will refer to 'second'
-
+    because we are calling the function with second
     to correct -> first.avgScore = second.avg().bind(first);
+
+    We can also do this by:
+        first.avg = second.avg;
+    and then do:
+        first.avg()
+
 //////////////////////////////////////////////////////////////////////////////////////
 key in objects can or can not be in qoutes
 but if key contains '-', then it needs to be in quotes.

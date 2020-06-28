@@ -13,7 +13,6 @@ in same component then static content will be rendered unnecessarily
 
 components made using pure components can have only props as an arguement
 pure functions can have many inner functions
-pure functions can not have lifecycle events and their own state.
 
 In react, we dont mutate objects, we create new ones.
 Js is fast in replacing objects rather than changing them which gives performance 
@@ -133,9 +132,11 @@ there is only one child. Otherwise, it throws an error.
 
 ////////////////////////////////////////////////////////////////////
 Child components are rendered before parent components
-componentDidMount of child is run before that of parent, its because react renders the components recursively. i.e. React.createComponent('parent', null, React.createComponent('child', null, ...)
+componentDidMount of child is run before that of parent, its because react renders the 
+components recursively. i.e. React.createComponent('parent', null, React.createComponent('child', null, ...)
 and so on.
-We can also think of this in a way that parent can only be rendered completely if all its children are rendered and hence children need to rendered before.
+We can also think of this in a way that parent can only be rendered completely if all its 
+children are rendered and hence children need to rendered before.
 
 But constructor method of parent will always run before the child.and in children, constructor will run in sequential manner i.e. top to bottom
 
@@ -216,3 +217,4 @@ Put state in lowest component that needs it, this will prevent the parent from r
 unnecessarily
 
 ///////////////////////////////////////////////////////////////////////////////
+React does not batch setStates present in async methods and event handlers

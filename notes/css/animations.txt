@@ -83,5 +83,7 @@ Using JavaScript you can listen for the following events:
     animationstart
     animationend
     animationiteration
-Be careful with animationstart, because if the animation starts on page load, your JavaScript code is always executed after the CSS has been processed, so the animation is already started and you cannot intercept the event.
+Be careful with animationstart, because if the animation starts on page load, 
+your JavaScript code is always executed after the CSS has been processed, so the 
+animation is already started and you cannot intercept the event.
 

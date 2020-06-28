@@ -1,8 +1,6 @@
-it is an object
 contains data that is local to the component and might change frequently
 whenever state changes, component is re rendered i.e. render method of component
 is called
-can only be defined in class based component
 Changing state of components can only affect itself and its children but not 
 sibling or parents
 Child can also mutate state of parent(indirectly) by passing a function down as prop

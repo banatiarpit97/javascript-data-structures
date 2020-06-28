@@ -62,7 +62,7 @@ Since nothing is provided in array, functin inside useEffect will never execute 
 Second arguement always has to be an array
 If any of the variable in the array changes, function inside useEffect will be called
 
-Take cre while changing state inside useEffect, that might create a cycle if we are listening for
+Take care while changing state inside useEffect, that might create a cycle if we are listening for
 the same state variable in that useEffect
 
 Implementing componentWillUnmount:

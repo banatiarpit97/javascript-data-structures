@@ -7,7 +7,7 @@ Thunk - function returned from another function.
 
 
 Redux-thunk:
-    3rd part package that is a middleware for redux.
+    3rd party package that is a middleware for redux.
     This lets us return function from action creators rather than returning an Object(action);
 
     code :

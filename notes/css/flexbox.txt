@@ -85,6 +85,8 @@ If all items are defined as 1 and one is defined as 3, the bigger element will s
 the other ones. When less space is available, it will take 3x less space.
 
 flex-basis
+The flex-basis property specifies the initial length of a flexible item.
+It sets the size of the content box unless otherwise set with box-sizing.
 If set to auto, it sizes an item according to its width or height, and adds extra 
 space based on the flex-grow property.
 If set to 0, it does not add any extra space for the item when calculating the layout.

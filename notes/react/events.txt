@@ -15,3 +15,4 @@ interface as native ones but it works same in all browsers.
 
 React does not attach event listeners to child node, instead it listens to all the
 events at top level using single event listener. This is performance boost.
+This is event delegation

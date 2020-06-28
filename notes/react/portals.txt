@@ -9,11 +9,11 @@ styling of the parents.(because we want to position the modal according the body
 and not some other component)
 
 to create a portal, wrap the the complete jsx returned from component inside
-ReactDOM.portal function as 1st arguement.
+ReactDOM.createPortal function as 1st arguement.
 The second arguement is the HTML node inside which we want to place our component.
 
 const modal = () => {
-    return ReactDOM.portal(
+    return ReactDOM.createPortal(
         <div>
             <p>Modal</p>
         </div>,
