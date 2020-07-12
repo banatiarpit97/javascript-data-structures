@@ -89,3 +89,23 @@ export const name = 'value';
 export {
   name
 }
+
+////////////////////////////////////////////////////////
+Dynamic imports:
+  Dynamic imports work in regular scripts, they don’t require script type="module".
+
+  Although import() looks like a function call, it’s a special syntax that just happens to use 
+  parentheses (similar to super()).
+  So we can’t copy import to a variable or use call/apply with it. It’s not a function.
+
+  option1:
+    const modulePath = './utils.js';
+    import(modulePath)
+      .then(module => console.log(module.hi));
+
+  option2:
+    (async function () {
+      const modulePath = './utils.js';
+      const module = await import(modulePath);
+      console.log(module.hi);
+    })();

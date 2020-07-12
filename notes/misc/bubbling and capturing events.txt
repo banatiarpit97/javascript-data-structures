@@ -32,6 +32,9 @@ back to the top most parent.
 Think of the element on which the event took place as the mirror and path of event
 as path of light rays which first strikes the mirror(top to bottom as capturing) and then reflects
 back(bottom to top as bubbling)
+
+e.target gives the element on which event occured and e.currentTarget gives element on which the
+event handler is being executed currently
 /////////////////////////////////////////////
 eg.-
 

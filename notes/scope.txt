@@ -93,6 +93,10 @@ function example(){
                     //of creating d property of obj
     }
 
+    in 'with' block, it is difficult to know if we are accessing a global variable or an obj property
+    if the with object has property named that var then it will be picked otherwise upper scope will be
+    searched
+
     eval and with should be avoided as it messes up the scope and js engine
     is not able to optimize our code and code runs very slowly.
 
@@ -197,4 +201,5 @@ function example(){
 
 20. classes created with 'class' keyword are not hoisted
 
-21. 
+21. let a = b = 2
+    console.log(a, b)   2, 2

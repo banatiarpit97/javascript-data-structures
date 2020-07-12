@@ -5,6 +5,9 @@ background-image
     you can use an image as background to an element, by specifying the image location URL:
         background-image: url(image.png);
 
+    If you make the image a background-image of a div in CSS, when that div is set to 
+    "display: none", the image will not load.
+
 background-clip
     lets you determine the area used by the background image, or color. 
     The default value is border-box, which extends up to the border outer edge.

@@ -57,7 +57,7 @@ div:not(.awesome)	    Negation Pseudo-class
 
 /////////
     a {
-    color: yellow;
+        color: yellow;
     }
 Things seem to work fine, until you click one link. 
 The link goes back to the predefined color (blue) when you click it.
@@ -70,7 +70,7 @@ So, to correctly make the link yellow across all states, you need to write
     a,
     a:visited,
     a:active {
-    color: yellow;
+        color: yellow;
     }
 /////////
 Some pseudo classes are just used for printing, like :first, :left, :right, 
@@ -96,4 +96,15 @@ a::after	                Generated Content
 You specify the content property to insert any kind of content after or before an element:
     p::before {
     content: url(/myimage.png);
+    }
+
+////////////////////////////////
+target even elements:
+    div:nth-of-typeof(2n) {
+        color: black;
+    }
+
+target odd elements:
+    div:nth-of-typeof(2n+1) {
+        color: black;
     }

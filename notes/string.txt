@@ -1,3 +1,14 @@
+if("")  //false
+if("  ")    //true
+
+so use if(" ".trim())   //false
+
+/////////////////////////////////////////////
+out of the three options:
+    .toString()   //will first coerce string to object to call .toString
+    new String()    //creates an obj
+    String()    //use this
+
 Escaping special characters :
 \'
 \" -> "i said \"what's your name\""

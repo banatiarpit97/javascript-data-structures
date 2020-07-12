@@ -23,6 +23,7 @@ eg.
 now instead of applying click handler to all the li, we can add 1 handler to ul
 that will take care of all li.
 using e.target, we can get the actual element/child on which event took place.
+e.target is an object and has properties like tagName, dataset etc
 
 document.querySelector('ul').addEventListener('click', function(e){
     if(e.target.innerHTML === '1'){

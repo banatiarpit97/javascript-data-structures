@@ -92,3 +92,64 @@ communication
 SEO does not work well in spa
 SEO relies on js, hence might feel slow on old devices and some customers
 have their js disabled in their browser
+
+///////////////////////////////////////////////////////////////////////////
+JS in browser typically executed in 3 stacks:
+    Main Stack
+    	- Standard thread
+		- functions from our code
+	
+	Micro Task
+		- Promises, Object.observe, MutationObserver
+		- handler of the promise becomes the microtask
+		- job queue is used for this stack
+
+	Macro Task
+		- setTimeout, setImmediate, requestAnimationFrame, UI rendering
+		- event queue is used for these
+
+
+	Priority:
+		Main Thread > Micro Tasks > Macro Tasks
+
+All setTimeouts and Promises are pushed into event loop but promises are executed before setTimeouts
+
+////////////////////////////////////////////////////////////////////////
+we can skip {} in if, for, while if body contains only 1 statement.
+
+//////////////////////////////////////////////////////////////////////
+labels in for loop:
+	loop: { // label
+        for (var i=0; i<arr.length; i++) {
+            if ((arr[i] % 2) === 0) {
+                break loop;
+            }
+        }
+    }
+
+flow of for loop:
+	for(init; step; condition){body}
+
+	flow is => init -> condition -> body -> step -> condition -> body....
+
+don't use for-in for arrays because loops over properties/indices and also loops over non-index
+properties
+While using for-in on object, check if prop is on itelf or prototype using hasOwnProperty
+
+/////////////////////////////////////////////////////////
+while accessing inbuilt functions/properties on object, its better to borrow thos methods from
+prototype like Object.prototype.hasOwnProperty because our might also have a property with this
+name
+
+/////////////////////////////////////////////////////////
+throw and return also works same as break in switch case
+
+checking equality in switch:
+	switch (true) {
+        case x < y:
+            return -1;
+        case x === y:
+            return 0;
+        default:
+            return 1;
+    }

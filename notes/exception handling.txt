@@ -1,0 +1,39 @@
+try {
+
+}
+catch (e) {
+
+}
+finally {
+
+}
+
+catch is used to get exceptions throws by try block(directly or any inside any function they invoke)
+finally is always executed, used for cleaning
+
+If we use a return statement inside try blocks, then following happens:
+    reuturn value is queued
+    finally block is executed
+    queued valued is returned
+
+    so even if we change that variable inside finally, return statement would not be affected
+
+///////////////////////////////////////////////////
+throw
+    can be used to throw any value like string, number etc
+        throw "Arpit";
+    Don’t do this. JavaScript has special constructors for exception objects. Use those or 
+    subclass them. Their advantage is that JavaScript automatically adds a stack trace 
+    and that they have room for additional context-specific properties. 
+    The simplest solution is to use the built-in constructor Error():
+        throw new Error('Something bad happened');
+
+////////////////////////////////////////////////////
+Error constructors:
+    Error, EvalError, RangeError, ReferenceError, SyntaxError, TypeError, URIError
+
+/////////////////////////////////////////////////////
+Properties on errors:
+    message - The error message.
+    name - The name of the error.
+    stack - A stack trace. This is nonstandard.

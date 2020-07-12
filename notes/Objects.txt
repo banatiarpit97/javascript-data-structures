@@ -238,3 +238,8 @@ Shallow Copy of an object:
     {...obj}
     Object.assign({}, obj);
 
+////////////////////////////////////
+Object.is() can also be used instead of ===, actually its better than === becuase it
+covers some cases like NaN and -0
+
+////////////////////////////////////

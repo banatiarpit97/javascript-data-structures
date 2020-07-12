@@ -101,7 +101,11 @@ CALL, APPLY, BIND :
 function_name.call(thisArg, arguement...);  //thisArg is bound to 'this' keyword
 function_name.apply(thisArg, [arguement...]);  //thisArg is bound to 'this' keyword
 
-difference between call and apply is that call takes arguements separately whereas apply takes arguements as array 
+difference between call and apply is that call takes arguements separately whereas 
+apply takes arguements as array.
+
+difference between call/apply and bind is that call/apply executed that function with 'this' binding
+but bind returns a new function with 'this' binding that we can later like a normal function
 
 function_name.bind(thisArg, arguement...);  //thisArg is bound to 'this' keyword
 
@@ -112,6 +116,18 @@ elem.addEventListener('click',
         console.log('clicked')
     }.bind(thisArg);               //if we don't bind, 'this' wll refer to elem. but now it will be thisArg
 )
+
+bind can also be used to perform currying:
+    function add(x, y) {
+        return x + y;
+    }
+    var plus1 = add.bind(null, 1);
+    console.log(plus1(5));  // 6
+
+    above bind code was converted to:
+        function plus1(y) {
+            return add(1, y);
+        }
 //////////////////////////////////////////////////
 Even though it appears this refers to the object where it is defined, 
 it is not until an object invokes the this Function that this is actually assigned a value. 

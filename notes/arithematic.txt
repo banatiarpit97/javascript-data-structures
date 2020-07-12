@@ -1,6 +1,11 @@
 ** -> exponential
 2**3 = 8
 
+////////////////////////////////////////////////////
+If we are using < or > and one of the arguemnt is number then the second will also be converted
+to number but if both are string, then they are compared using alphanumeric values
+
+///////////////////////////////////////////////////
 5+7 = 12
 "5"+7 = 57
 "5"+"7" = 57

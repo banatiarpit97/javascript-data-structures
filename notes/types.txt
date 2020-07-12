@@ -1,10 +1,36 @@
 there are 6 types:
     Undefined, Null
-    Boolean, String, Number, and
+    Boolean, String, Number, Symbol and
     Object
 
 Constructors technically don’t introduce new types, even though they are said to have instances.
+Bigint will also be added soon.
+Functions are not a separate type, they are a subtype of objects like array. Functions are
+actually called callable objects.
 
+People usually say that everything is an object in js which is not true, most of the primitive
+can act as an object but are not object.
+Since js is a dynamically typed language, variable does not have a type but value do.
+/////////////////////////////////////////////////
+typeof
+
+always returns a string.
+has a set of returnable values(Enum);
+
+    typeof null     //'object'(known js bug, so if ypu ever get typeof object, check if it's not null)
+
+    typeof function(){}     //'function', even though function is not a separate js type, typeof returns it
+
+    typeof []       //'object', so use instanceof or Array.isArray
+
+    typeof Symbol()     //'symbol'
+
+    typeof NaN      //'number'
+
+    typeof a    //'undefined', even if we haven't declared the variable a. 
+    
+Typeof will always return a string. Its the only operator that won't give an error when referencing 
+an undeclared value
 ///////////////////////////////////////////
 Static Typing Versus Dynamic Typing
     static usually means “at compile time” or “without running a program,” while dynamic 
@@ -23,7 +49,7 @@ Static Typing Versus Dynamic Typing
 
 /////////////////////////////////////////////////////////////////////////////
 Primitive Values Versus Objects
-    booleans, numbers, strings, null, and undefined
+    booleans, numbers, strings, symbol, null, and undefined
     All other values are objects.(plain obj, arrays, regex)
 
     A major difference between the two is how they are compared; each object has a 
@@ -135,6 +161,8 @@ there is nothing that objects can do that primitives can’t (with the exception
     > 'abc' == new String('abc')
         true(can not compare 2 references with == but can compare primitive and reference)
 
+
+
 //////////////
 There is one use case for wrapper objects: you want to add properties to a primitive value. 
 Then you wrap the primitive and add properties to the wrapper object. You need to unwrap 
@@ -217,6 +245,11 @@ Function for conversion:
         '1'
         > String({})
         "[object Object]"'
+        > String([])
+        ""
+        > String([1,2,3])
+        "1,2,3"
+        
         Objects are first converted to primitives, which are then converted to strings.
 
 ////////////////////////
@@ -273,3 +306,49 @@ numbers and strings. It has the following signature:
         '7'
         > Number(s)
         7
+
+//////////////////////////////////
+NaN
+this is defined as an invalid number.
+It is a number, just an invalid one i.e. why typeof NaN is 'number'
+
+NaN === NaN     //false, NaN does not have identity property on it and hence not equal to itself
+
+If we ever want to say that there is no valid number for this variable, use NaN
+
+isNaN is a method in js but is a little faulty(converts value to number before checking for NaN
+so isNaN('aa') is also true if its a string)
+Use Number.isNaN() instead, it does not coerce arguemnt to number
+
+/////////////////////////////////////
+-0 is a value in js
+can be used when we need sign to know the direction
+
+-0 === 0        //true
+Object.is(-0, 0)        //false
+
+////////////////////////////////////////
+Double equals ( == ) algo according to spec:
+    if types are same, check using ===
+    if null or undefined, equal
+    if one of them is object, convert it to ToPrimitive (42 == [42] is true)
+    if primitive values are compared, they are converted to NUMBERS then checked for ===
+
+So its not like == does not check the type, it checks but it coerce the types before checking for 
+equality and for coercion, it prefers converting to number
+
+    if([])  //true
+    if([] == true)  //false due to above algo(don't use ever)
+
+////////////////////////////////////////
+instanceof:
+    The instanceof operator tests whether the prototype property of a constructor appears 
+    anywhere in the prototype chain of an object.
+    If we change the prototype of function after creating an object from it, then the object
+    will give false on instanceof since now its prototype is different
+
+        function C() {}
+        let o = new C()
+
+        o instanceof C // true, because: Object.getPrototypeOf(o) === C.prototype
+        

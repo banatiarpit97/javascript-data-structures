@@ -8,7 +8,7 @@ var a = ['red', 1, {prop:val}, [1,2,4]];
 We can dynamically resize array,
 if an array is of size 3 [1,2,3], and we do a[5] = 5, then -> [1,2,3,undefined, undefined, 5];
 
-even an empty array returns true
+even an empty array returns true(same for object)
 a = [];
 if(a){
 	console.log(true);
@@ -96,6 +96,7 @@ arrays are also objects with properties '0', '1', '2'... i.e. index number
 typeof([])  //'object'
 [] instanceof Array		//true
 [] instanceof Object		//true
+Array.isArray([])	//true	(use this)
 
 arrays in JavaScript are too flexible: they are not indexed sequences of elements, 
 but maps from numbers to elements.

@@ -1,0 +1,17 @@
+function curry (fn) {
+    return function curried (...args) {
+        if(args.length >= fn.length) {
+            fn.apply(this, args);
+        } else {
+            return function(...args2) {
+                return curried.apply(this, [...args, ...args2])
+            }
+        }
+    }
+}
+
+this can be used to break arguements into parts i.e. if a function accepts 3 paramters, we can curry
+it to accept some arguements at a time and return a function that can be called again to pass some
+more arguements. When we have passed arguements equal or greater than expected by function, we call
+the original function.
+This can be used to create an intermediate state of a function like creating function factories.

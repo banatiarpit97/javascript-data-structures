@@ -46,6 +46,13 @@ arrow function :
 
         arrow functions can not be used as constructors, gives TypeError
 
+The Function Constructor
+    The constructor Function() evaluates JavaScript code stored in strings.
+        var add = new Function('x', 'y', 'return x + y');
+
+    However, this way of defining a function is slow and keeps code in strings (inaccessible to tools).
+    it works similarly to eval() and should never be used.
+
 IIFE:
     (function(){       //These are functions that are called immediately but can not be called again
 
@@ -89,11 +96,20 @@ is neither top level nor inside other functions.
     (see spelling carefully)
     This object contains all the params passed while calling
     Key of these params are numbers 0,1,2... and values are params passed
-    after that, a key called 'callee' that has its value as obj and tells about function signature
+    after that, a key called 'callee' that refers to the current function and used for recursion,
+    this is not allowed in strict mode and named function are used for this.
     after that, a key called Symbol(Symbol.iterator) whose value is also an obj
 
     this can be used to get all the extra params passed to function while
     calling it(Since we can pass more than required params in js)
+
+    It is an array like structure but not an Array
+        Contains properties like length but noth methods like slice. forEach etc(we can borrow methods
+        from Array.prototype if necessary)
+        It has object methods like 'in' or 'hasOwnProperty'
+
+    in non-strict mode, arguments array stay up to date even if we change the params but no 
+    updating in strict mode.
     
 4. Spread operator :
         extra arguements can be accomodated by spread operator(needs to be last parameter)
@@ -204,3 +220,26 @@ is neither top level nor inside other functions.
 
 16. function foo(){console.log(1)}
     typeof(foo) //'function'
+
+17. inbuilt functions in js can be overritten like  (though should not be done)
+        Array.prototype.slice = function(){console.log('slice')}
+
+18. function can be used as a normal function like func() and can also be used as a 
+    constructor like new func(). constructor returns an object
+
+19. we can change params of a function, but then we won't be able to acces the original
+    arg passed event with 'arguments'
+        function a (b){
+            b = 2;
+            console.log(b, arguments[0])    2, 2
+        }
+
+20. To check if the function was called using new(constructor form):
+        function Product(){
+            if(new.target){
+                console.log('called using new');
+            } else {
+                return; //this can be used if we want to force a function to be called using new only
+
+            }
+        }

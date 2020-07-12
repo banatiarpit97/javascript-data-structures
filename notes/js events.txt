@@ -12,13 +12,13 @@ removing events :
     elem.removeEventListener("event", func_name);
 
 Event object :
-elem.addEventListener("click", (e) => {
-    console.log(e)          //event object
-    e.preventDefault();     //prevent default behavious like submitting a form, redirect using a link
-    e.stopPropogation();       //stop event bubbling
-    //bubbling is set to true by default which means, that an event looks for listener in parent elements
-        also
-})
+	elem.addEventListener("click", (e) => {
+		console.log(e)          //event object
+		e.preventDefault();     //prevent default behavious like submitting a form, redirect using a link
+		e.stopPropogation();       //stop event bubbling
+		//bubbling is set to true by default which means, that an event looks for listener in parent elements
+			also
+	})
 addEventListener can be called from a elem/selector that return a single elem
 can be applied on .querySelector and .getElelemntById
 can NOT be applied on .querySelectorAll and getElementsByClassName and getElementsByTagName
@@ -45,7 +45,38 @@ to get files uploaded:
 		console.log(e.target.files[0]);
 	})
 
+////////////////////////////////////////
 event are not fired for elements with visibility:hidden;
+
+///////////////////////////////////////
+There are 4 methods on event object:
+	stopPropogation
+	preventDefault
+		-The preventDefault() method cancels the event if it is cancelable, meaning that the 
+		default action that belongs to the event will not occur.
+		-Not all events are cancelable. Use the cancelable property to find out if an event is 
+		cancelable(e.cancelable).
+		-The preventDefault() method does not prevent further propagation of an event through 
+		the DOM. Use the stopPropagation() method to handle this.
+
+	getModifierState
+		-The getModifierState() method returns true if the specified modifier key was pressed, 
+		or activated.
+		-like alt, control, shift, CapsLock, NumLock, ScrollLock
+		-event.getModifierState("CapsLock");
+
+	createEvent
+		-The createEvent() method creates an event object.
+		-The event can be of any legal event type, and must be initialized before use.
+			document.createEvent("MouseEvent");
+			x.initMouseEvent("mouseover", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+			document.getElementById("myDiv").dispatchEvent(x);
+
+	stopImmediatePropagation
+		When clicking on a button, execute the first event handler, and stop the rest of 
+		the event handlers from being executed
+
+////////////////////////////////////////
 
 Common Events :
 

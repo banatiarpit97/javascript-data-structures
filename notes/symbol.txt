@@ -1,0 +1,13 @@
+Using for-of loops in objects:
+    let product = {
+        id: 1,
+        [Symbol.iterator]: function* () {
+            for(i in this) {
+                yield [i, this[i]];
+            }
+        }
+    }
+
+    for(p of product){
+        console.log(p);
+    }
