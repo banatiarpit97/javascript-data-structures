@@ -1,3 +1,7 @@
+Variables in JavaScript are lexically scoped, so the static structure of a program 
+determines the scope of a variable (it is not influenced by, say, where a function is 
+called from).
+
 var name = "arpit";          //global variable
 name = "arpit"              //will be global when declared inside or outside function
 
@@ -13,6 +17,10 @@ function example(){
 
 2. Global variable should be used very carefully, global variables can be accessed by other scripts
    included in the page(user defined or libraries) and hence can cause problems.
+   Global variables are also unpredictable since they can be changed from anywhere
+
+   Module systems solve this problem because modules don’t interface via the global scope 
+   and because each module has its own scope for module-global variables.
 
 3. Global variables are properties of window object, we can use them using var_name or window.var_name
     all global varibales are properties of 'window' in browser 
@@ -52,7 +60,7 @@ function example(){
     food    //apple
 
 8.  var a = 10;
-    var a;                  //a still remains 10(this line is ignored)
+    var a;                  //a still remains 10(this line is ignored, value unchanged)
     console.log(a);         //prints 10
     (function(){            //IIFE
         console.log(a);     //undefined as a is hoisted but not its value and local a takes preference over global one
@@ -203,3 +211,35 @@ function example(){
 
 21. let a = b = 2
     console.log(a, b)   2, 2
+
+22. we can use console.log(window.a) instead of console.log(a) to save ourselves from ReferenceError
+    while accessing global variable but try to avoid it.
+
+Internals of Scope:
+
+Variables come into existence when program execution enters their scope. Then they need 
+storage space. The data structure that provides that storage space is called an 
+environment in JavaScript. It maps variable names to values. Its structure is very 
+similar to that of JavaScript objects. Environments sometimes live on after you leave 
+their scope. Therefore, they are stored on a heap, not on a stack.
+
+Each time a function is invoked, a new environment is created to map identifiers 
+(of parameters and variables) to values. To handle recursion, execution contexts—references
+to environments—are managed in a stack. That stack mirrors the call stack.
+
+a function records the scope it was created in via the internal property [[Scope]]. 
+When a function is called, an environment is created for the new scope that is entered. 
+That environment has a field called outer that points to the outer scope’s environment and
+is set up via [[Scope]]. Therefore, there is always a chain of environments, starting with
+the currently active environment, continuing with its outer environment, and so on. 
+Every chain ends with the global environment (the scope of all initially invoked functions). 
+The field outer of the global environment is null.
+
+To resolve an identifier, the complete environment chain is traversed, starting with the
+active environment.
+
+    Closures:
+        If a function leaves the scope in which it was created, it stays connected to the 
+        variables of that scope (and of the surrounding scopes).
+        A closure is a function plus the connection to the scope in which the function was created.
+        That is why closure can always access the latest values of variables outside

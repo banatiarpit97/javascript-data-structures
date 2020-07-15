@@ -76,6 +76,33 @@ function from global scope.
 We can not call an iife from anywhere else.
 But iife has access to global variables and functions.
 
+If a statement starts with the keyword function, the parser expects it to be a function 
+declaration. But a function declaration cannot be immediately invoked. 
+Thus, we tell the parser that the keyword function is the beginning 
+of a function expression by starting the statement with an open parenthesis. 
+Inside parentheses, there can only be expressions.
+
+we need to have a ; between 2 adjacent iife otherwise parser would think of second iife as a
+function call
+
+We can use prefix operators also to enforce expression context like:
+    !function () {
+        // inside IIFE
+    }();
+    void function () {
+        // inside IIFE
+    }();
+
+The advantage of using prefix operators is that forgetting the terminating semicolon 
+does not cause trouble.
+
+Note that enforcing the expression context for an IIFE is not necessary, if you are 
+already in the expression context.
+    var File = function () {
+        var UNTITLED = 'Untitled';
+    }();
+
+
 Using new :
     var name = new Function("console.log('hh)");
     name();
@@ -110,6 +137,9 @@ is neither top level nor inside other functions.
 
     in non-strict mode, arguments array stay up to date even if we change the params but no 
     updating in strict mode.
+
+    to convert arguments into an array:
+        Array.prototype.slice.call(arguments)
     
 4. Spread operator :
         extra arguements can be accomodated by spread operator(needs to be last parameter)

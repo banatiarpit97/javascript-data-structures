@@ -188,6 +188,8 @@ while going above the prototype chain, 'this' does not change,
 it still remains what it was when first assigned i.e execution context remains same that is why
 we can call a function present in prototype object from its different child objects from their
 own context.
+the value of this is always the object where the search for the method began, not where the
+method was found. That allows the method to access all of the properties of the prototype chain.
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 ways to add methods to prototype:
@@ -238,3 +240,28 @@ properties of constructor function can not be accessed without creating an objec
     console.log(a.yoyo, a.age);     //undefined, 21
 
 //////////////////////////////////////////////////////////////////////////////////////////////
+Prototypes are great for sharing data between objects: several objects get the same 
+prototype, which holds all shared properties.
+
+///////////////////////////////////////////////////////////////////////////
+Prototype methods:
+    Object.create()
+
+    Object.getPrototypeOf(obj)
+        returns the prototype of obj.
+
+    Object.prototype.isPrototypeOf(obj)
+        checks whether the receiver of the method is a (direct or indirect) prototype of obj.
+        In other words: are the receiver and obj in the same prototype chain, and does obj
+        come before the receive
+
+///////////////////////////////////////////////////////////////////////////
+Finding the object where a property is defined
+    function getDefiningObject(obj, propKey) {
+        while (obj && !{}.hasOwnProperty.call(obj, propKey)) {
+            obj = Object.getPrototypeOf(obj);
+        }
+        return obj; //will be null at the top
+    }
+
+//////////////////////////////////////////////////////////////////////

@@ -177,3 +177,26 @@ Function inside function:
     Function expressions are often used as arguments in function calls in JavaScript. 
     Always be careful when you refer to this from one of those function expressions.
 
+/////////////////////////////////////////////////////////////////////////////////
+Global this:
+    Browsers include window, which is standardized as part of the Document Object Model (DOM),
+    not as part of ECMAScript 5. There is one global object per frame or window.
+
+    Node.js contains global, which is a Node.js-specific variable. Each module has its own 
+    scope in which this points to an object with that scope’s variables. Accordingly, 
+    this and global are different inside modules.
+
+///////////////////////////////////////////////////////////////////////////
+if we pass strings, number as a value to 'this', then its actual value becomes this
+    function func() {
+        console.log('this: '+this);
+    }
+    var bound = func.bind('abc');
+    bound() //'abc'
+
+//////////////////////////////////////////////////////////////////////////////
+call, apply, bind on constructors:
+    new (Date.bind(null, 2011, 11, 24))
+
+    new (Function.prototype.bind.apply(
+         Date, [null, 2011, 11, 24]))

@@ -54,6 +54,12 @@ Second one has an advantage that we can use dynamic variables that hold property
 var w = "name";
 a[w] -> will calculate a["name"];
 
+Note that the bracket operator coerces its interior to string.
+    obj[3+3]    //will calculate obj['6']
+
+Calling methods works as you would expect:
+    obj['myMethod']()
+
 ////////////////////////////////////////////////////////////////////////////
 
 Objects are passed by refernce :
@@ -148,13 +154,26 @@ To delete a property from an object, you use the delete operator.
 Only properties that are defined in object itself and that defined in constructor function using this
 keyword can be deleted.(Props in constructor function are not inherited, they are created every time
 we create an object but props defined in proto are inherited)
+
 You cannot delete properties that were inherited(Defined in proto), nor can you delete properties with their
 attributes set to configurable. You must delete the inherited properties on the prototype object 
 (where the properties were defined). Also, you cannot delete properties of the global object, 
 which were declared with the var keyword.
 
+we can also set/change properties that are inherited.
+To delete/set, we first have to find the object that contains it
+
 delete obj.prop;        //always returns true(whether prop deleted or not)
 
+If you merely set a property to undefined, the property still exists and the object still 
+contains its key:   Object.keys(obj)
+
+Use the delete operator sparingly. Most modern JavaScript engines optimize the performance of
+instances created by constructors if their “shape” doesn’t change (roughly: no properties are
+removed or added). Deleting a property prevents that optimization.
+
+delete returns false if the property is an own property, but cannot be deleted. It returns
+true in all other cases.
 ////////////////////////////////////////////////////////////////////////////
 Borrowing methods from objects:
 
@@ -183,6 +202,9 @@ Borrowing methods from objects:
         first.avg = second.avg;
     and then do:
         first.avg()
+
+If you extract a method from an object, it becomes a true function again. Its connection
+with the object is severed. Same happens when we pass these functions as callback
 
 //////////////////////////////////////////////////////////////////////////////////////
 key in objects can or can not be in qoutes
@@ -243,3 +265,243 @@ Object.is() can also be used instead of ===, actually its better than === becuas
 covers some cases like NaN and -0
 
 ////////////////////////////////////
+Map vs Object:
+    1. order of properties are conserved in Map
+    2. Map can not have inheritance(prototype linking)
+
+/////////////////////////////////////////////////
+    var obj = {};
+    Object(obj) === obj     //true
+
+The following function checks whether value is an object:
+    function isObject(value) {
+        return value === Object(value);
+    }
+
+////////////////////////////////////////////////
+There are many internal properties in js.
+All of these properties are defined by [[name]] like [[Prototype]], [[Scope]]
+we can not refernce them directly but usually there is key to refernce them like
+__proto__, outer etc
+
+////////////////////////////////////////////////
+Object.create(proto, propDescObj?)
+
+Optionally, properties can be added via descriptors (which are explained in Property Descriptors).
+    var jane = Object.create(PersonProto, {
+        name: { value: 'Jane', writable: true }
+    });
+
+////////////////////////////////////////////////////
+Object.getOwnPropertyNames(obj) returns the keys of all own properties of obj.
+
+Object.keys(obj) returns the keys of all enumerable own properties of obj.
+
+////////////////////////////////////////////////////
+Accessors (Getters and Setters)
+
+property is virtual and not storage space
+    var obj = {
+        get foo() {
+            return 'getter';
+        },
+        set foo(value) {
+            console.log('setter: '+value);
+        }
+    };
+
+    > obj.foo = 'bla';
+    setter: bla
+    > obj.foo
+    'getter'
+
+    a normal assignment in the object can override setters and getters if that comes after,
+    but if getter/setter comes after, they will override the assignment
+        var obj = {
+            get foo() {
+                return 'getter';
+            },
+            set foo(value) {
+                console.log('setter: '+value);
+            },
+            foo: 1      //getter, setter won't be called now since overriden
+        };
+
+Getters and setters are inherited from prototypes.
+
+////////////////////////////////////////////////////
+Property attributes:
+    All of a property’s state, both its data and its metadata, is stored in attributes.
+    They are fields that a property has, much like an object has properties. Attribute
+    keys are often written in double brackets.
+
+    [[Value]] 
+        holds the property’s value, its data.
+
+    [[Writable]]
+        whether the value of a property can be changed.
+
+    [[Get]]
+        holds the getter, a function that is called when a property is read.
+        The function computes the result of the read access.
+
+    [[Set]]
+        holds the setter, a function that is called when a property is set to a value.
+        The function receives that value as a parameter.
+
+    All properties have the following attributes:
+
+        [[Enumerable]]
+            Making a property nonenumerable hides it from some operations.
+            The main purpose of enumerability is to tell the for-in loop which properties it
+            should ignore.
+            Instances of built-in constructors, everything not created by the user is hidden
+            from for-in.
+
+            The only operations affected by enumerability are:
+            for-in loop, Object.keys(), JSON.stringify()
+
+        [[Configurable]]
+            If it is false, you cannot delete a property, change any of its attributes
+            (except [[Value]]), or convert it from a data property to an accessor property or
+            vice versa. In other words, [[Configurable]] controls the writability of a
+            property’s metadata. There is one exception to this rule—JavaScript allows you
+            to change an unconfigurable property from writable to read-only, for historic
+            reasons; the property length of arrays has always been writable and unconfigurable.
+            Without this exception, you wouldn’t be able to freeze arrays.
+
+/////////////////////////////////////////////////////////////////
+Property Descriptors
+    A property descriptor is a data structure for working programmatically with attributes.
+    It is an object that encodes the attributes of a property. Each of a descriptor’s
+    properties corresponds to an attribute.
+
+    Defining properties via descriptors:
+        If a property does not exist, create a new property whose attributes are as
+        specified by the descriptor. If an attribute has no corresponding property in the
+        descriptor, then use the default value.
+        If a property already exists, update the attributes of the property as specified by
+        the descriptor. If an attribute has no corresponding property in the descriptor,
+        then don’t change it.
+
+    Methods:
+        Object.getOwnPropertyDescriptor(obj, propKey)
+            Returns the descriptor of the own (noninherited) property of obj whose key is
+            propKey. If there is no such property, undefined is returned
+
+        Object.defineProperty(obj, propKey, propDesc)
+            Create or change a property of obj whose key is propKey and whose attributes
+            are specified via propDesc. Return the modified object.
+                var obj = Object.defineProperty({}, 'foo', {
+                    value: 123,
+                    enumerable: true
+                });
+
+        Object.defineProperties(obj, propDescObj)
+            The batch version of Object.defineProperty(). Each property of propDescObj holds
+            a property descriptor. The keys of the properties and their values tell
+            Object.defineProperties what properties to create or change on obj
+                var obj = Object.defineProperties({}, {
+                    foo: { value: 123, enumerable: true },
+                    bar: { value: 'abc', enumerable: true }
+                });
+
+    Default values of attributes while defining properties
+        [[Value]] - undefined
+        [[Get]] - undefined
+        [[Set]] - undefined
+        [[Writable]] - false for descriptor({}), true for assignment(=)
+        [[Enumerable]] - false for descriptor({}), true for assignment(=)
+        [[Configurable]] - false for descriptor({}), true for assignment(=)
+
+////////////////////////////////////////////////////
+Copying an Object:
+    To create an identical copy of an object, you need to get two things right:
+        1. The copy must have the same prototype
+        2. The copy must have the same properties, with the same attributes as the original.
+
+        function copyObject(orig) {
+            var copy = Object.create(Object.getPrototypeOf(orig));
+            copyOwnPropertiesFrom(copy, orig);
+            return copy;
+        }
+        function copyOwnPropertiesFrom(target, source) {
+            Object.getOwnPropertyNames(source)
+            .forEach(function(propKey) {
+                var desc = Object.getOwnPropertyDescriptor(source, propKey);
+                Object.defineProperty(target, propKey, desc);
+            });
+            return target;
+        };
+
+////////////////////////////////////////////////////
+Inherited Read-Only Properties Can’t Be Assigned To
+    If an object, obj, inherits a property, foo, from a prototype and foo is not writable,
+    then you can’t assign to obj.foo but defining that property works
+    does not do anything in sloppy mode, TypeError in strict mode.
+
+    var proto = Object.defineProperty({}, 'foo', {
+        value: 'a',
+        writable: false
+    });
+    var obj = Object.create(proto);
+
+    > obj.foo = 'b';
+    > obj.foo
+    'a'
+
+    > Object.defineProperty(obj, 'foo', { value: 'b' });
+    > obj.foo
+    'b'
+
+////////////////////////////////////////////////////
+Protecting Objects:
+
+Preventing Extensions(Weakest):
+    makes it impossible to add properties to obj.
+    You can still delete properties, though
+    nothing happens in sloppy mode, TypeError in strict mode
+        Object.preventExtensions(obj);
+        Object.isExtensible(obj)
+
+Sealing(Mid):
+    prevents extensions and makes all properties unconfigurable.
+    literally change configurable attribute of all properties to false, can be verified using
+    getOwnPropertyDescriptor()
+    This means that the attributes of properties can’t be changed anymore,
+    You can still change the property like obj.foo = 'b'
+
+        Object.seal(obj)
+        Object.isSealed(obj)
+
+Freeze(Strongest):
+    It makes all properties nonwritable and seals obj. In other words, obj is not extensible
+    and all properties are read-only, and there is no way to change that.
+    nothing happens in sloppy mode, TypeError in strict mode
+
+        Object.freeze(point);
+        Object.isFrozen(obj)
+
+Pitfall: Protection Is Shallow
+    Protecting an object is shallow: it affects the own properties, but not the values of
+    those properties.
+
+        var obj = {
+            foo: 1,
+            bar: ['a', 'b']
+        };
+        Object.freeze(obj);
+
+    Even though you have frozen obj, it is not completely immutable—you can change the
+    (mutable) value of property bar:
+
+        > obj.foo = 2; // no effect
+        > obj.bar.push('c'); // changes obj.bar
+
+        > obj
+        { foo: 1, bar: [ 'a', 'b', 'c' ] }
+
+    Additionally, obj has the prototype Object.prototype, which is also mutable.
+
+/////////////////////////////////////////////////////////////////
+
