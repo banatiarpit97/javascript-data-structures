@@ -35,6 +35,6 @@ const paidUserFunction = {
 
 Object.setPrototypeOf(paidUserFunction, userFunction);
 
-const paidUser1 = new paidUserCreator('ankit', 10, 25);
+const paidUser1 = paidUserCreator('ankit', 10, 25);
 paidUser1.increaseBalance();
 paidUser1.sayName();//I am ankit

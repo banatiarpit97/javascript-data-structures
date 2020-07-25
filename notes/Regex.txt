@@ -21,3 +21,6 @@ Methods:
 
         The first parameter of replace must be a regular expression with a /g flag; otherwise, 
         only the first occurrence is replaced
+
+////////////////////////////////////////////////
+Object.prototype.isPrototypeOf(/xyz/)   //true

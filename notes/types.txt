@@ -344,6 +344,7 @@ equality and for coercion, it prefers converting to number
 instanceof:
     The instanceof operator tests whether the prototype property of a constructor appears 
     anywhere in the prototype chain of an object.
+    The instanceof operator does not rely on the property constructor.
     If we change the prototype of function after creating an object from it, then the object
     will give false on instanceof since now its prototype is different
 
@@ -352,3 +353,13 @@ instanceof:
 
         o instanceof C // true, because: Object.getPrototypeOf(o) === C.prototype
         
+    As expected, instanceof is always false for primitive values:
+        > 123 instanceof Number
+        false
+
+    Finally, instanceof throws an exception if its right side isn’t a function:
+        > [] instanceof 123
+        TypeError: Expecting a function in instanceof check
+
+    In web browsers, each frame and window has its own realm with separate global variables.
+    That prevents instanceof from working for objects that cross realms.

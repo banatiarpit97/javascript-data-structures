@@ -5,7 +5,8 @@ var a = { }  or
 var a =  new Object(); then a.prop = value;
 
 var a = Object.create(null)     //creates a completely empty object(no .proto)
-
+Such an object is a better map (dictionary) than a normal object, which is why this
+pattern is sometimes called the dict pattern (dict for dictionary).
 ////////////////////////////////////////////////////////////////////////////
 
 Objects can also contain functions :
@@ -293,6 +294,9 @@ Optionally, properties can be added via descriptors (which are explained in Prop
     });
 
 ////////////////////////////////////////////////////
+for (propKey in obj) 
+    returns all enumerable keys of obj and enumerable keys on all of its prototypes
+
 Object.getOwnPropertyNames(obj) returns the keys of all own properties of obj.
 
 Object.keys(obj) returns the keys of all enumerable own properties of obj.
@@ -504,4 +508,32 @@ Pitfall: Protection Is Shallow
     Additionally, obj has the prototype Object.prototype, which is also mutable.
 
 /////////////////////////////////////////////////////////////////
+Conversion to Primitive
 
+Object.prototype.toString()
+This is the preferred way of converting an object to a string.
+Returns a string representation of an object:
+    > ({ first: 'John', last: 'Doe' }.toString())
+    '[object Object]'
+    > [ 'a', 'b', 'c' ].toString()
+    'a,b,c'
+    > String({ toString: function () { return 'ME' } })
+    'Result: ME'
+
+Object.prototype.valueOf()
+This is the preferred way of converting an object to a number.
+valueOf is overridden by wrapper constructors to return the wrapped primitive:
+    > new Number(7).valueOf()
+    7
+    > 3 * { valueOf: function () { return 5 } }
+    15
+
+The conversion to boolean is not configurable;
+objects are always considered to be true.
+
+Object.prototype.toLocaleString()
+This method returns a locale-specific string representation of an object.
+The default implementation calls toString(). Most engines don’t go beyond this
+support for this method. However, the ECMAScript Internationalization API 
+which is supported by many modern engines, overrides it for several built-in
+constructors.

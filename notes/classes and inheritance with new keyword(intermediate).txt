@@ -22,6 +22,7 @@ function paidUserCreator(paidName, paidScore, accountBalance){
 }
 
 paidUserCreator.prototype = Object.create(userCreator.prototype);
+paidUserCreator.prototype.constructor = paidUserCreator;
 
 paidUserCreator.prototype.increaseBalance = function(){
     this.accountBalance++;

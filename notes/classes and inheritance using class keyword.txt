@@ -1,3 +1,12 @@
+things to keep in mind for inheritance:
+    Inheriting instance properties.
+    Inheriting prototype properties.
+    Ensuring that instanceof works
+    Overriding a method to adapt one of Super’s methods in Sub.
+    Making supercalls: if we have overridden one of Super’s methods, we may need
+    to call the original method from Sub.
+
+////////////////////////////////////////////////////////////////
 class userCreator{
     constructor(name, score){
         this.name = name;

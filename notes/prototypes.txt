@@ -126,6 +126,8 @@ semicircle = Object.create(circle.prototype);
 
 semicircle.prototype.constructor;  //will give circle which is a problem
 semicircle.prototype.constructor = semicircle  //to solve the above problem
+because we have replaced the original instance prototype where it had 
+the correct value.
 
 var sc = new semicircle(15);
 Object.getPrototypeOf(sc) -> will give cirle
@@ -254,6 +256,11 @@ Prototype methods:
         checks whether the receiver of the method is a (direct or indirect) prototype of obj.
         In other words: are the receiver and obj in the same prototype chain, and does obj
         come before the receive
+            obj.isPrototypeOf(obj)  //false
+    
+    Object.prototype.propertyIsEnumerable(propKey)
+        Returns true if the receiver has a property with the key propKey that is
+        enumerable and false otherwise
 
 ///////////////////////////////////////////////////////////////////////////
 Finding the object where a property is defined
@@ -265,3 +272,176 @@ Finding the object where a property is defined
     }
 
 //////////////////////////////////////////////////////////////////////
+The property constructor of obj.prototype points back to the constructor function.
+
+Because the constructor property is inherited from the prototype by each instance, you
+can use it to get the constructor of an instance:
+    > var o = new C();
+    > o.constructor
+    [Function: C]
+
+Make sure that for each constructor C, the following assertion holds:
+    C.prototype.constructor === C
+
+By default, every function f already has a property prototype that is set up correctly:
+You should thus avoid replacing prototype object and only add properties to it:
+    C.prototype.method = '' instead of C.prototype = {method: ''}
+
+Calling a constructor function in strict mode will most probably give an error since
+this is undefined
+
+We return whatever object you need from a constructor.
+Constructors don’t lock you in, so you can always change your mind as to whether 
+constructor should return a direct instance or something else.
+
+    function Expression(str) {
+        if (...) {
+            return new Addition(..);
+        } else if (...) {
+            return new Multiplication(...);
+        } else {
+            throw new ExpressionException(...);
+        }
+    }
+    var expr = new Expression(someStr);
+
+/////////////////////////////////////////////////////////////////////
+Creating similar objects
+    function Constr() {}
+    var x = new Constr();
+    var y = new x.constructor();
+
+    or create a method for it:
+        SuperConstr.prototype.createCopy = function () {
+            return new this.constructor(...);
+        };
+
+///////////////////////////////////////////////////////////////////
+Almost all objects are instances of Object, because Object.prototype is in their prototype
+chain. But there are also objects where that is not the case. Here are two examples:
+    > Object.create(null) instanceof Object
+    false
+    > Object.prototype instanceof Object
+    false
+
+////////////////////////////////////////////////////////////////
+If we inherit a function and override a method in child prototype then this method
+will be called always
+To call the method present in parent prototype:
+    Sub.prototype.methodB = function (x, y) {   //overriding methodB
+        let superResult = Super.prototype.methodB.call(this, x, y);
+        // Super is name of parent function
+        return this.prop3 + ' ' + superResult;
+    }
+
+//////////////////////////////////////////////////////////////
+The Inheritance Hierarchy of Built-in Constructors
+Built-in constructors use the same subclassing appoach.
+For example, Array is a subconstructor of Object.
+
+///////////////////////////////////////////////////////////////
+Antipattern: The Prototype Is an Instance of the Superconstructor
+
+Before ECMAScript 5 and Object.create(), an often-used solution was to create the
+subprototype by invoking the superconstructor:
+
+    Sub.prototype = new Super();  // Don’t do this
+
+This is not recommended under ECMAScript 5. The prototype will have all of Super’s
+instance properties, which it has no use for. Therefore, it is better to use the
+aforementioned pattern (involving Object.create()).
+
+/////////////////////////////////////////////////////////////////
+Generic Methods: Borrowing Methods from Prototypes
+
+Sometimes instance prototypes have methods that are useful for more objects than
+those that inherit from them.
+    Object.prototype.hasOwnProperty.call(obj, 'propKey')
+    or
+    {}.hasOwnProperty.call(obj, 'propKey')
+
+The advantage of second pattern is that it is less verbose.
+But it is also less self-explanatory.
+Performance should not be an issue (at least long term), as engines can
+statically determine that the literals should not create objects.
+
+
+Apply a string method to nonstrings. toUpperCase() converts the receiver to a
+string and uppercases the result:
+    > String.prototype.toUpperCase.call(true)
+    'TRUE'
+
+
+Using generic array methods on plain objects gives you insight into how they work:
+    var fakeArray = { 0: 'a', 1: 'b', length: 2 };
+    > Array.prototype.join.call(fakeArray, '-')
+    'a-b'
+
+    var obj = {};
+    > Array.prototype.push.call(obj, 'hello');
+    1
+    > obj
+    { '0': 'hello', length: 1 }
+
+///////////////////////////////////////////////////////////////////////
+Array-Like Objects and Generic Methods
+
+There are some objects in JavaScript that feel like an array, but actually aren’t.
+That means that while they have indexed access and a length property, they don’t
+have any of the array methods (forEach(), push, concat(), etc.).
+
+The special variable arguments:
+    > function args() { return arguments }
+    > var arrayLike = args('a', 'b');
+
+    > arrayLike[0]
+    'a'
+    > arrayLike.length
+    2
+    But none of the array methods are available:
+
+    > arrayLike.join('-')
+    TypeError: object has no method 'join'
+
+That’s because arrayLike is not an instance of Array
+(and Array.prototype is not in the prototype chain):
+
+Browser DOM node lists, which are returned by document.getElementsBy*()
+(e.g., getElementsByTagName()), document.forms, and so on:
+
+Strings, which are array-like, too:
+
+    > 'abc'[1]
+    'b'
+    > 'abc'.length
+    3
+
+The term array-like can also be seen as a contract between generic array methods and
+objects. The objects have to fulfill certain requirements; otherwise, the methods 
+won’t work on them. The requirements are:
+
+The elements of an array-like object must be accessible via square brackets and
+integer indices starting at 0. All methods need read access, and some methods
+additionally need write access. Note that all objects support this kind of
+indexing: an index in brackets is converted to a string and used as a key to
+look up a property value:
+
+An array-like object must have a length property whose value is the number of its
+elements. Some methods require length to be mutable (for example, reverse()).
+Values whose lengths are immutable (for example, strings) cannot be used with
+those methods.
+
+Patterns for working with array-like objects
+
+Turn an array-like object into an array:
+    var arr = Array.prototype.slice.call(arguments);
+
+But you can also borrow methods:
+    Array.prototype.forEach.call(arguments, function (elem, i) {
+        console.log(i+'. '+elem);
+    });
+
+////////////////////////////////////////////////////////////////////
+In ECMAScript 6, the special property __proto__ will be disabled if Object.prototype
+is not in the prototype chain of an object.(in most browsers)
+    Object.create(null) //won’t have a __proto__ property on it
