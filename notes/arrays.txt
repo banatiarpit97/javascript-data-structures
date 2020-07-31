@@ -1,6 +1,10 @@
 var a = [1,2,3,4];
 var a = new Array(1,2,3,4)  //same result as above, but this time 'a' is object
 var a = new Array(3)        //empty array of size 3
+	//new is optional: invoking it as a normal function (without new) does the
+	same as invoking it as a constructor.
+	//Some engines may preallocate contiguous memory when you call Array()
+	in this manner, which may slightly improve performance.
 
 arrays in js can store different values, string, int, object...
 var a = ['red', 1, {prop:val}, [1,2,4]];
@@ -25,9 +29,9 @@ ARRAY PROPERTIES :
 
 a.length;
 a.shift()   //removes first element
-a.unshift(n)    //add element at start of array
+a.unshift(n1, n2....)    //add element at start of array
 a.pop()     //removes last element
-a.push(n)   //add element at end of array
+a.push(n1, n2....)   //add element at end of array
 a.splice(start_ind, number_of_elem_to_be_removed, elems to be added)
 a.indeOf(elem)
 a.join("string to be in between array elems")
@@ -124,8 +128,218 @@ is added to array like object
 
 ///////////////////////////////////////////////////////////////
 The in operator works for arrays, too:
-	> var arr = [ 'a', 'b', 'c' ];
-	> 1 in arr // is there an element at index 1?
+	> var arr = [ 'a', , 'c' ];
+	> 0 in arr // is there an element at index 0?
 	true
+	> 1 in arr // is there an element at index 1?
+	false
 	> 5 in arr // is there an element at index 5?
 	false
+
+/////////////////////////////////////////////////////////////////
+Arrays Are Maps, Not Tuples
+The ECMAScript standard specifies arrays as maps (dictionaries) from indices to values.
+In other words, arrays may not be contiguous and can have holes in them.
+	[ 'a', , 'b' ]
+The preceding array has a hole: there is no element at index 1.
+
+Trailing commas are ignored
+	[ 'a', 'b', ]	//still of length 2
+
+Note that most JavaScript engines optimize arrays without holes internally and
+store them contiguously.
+
+/////////////////////////////////////////////////////////////////
+Constructor method
+var a = new Array(3)        //empty array of size 3
+	
+new is optional: invoking it as a normal function (without new) does the
+same as invoking it as a constructor.
+Some engines may preallocate contiguous memory when you call Array()
+in this manner, which may slightly improve performance.
+
+The problem is that you can’t create arrays with a single number in them,
+because that is interpreted as creating an array whose length is the number:
+	> new Array(2)  // alas, not [ 2 ]
+	[ , ,]
+	> Array.apply(null, [2])
+	[ , ,]
+
+	> new Array(5.7)  // alas, not [ 5.7 ]
+	RangeError: Invalid array length
+
+	> new Array('abc')  // ok
+	[ 'abc' ]
+
+//////////////////////////////////////////////////////////////////////
+Array Indices
+
+Indices are numbers i in the range 0 ≤ i < (2^32)−1.
+The maximum length is (2^32)−1.
+
+Indices that are out of range are treated as normal property keys (strings!).
+They don’t show up as array elements and they don’t influence the property length.
+
+ECMAScript specification sees indices differently. Paraphrasing Section 15.4:
+A property key P (a string) is an array index if and only if ToString(ToUint32(P))
+is equal to P and ToUint32(P) is not equal to 232−1.
+The upper limit has been explicitly excluded in the spec (as quoted previously).
+It is reserved for the maximum length.
+
+all values in brackets are converted to strings and interpreted as property keys,
+even numbers.
+	> var arr = ['a', 'b'];
+	> arr['0']
+	'a'
+	> arr[0]
+	'a'
+	> arr['00'] // normal property(not index)
+	undefined
+
+	> var arr1 = new Array(Math.pow(2, 32));  // not ok
+	RangeError: Invalid array length
+////////////////////////////////////////////////////////////////////////
+Deleting Array Elements
+In addition to deleting properties, the delete operator also deletes array elements.
+Deleting elements creates holes (the length property is not updated):
+
+	> var arr = [ 'a', 'b' ];
+	> arr.length
+	2
+	> delete arr[1]  // does not update length
+	true
+	> arr
+	[ 'a',  ]
+	> arr.length
+	2
+
+You can also delete trailing array elements by decreasing an array’s length.
+To remove elements without creating holes (i.e., the indices of subsequent elements
+are decremented), you use Array.prototype.splice()
+
+If you set an array’s length to 0, then it becomes empty.
+That allows you to clear an array for someone else.
+Note, however, that this approach can be slow, because each array element is
+explicitly deleted. Ironically, creating a new empty array is often faster
+
+	let a1 = [1,2,3]
+	a2 = a1;
+	//	first case
+	a1 = [];
+	a2	//[1,2,3]
+	//	second case
+	a1.length = 0;
+	a2	//[]
+//////////////////////////////////////////////////////////////////////
+Sparse Arrays Versus Dense Arrays
+
+An array with holes is called sparse. An array without holes is called dense.
+Dense arrays are contiguous and have an element at each index—starting at zero,
+and ending at length − 1.
+
+Given that reading a hole returns undefined, both are very similar.
+
+	var sparse = [ , , 'c' ];
+	var dense  = [ undefined, undefined, 'c' ];
+
+	> sparse.length
+	3
+	> dense.length
+	3
+
+But the sparse array does not have an element at index 0:
+	> 0 in sparse
+	false
+	> 0 in dense
+	true
+
+Iteration via forEach skips the holes, but not the undefined elements
+
+Array methods that skip holes:
+forEach, every, same, map(skip but preserves), for-in
+join() converts holes, undefineds, and nulls to empty strings:
+	> [undefined, null].join('#')	//'#'
+	> ['a',, 'b'].join('-')		//'a--b'
+
+sort() preserves holes while sorting:
+
+Removing Holes from Arrays
+	> ['a',, 'b'].filter(function (x) { return true })
+
+//////////////////////////////////////////////////////////////
+unshift and push can accept more than 1 numbers
+
+splice:
+	start can be negative, in which case it is added to the length to determine the
+	start index. Thus, -1 refers the last element, and so on.
+	deleteCount is optional. If it is omitted (along with all subsequent arguments),
+	then all elements at and after index start are removed.
+		var arr = [ 'a', 'b', 'c', 'd' ];
+		> arr.splice(-2)
+		> arr
+		[ 'a', 'b' ]
+
+slice:
+If either of the indices is negative, the array length is added to it.
+Thus, -1 refers to the last element, and so on:
+	> [ 'a', 'b', 'c', 'd' ].slice(1, -1)
+	[ 'b', 'c' ]
+	> [ 'a', 'b', 'c', 'd' ].slice(-2)
+	[ 'c', 'd' ]
+
+sort:
+Keep in mind that sorting compares values by converting them to strings, 
+which means that numbers are not sorted numerically
+You can fix this by providing the optional parameter compareFunction,
+which controls how sorting is done.
+
+For numbers, you can simply return a-b, but that can cause numeric overflow.
+To prevent that from happening, you need more verbose code:
+	function compareCanonically(a, b) {
+		if (a < b) {
+			return -1;
+		} else if (a > b) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+
+Comparing Strings
+For strings, you can use String.prototype.localeCompare:
+	> ['c', 'a', 'b'].sort(function (a,b) { return a.localeCompare(b) })
+	[ 'a', 'b', 'c' ]
+
+indexOf:
+Array.prototype.indexOf(searchValue, startIndex?)
+f startIndex is negative, the array length is added to it;
+if it is missing, the whole array is searched
+Strict equality is used for the search, which means that indexOf() can’t find NaN:
+	> [NaN].indexOf(NaN)	//-1
+
+every:
+Returns true if the callback returns true for every element.
+It stops iteration as soon as the callback returns false.
+If the array is empty, the result is true (and callback is not called):
+
+some:
+Returns true if the callback returns true for at least one element.
+It stops iteration as soon as the callback returns true.
+If the array is empty, the result is false (and callback is not called):
+
+This can be used instead of forEach since forEach() is that it does not 
+support break or something similar to prematurely abort the loop.
+
+reduce:
+function callback(previousValue, currentElement, currentIndex, array)
+
+The parameter previousValue is the value previously returned by the callback.
+When this function is first called, there are 2 cases:
+	if we provide an initial value, then prevValue is initial value and currentValue
+	is first element
+	if we DON'T provide an initial value, then prevValue is first element and
+	currentValue is second element
+
+
+Array.prototype.reduceRight(callback, initialValue?)
+Works the same as reduce(), but iterates from right to left.

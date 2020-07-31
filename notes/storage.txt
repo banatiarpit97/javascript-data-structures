@@ -25,7 +25,7 @@ not deleted even when browser is closed
 ///////////////////////////////////////////////////////////////////
 session storage:
 same as local storage except that it stores data for only 1 session
-data is deleted when browser is closed(or even when tab is closed)
+data is deleted when browser is closed(or even when TAB is closed)
 
     sessionStorage.setItem("key", "value");
     var lastname = sessionStorage.getItem("key");

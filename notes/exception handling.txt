@@ -28,6 +28,10 @@ throw
     The simplest solution is to use the built-in constructor Error():
         throw new Error('Something bad happened');
 
+    If we directly throw a string, then it would be accessible by error arguemnt in
+    catch but if we throw new Error then we would have to do e.message to get the
+    string passed
+
 ////////////////////////////////////////////////////
 Error constructors:
     Error, EvalError, RangeError, ReferenceError, SyntaxError, TypeError, URIError

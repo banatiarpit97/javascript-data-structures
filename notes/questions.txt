@@ -3,3 +3,305 @@
 since map passed an extra arguemnt index and parseInt accepts another arguemnt as radix/base
 to correct:
     ['1', '2', '3'].map(function (x) { return parseInt(x, 10) })
+
+////////////////////////////////////////////////////////
+function getPersonInfo(one, two, three) {
+  console.log(one);
+  console.log(two);
+  console.log(three);
+}
+
+const person = 'Lydia';
+const age = 21;
+
+getPersonInfo`${person} is ${age} years old`;
+
+//["", " is ", " years old"] "Lydia" 21
+If you use tagged template literals, the value of the first argument is always an
+array of the string values. The remaining arguments get the values of the passed expressions!
+
+////////////////////////////////////////////////////////
+eval('10*10+5');    //105
+
+/////////////////////////////////////////////////////////
+const obj = { a: 'one', b: 'two', a: 'three' };
+console.log(obj);
+//{ a: "three", b: "two" }
+If you have two keys with the same name, the key will be replaced.
+It will still be in its first position, but with the last specified value.
+
+///////////////////////////////////////////////////////////////
+String.prototype.print = function() {
+    console.log(this)
+}
+'a'.print()
+//String obj -> {0: "a"}
+
+/////////////////////////////////////////////////////////////////
+const a = {};
+const b = { key: 'b' };
+const c = { key: 'c' };
+
+a[b] = 123;
+a[c] = 456;
+
+console.log(a[b]);  //456
+
+Object keys are automatically converted into strings.
+when we stringify an object, it becomes "[object Object]".
+So what we are saying here, is that a["object Object"] = 123.
+Then, we can try to do the same again. a["object Object"] = 456.
+
+/////////////////////////////////////////////////////////////////
+0;  //false
+new Number(0);  //true
+('');   //false
+(' ');  //true
+new Boolean(false); //true
+undefined;  //false
+
+Function constructors, like new Number and new Boolean are truthy.
+
+///////////////////////////////////////////////////////////////////
+console.log(typeof typeof 1);   //string
+
+///////////////////////////////////////////////////////////////////
+
+(() => {
+  let x, y;
+  try {
+    throw new Error();
+  } catch (x) {
+    (x = 1), (y = 2);
+    console.log(x);
+  }
+  console.log(x);
+  console.log(y);
+})();
+
+// 1 undefined 2
+
+///////////////////////////////////////////////////////////////
+pass parameters to setTimeout callback:
+
+In modern browsers, the "setTimeout" receives a third parameter that is sent as
+parameter to the internal function at the end of the timer.
+    setTimeout(alert, 1000, 'hello');
+
+or create a function
+    setTimeout(() => alert('hello'), 1000)
+
+/////////////////////////////////////////////////////////////////
+IMP
+let person = { name: 'Lydia' };
+const members = [person];
+person = null;
+
+console.log(members);   //[{ name: 'Lydia' }]
+
+we are not modifying the obj, we are changing the variable itself and hence array
+still have that object
+
+////////////////////////////////////////////////////////////////
+const num = parseInt('7*6', 10);
+// 7
+
+Once parseInt encounters a character that isn't a valid number in the radix,
+it stops parsing and ignores the following characters.
+
+/////////////////////////////////////////////////////////
+function Car() {
+  this.make = 'Lamborghini';
+  return { make: 'Maserati' };
+}
+
+const myCar = new Car();
+console.log(myCar.make);  //Maserati
+
+if we explicitly return something from the xonstructor function then new obj(this) won't be
+returned
+
+/////////////////////////////////////////////////////////////
+(() => {
+  let x = (y = 10);
+})();
+
+console.log(typeof x);
+console.log(typeof y);
+//"undefined", "number"
+
+let x = y = 10; is actually shorthand for:
+y = 10;
+let x = y;
+
+/////////////////////////////////////////////////////////////
+class Dog {
+  constructor(name) {
+    this.name = name;
+  }
+}
+
+Dog.prototype.bark = function() {
+  console.log(`Woof I am ${this.name}`);
+};
+
+const pet = new Dog('Mara');
+pet.bark();
+delete Dog.prototype.bark;
+pet.bark();
+
+//"Woof I am Mara", TypeError
+We can delete properties from objects using the delete keyword, also on the prototype.
+but not indirectly, we have to reference prototype directly not by js going up the chain
+
+/////////////////////////////////////////////////////////////////
+// counter.js
+let counter = 10;
+export default counter;
+
+// index.js
+import myCounter from './counter';
+myCounter += 1;
+console.log(myCounter);
+
+//Error
+An imported module is read-only: you cannot modify the imported module.
+Only the module that exports them can change its value.
+
+///////////////////////////////////////////////////////////////////
+const name = 'Lydia';
+age = 21;
+
+console.log(delete name);   //false
+console.log(delete age);    //true
+
+The delete operator returns a boolean value: true on a successful deletion,
+else it'll return false. However, variables declared with the var, const or let
+keyword cannot be deleted using the delete operator.
+
+var is function scope or module scope but not writing var is global scope which is deletable
+
+/////////////////////////////////////////////////////////////////////////////////
+const settings = {
+  username: 'lydiahallie',
+  level: 19,
+  health: 90,
+};
+
+const data = JSON.stringify(settings, ['level', 'health']);
+console.log(data);
+//"{"level":19, "health":90}"
+
+The second argument of JSON.stringify is the replacer. The replacer can either be a
+function or an array, and lets you control what and how the values should be stringified.
+
+If the replacer is an array, only the property names included in the array will be
+added to the JSON string..
+
+If the replacer is a function, this function gets called on every property in the
+object you're stringifying. The value returned from this function will be the value
+of the property when it's added to the JSON string. If the value is undefined, this
+property is excluded from the JSON string.
+
+/////////////////////////////////////////////////////////////////////////////
+
+let num = 10;
+
+const increaseNumber = () => num++;
+const increasePassedNumber = number => number++;
+
+const num1 = increaseNumber();
+const num2 = increasePassedNumber(num1);
+
+console.log(num1);  //10
+console.log(num2);  //10
+
+/////////////////////////////////////////////////////////////////////////////
+// index.js
+console.log('running index.js');
+import { sum } from './sum.js';
+console.log(sum(1, 2));
+
+// sum.js
+console.log('running sum.js');
+export const sum = (a, b) => a + b;
+
+//running sum.js, running index.js, 3
+
+With the import keyword, all imported modules are pre-parsed. 
+This means that the imported modules get run first, the code in the file which 
+imports the module gets executed after.
+
+This is a difference between require() in CommonJS and import! With require(),
+you can load dependencies on demand while the code is being run. If we would have
+used require instead of import, running index.js, running sum.js, 3 would have been
+logged to the console.
+
+////////////////////////////////////////////////////////////////////////////
+
+console.log(Number(2) === Number(2));
+console.log(Boolean(false) === Boolean(false));
+console.log(Symbol('foo') === Symbol('foo'));
+
+//true true false
+called as normal function, not using new hence not an object
+Symbol always returns a new value
+
+////////////////////////////////////////////////////////////////////////////
+
+function* startGame() {
+  const answer = yield 'Do you love JavaScript?';
+  if (answer !== 'Yes') {
+    return "Oh wow... Guess we're gone here";
+  }
+  return 'JavaScript loves you back ❤️';
+}
+
+const game = startGame();
+console.log(game.next().value); // Do you love JavaScript?
+console.log(game.next("Yes").value); // JavaScript loves you back ❤️
+
+/////////////////////////////////////////////////////////////////////////
+console.log(String.raw`Hello\nworld`);
+
+//Hello\nworld
+String.raw returns a string where the escapes (\n, \v, \t etc.) are ignored! 
+
+//////////////////////////////////////////////////////////////////////
+const box = { x: 10, y: 20 };
+
+Object.freeze(box);
+
+const shape = box;
+shape.x = 100;
+
+console.log(shape);
+
+//{ x: 10, y: 20 }
+reference also frozen
+
+/////////////////////////////////////////////////////////////////////////
+const { name: myName } = { name: 'Lydia' };
+
+console.log(name);  //ReferenceError
+
+/////////////////////////////////////////////////////////////////////////
+Memoized function
+const add = () => {
+  const cache = {};
+  return num => {
+    if (num in cache) {
+      return `From cache! ${cache[num]}`;
+    } else {
+      const result = num + 10;
+      cache[num] = result;
+      return `Calculated! ${result}`;
+    }
+  };
+};
+
+///////////////////////////////////////////////////////////////////////////
+const list = [1 + 2, 1 * 2, 1 / 2];
+console.log(list);  //[3, 2, 0.5]
+
+/////////////////////////////////////////////////////////////////////////////

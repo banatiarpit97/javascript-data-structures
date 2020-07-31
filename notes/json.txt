@@ -6,3 +6,14 @@ boolean, integer, array, objects -> no quotes
 
 JSON.stringify(arr/object) -> converts json to strings so that it can be trasferred 
 JSON.parse(json) -> converts string to json so that we can use it like a normal object like obj.prop
+
+The second argument of JSON.stringify is the replacer. The replacer can either be a
+function or an array, and lets you control what and how the values should be stringified.
+
+If the replacer is an array, only the property names included in the array will be
+added to the JSON string..
+
+If the replacer is a function, this function gets called on every property in the
+object you're stringifying. The value returned from this function will be the value
+of the property when it's added to the JSON string. If the value is undefined, this
+property is excluded from the JSON string.

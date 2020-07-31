@@ -61,6 +61,7 @@ function example(){
 
 8.  var a = 10;
     var a;                  //a still remains 10(this line is ignored, value unchanged)
+    var a = 8;              //var is ignored but assignemnt is not
     console.log(a);         //prints 10
     (function(){            //IIFE
         console.log(a);     //undefined as a is hoisted but not its value and local a takes preference over global one
