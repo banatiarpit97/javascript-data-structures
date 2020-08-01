@@ -44,7 +44,11 @@ arrow function :
             value of 'this' inside arrow functions is defined by looking up in the call stack
         2. Does not have 'arguements' object of its own, takes it from the global or outer function
 
-        arrow functions can not be used as constructors, gives TypeError
+        3. arrow functions can not be used as constructors, gives TypeError
+
+    arrow functions does not have a 'prototype' property
+    const name = () => 'arpit'
+    console.log(name.prototype)     //undefined
 
 The Function Constructor
     The constructor Function() evaluates JavaScript code stored in strings.

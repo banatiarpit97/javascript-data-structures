@@ -216,6 +216,11 @@ function example(){
 22. we can use console.log(window.a) instead of console.log(a) to save ourselves from ReferenceError
     while accessing global variable but try to avoid it.
 
+23. Variables with the let keyword (and const) are hoisted, but unlike var, don't get
+    initialized. They are not accessible before the line we declare (initialize) them.
+    This is called the "temporal dead zone". When we try to access the variables before
+    they are declared, JavaScript throws a ReferenceError.
+
 Internals of Scope:
 
 Variables come into existence when program execution enters their scope. Then they need 
@@ -244,3 +249,4 @@ active environment.
         variables of that scope (and of the surrounding scopes).
         A closure is a function plus the connection to the scope in which the function was created.
         That is why closure can always access the latest values of variables outside
+

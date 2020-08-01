@@ -305,3 +305,385 @@ const list = [1 + 2, 1 * 2, 1 / 2];
 console.log(list);  //[3, 2, 0.5]
 
 /////////////////////////////////////////////////////////////////////////////
+function sayHi(name) {
+  return `Hi there, ${name}`;
+}
+
+console.log(sayHi());
+
+//Hi there, undefined
+undefined/null gets converted to string(even if we use + instead of ``)
+
+///////////////////////////////////////////////////////////////////////////////
+console.log('I want pizza'[0]);
+//I
+
+////////////////////////////////////////////////////////////////////////////
+function sum(num1, num2 = num1) {
+  console.log(num1 + num2);
+}
+
+sum(10);
+//20
+
+You can set a default parameter's value equal to another parameter of the function,
+as long as they've been defined before the default parameter
+
+///////////////////////////////////////////////////////////////////////////
+function getItems(fruitList, ...args, favoriteFruit) {
+  return [...fruitList, ...args, favoriteFruit]
+}
+
+getItems(["banana", "apple"], "pear", "orange")
+
+//SyntaxError
+The rest parameter can only be the last parameter
+
+/////////////////////////////////////////////////////////////////////////////
+class Person {
+  constructor() {
+    this.name = 'Lydia';
+  }
+}
+
+Person = class AnotherPerson {
+  constructor() {
+    this.name = 'Sarah';
+  }
+};
+
+const member = new Person();
+console.log(member.name);   //'Sarah'
+
+////////////////////////////////////////////////////////////////////////
+const info = {
+  [Symbol('a')]: 'b',
+};
+
+console.log(info);
+console.log(Object.keys(info));
+//{Symbol('a'): 'b'} and []
+A Symbol is not enumerable.
+
+//////////////////////////////////////////////////////////////////////////
+const getList = ([x, ...y]) => [x, y]
+const getUser = user => { name: user.name, age: user.age }
+
+const list = [1, 2, 3, 4]
+const user = { name: "Lydia", age: 21 }
+
+console.log(getList(list))  //[1, [2, 3, 4]]
+console.log(getUser(user))  //undefined, because no brackets while returning object
+
+//////////////////////////////////////////////////////////////////////////////
+console.log(Promise.resolve(5))
+//Promise {<fulfilled>: 5}
+
+////////////////////////////////////////////////////////////////////////
+function compareMembers(person1, person2 = person) {
+  if (person1 !== person2) {
+    console.log('Not the same!');
+  } else {
+    console.log('They are the same!');
+  }
+}
+
+const person = { name: 'Lydia' };
+compareMembers(person);
+
+//They are the same!
+
+/////////////////////////////////////////////////////////////////////////
+function* generatorOne() {
+  yield ['a', 'b', 'c'];
+}
+
+function* generatorTwo() {
+  yield* ['a', 'b', 'c'];
+}
+
+const one = generatorOne();
+const two = generatorTwo();
+
+console.log(one.next().value);
+console.log(two.next().value);
+
+//['a', 'b', 'c'] and a
+
+With the yield keyword, we yield values in a generator function.
+With the yield* keyword, we can yield values from another generator function,
+or iterable object (for example an array).
+
+In generatorOne, we yield the entire array ['a', 'b', 'c'] using the yield keyword.
+The value of value property on the object returned by the next method on one
+(one.next().value) is equal to the entire array ['a', 'b', 'c'].
+
+In generatorTwo, we use the yield* keyword. This means that the first yielded value of
+two, is equal to the first yielded value in the iterator. The iterator is the array
+['a', 'b', 'c']. The first yielded value is a, so the first time we call 
+two.next().value, a is returned.
+
+/////////////////////////////////////////////////////////////////////
+console.log(`${(x => x)('I love')} to program`);
+//I love to program
+
+////////////////////////////////////////////////////////////////////
+let config = {
+  alert: setInterval(() => {
+    console.log('Alert!');
+  }, 1000),
+};
+
+//The setInterval callback will still be called every second
+
+Normally when we set objects equal to null, those objects get garbage collected as
+there is no reference anymore to that object. However, since the callback function
+within setInterval is an arrow function (thus bound to the config object), the
+callback function still holds a reference to the config object. As long as there
+is a reference, the object won't get garbage collected. Since it's not garbage
+collected, the setInterval callback function will still get invoked every 1000ms (1s).
+
+////////////////////////////////////////////////////////////////////
+const myMap = new Map();
+const myFunc = () => 'greeting';
+
+myMap.set(myFunc, 'Hello world!');
+
+myMap.get('greeting');  //undefined
+myMap.get(myFunc);      //Hello world
+myMap.get(() => 'greeting');  //undefined since this is a new function/object so 
+not strictly equal
+
+///////////////////////////////////////////////////////////////////
+let num = 1;
+const list = [1, 2, 3, 4];
+
+console.log(list[(num += 1)]);    //3
+
+/////////////////////////////////////////////////////////////////////
+const person = {
+  firstName: 'Lydia',
+  lastName: 'Hallie',
+  pet: {
+    name: 'Mara',
+    breed: 'Dutch Tulip Hound',
+  },
+  getFullName() {
+    return `${this.firstName} ${this.lastName}`;
+  },
+};
+
+console.log(person.pet?.name);    //Mara
+console.log(person.pet?.family?.name);  //undefined
+console.log(person.getFullName?.());  //Lydia Hallie 
+console.log(member.getLastName?.());  //ReferenceError
+
+/////////////////////////////////////////////////////////////////
+const config = {
+  languages: [],
+  set language(lang) {
+    return this.languages.push(lang);
+  },
+};
+console.log(config.language);
+//undefined
+
+The language method is a setter. Setters don't hold an actual value, their purpose
+is to modify properties. When calling a setter method, undefined gets returned.
+
+////////////////////////////////////////////////////////////////////
+const name = 'Lydia Hallie';
+
+console.log(!typeof name === 'object');
+console.log(!typeof name === 'string');
+
+//false false
+Calculated as (!(typeof name)) === 'string'
+
+////////////////////////////////////////////////////////////////
+async function* range(start, end) {
+  for (let i = start; i <= end; i++) {
+    yield Promise.resolve(i);
+  }
+}
+
+(async () => {
+  const gen = range(1, 3);
+  for await (const item of gen) {
+    console.log(item);
+  }
+})();
+
+//1 2 3
+
+///////////////////////////////////////////////////////////////////
+function getFine(speed, amount) {
+  const formattedSpeed = new Intl.NumberFormat({
+    'en-US',
+    { style: 'unit', unit: 'mile-per-hour' }
+  }).format(speed)
+
+  const formattedAmount = new Intl.NumberFormat({
+    'en-US',
+    { style: 'currency', currency: 'USD' }
+  }).format(amount)
+
+  return `The driver drove ${formattedSpeed} and has to pay ${formattedAmount}`
+}
+
+console.log(getFine(130, 300))
+
+//The driver drove 130 mph and has to pay $300.00
+
+////////////////////////////////////////////////////////////////////
+const spookyItems = [1, 2, 3];
+({ item: spookyItems[3] } = { item: 4 });
+
+console.log(spookyItems);
+//[1,2,3,4]
+
+By destructuring objects, we can unpack values from the right-hand object,
+and assign the unpacked value to the value of the same property name on the
+left-hand object.
+
+/////////////////////////////////////////////////////////////////
+const name = 'Lydia Hallie';
+const age = 21;
+
+console.log(Number.isNaN(name));  //false
+console.log(Number.isNaN(age));   //false
+
+console.log(isNaN(name));   //true
+console.log(isNaN(age));    //false
+
+////////////////////////////////////////////////////////////////
+class Counter {
+  constructor() {
+    this.count = 0;
+  }
+
+  increment() {
+    this.count++;
+  }
+}
+
+const counterOne = new Counter();
+counterOne.increment();
+counterOne.increment();
+
+const counterTwo = counterOne;
+counterTwo.increment();
+
+console.log(counterOne.count);    //3(reference)
+
+///////////////////////////////////////////////////////////////////////////
+
+const myPromise = Promise.resolve(Promise.resolve('Promise!'));
+
+function funcOne() {
+  myPromise.then(res => res).then(res => console.log(res));
+  setTimeout(() => console.log('Timeout!', 0));
+  console.log('Last line!');
+}
+
+async function funcTwo() {
+  const res = await myPromise;
+  console.log(await res);
+  setTimeout(() => console.log('Timeout!', 0));
+  console.log('Last line!');
+}
+
+funcOne();
+funcTwo();
+
+//Last line! Promise! Promise! Last line! Timeout! Timeout!
+
+first all the sync code will execute
+then all promises
+then all setTimeout(setTimeout won't execute till both the functions are executed
+since call stack needs to be empty for Timeout to executed)
+
+////////////////////////////////////////////////////////////////////////
+const person = {
+  name: 'Lydia Hallie',
+  hobbies: ['coding'],
+};
+
+function addHobby(hobby, hobbies = person.hobbies) {
+  hobbies.push(hobby);
+  return hobbies;
+}
+
+addHobby('running', []);
+addHobby('dancing');
+addHobby('baking', person.hobbies);
+
+console.log(person.hobbies);
+//["coding", "dancing", "baking"]
+
+///////////////////////////////////////////////////////////////////
+class Bird {
+  constructor() {
+    console.log("parent");
+  }
+}
+
+class Flamingo extends Bird {
+  constructor() {
+    console.log("child");
+    super();
+  }
+}
+
+const pet = new Flamingo();
+//child parent
+
+///////////////////////////////////////////////////////////////////
+const a = [1,2]
+a.splice(0,1)   //NO error because of const
+
+/////////////////////////////////////////////////////////////////////
+
+const person = {
+  name: "Lydia Hallie",
+  age: 21,
+  *[Symbol.iterator]() { yield* Object.values(this) }
+}
+
+[...person] 
+//["Lydia Hallie", 21]
+
+/////////////////////////////////////////////////////////////////////
+const user = {
+	email: "e@mail.com",
+	password: "12345"
+}
+
+const updateUser = () => {
+	user.name = 'arpit'
+	return user
+}
+
+const updatedUser = updateUser()
+console.log(updatedUser === user)   //true
+
+/////////////////////////////////////////////////////////////////////////
+const promise1 = Promise.resolve('First')
+const promise2 = Promise.resolve('Second')
+const promise3 = Promise.reject('Third')
+const promise4 = Promise.resolve('Fourth')
+
+const runPromises = async () => {
+	const res1 = await Promise.all([promise1, promise2])
+	const res2  = await Promise.all([promise3, promise4])
+	return [res1, res2]
+}
+
+runPromises()
+	.then(res => console.log(res))
+	.catch(err => console.log(err))
+
+//'Third'
+
+The Promise.all method runs the passed promises in parallel. If one promise fails,
+the Promise.all method _rejects) with the value of the rejected promise.

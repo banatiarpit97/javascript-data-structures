@@ -73,11 +73,18 @@ spread - When we want to extract each element from array/objects
 		var hey = 'hey';
 		var a = [...hey]	//gives ['h', 'e', 'y']
 
+		function a(x, y, z){
+
+		}
+		a(...[1,2,3])
+
 rest - When we want to combine many elements in an array
 		function a(...arr){
 
 		}
 		a(1,2,4,5)
+
+		rest operator has to be last parameter of function otherwise results in an error
 
 		var {first, second, others} = {
 			first:1,

@@ -17,3 +17,7 @@ If the replacer is a function, this function gets called on every property in th
 object you're stringifying. The value returned from this function will be the value
 of the property when it's added to the JSON string. If the value is undefined, this
 property is excluded from the JSON string.
+
+we can stringify primitive values also, it will convert the value to a string:
+    JSON.stringify(4)   //'4'
+    JSON.stringify(true)   //'true'
