@@ -1,0 +1,114 @@
+4 characterstics of web components:
+    1. Custom HTML elements
+        We can register and reuse our self made elements like <my-modal></my-modal>
+
+    2. Shadow DOM
+        This gives us a separate DOM that does not mix with the DOM of webpage
+        Helps in scoping css
+
+    3. Templates and slots
+        We can write template html for our components and can also accept html to be injected
+        from outside using slots
+
+    4. HTML imports(discontinued)
+        import html files in html files
+
+/////////////////////////////////////////////////////////////////////////
+Why web components:
+encapsulate ui + logic
+reusable across pages/apps
+
+////////////////////////////////////////////////////////////////////////
+Basic web component:
+
+class Modal extends HTMLElement {
+    constructor(){
+        super();
+    }
+}
+customElements.define('my-modal', Modal);
+
+Naming rules:
+    name must contain atleast one dash(-)
+
+////////////////////////////////////////////////////////////////////////
+Lifecycle events:
+
+constructor:
+    this is called after the element is created.
+    This does not mean that element has been added to the DOM, it only means that the element
+    is created in the memory.
+    Should NOT be used the access the DOM.
+    should be used fot basic initiliazations.
+
+connectedCallback
+    This is called when element is added to the DOM
+    Should be used to access or initiliaze DOM
+
+disconnectedCallback
+    This is called when element has been removed from the DOM
+    should be used for cleanup work
+
+attributeChangedCallback
+    When an observed attributed changes
+    Should be used to update data and DOM
+
+//////////////////////////////////////////////////////////////////
+we can pass attributes to web components:
+
+    <my-modal name="arpit"></my-modal>
+
+access this attribute inside we component:
+    this.getAttribute('name');
+
+///////////////////////////////////////////////////////////////
+If we add content to our web component without shadow DOM then global styling of the apps
+will affect the web component styling
+So,
+do this.shadowRoot.innerHTML = ``
+instead of this.innerHTML = ``
+
+////////////////////////////////////////////////////////////////
+using html template for content:(not very helpful)
+    <template id="modal-content">
+        <p>this is content</p>
+    </template> //this is not rendered by html, just used for content
+
+    and in web component:
+    this.shadowRoot.appendChild(document.querySelector('#modal-content').content.cloneNode(true))
+
+///////////////////////////////////////////////////////////////
+Passing data from outside using slots:
+    this.shadowRoot.innerHTML = `
+        <slot>this is default content</slot>
+    `
+
+    <my-modal>
+        <p>This is injected content</p>
+    <my-modal>
+
+    this content inside web component tags will be injected in slot position and if we
+    don't pass anything then default content will be used
+
+////////////////////////////////////////////////////////////////
+Extending build in html tags:
+
+we do this if we want to build something on top of already existing tags so that we can
+take advantage of its built in functionality:
+
+    class MyAnchor extends HTMLAnchorElement{
+        connectedCallback(){
+            this.addEventListener('click', (e) => {
+                if(!confirm('Do you want to leave')) {
+                    e.preventDefault();
+                }
+            })
+        }
+    }
+
+    customElements.define('my-anchor', MyAnchor, {extends: 'a'});
+
+Usage:
+    <a is="my-anchor" href="www.google.com">Google</a>
+
+/////////////////////////////////////////////////////////////

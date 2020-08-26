@@ -25,3 +25,6 @@ transition: property
     background: rgba(142, 92, 205, .75);
     transition: background 1s ease-in;
     }
+
+/////////////////////////////////////////////////////
+Transitions won't apply on elements if we toggle its display property from none to block

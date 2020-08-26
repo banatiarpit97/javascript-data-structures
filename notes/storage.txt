@@ -1,7 +1,7 @@
 types of storage:
 cookies
-local storage
-session storage
+local storage(web storage)
+session storage(web storage)
 
 advantages of local and session over cookies:
 more data can be stored
@@ -57,6 +57,11 @@ Cookies:
 
 cookies can be read like this:
     var x = document.cookie;
+
+By default, the cookie is deleted when the browser is closed but you can change this
+behavior by setting expiry date (in UTC time).
+By default, the cookie belongs to a current page. But you can tell the browser what
+path the cookie belongs to using a path parameter.
 
 Deleting a cookie:
 You don't have to specify a cookie value when you delete a cookie.

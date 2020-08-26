@@ -166,3 +166,17 @@ class child extends parent{
         console.log(this.props) //print actual props
     }
 }
+
+//////////////////////////////////////////////////////////////////
+in es7 or using babel:
+we can define instance variable outside constructor:
+    class a {
+        status = 'pending';     //no this. required
+    }
+
+we can define methods on class as arrow function:
+    class a {
+        myMethod: () => {}
+    }
+
+//////////////////////////////////////////////////////////////////

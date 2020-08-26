@@ -269,6 +269,10 @@ covers some cases like NaN and -0
 Map vs Object:
     1. order of properties are conserved in Map
     2. Map can not have inheritance(prototype linking)
+    3. The keys of an Object are Strings and Symbols, whereas they can be any value
+        for a Map, including functions, objects, and any primitive.
+    4. A Map is an iterable and can thus be directly iterated, whereas iterating over
+        an Object requires obtaining its keys in some fashion and iterating over them.
 
 /////////////////////////////////////////////////
     var obj = {};

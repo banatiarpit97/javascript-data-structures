@@ -78,6 +78,24 @@ There are 4 methods on event object:
 
 ////////////////////////////////////////
 
+Creating event:
+	const a = new Event('name', {});
+
+in second arguement, we can pass an optional object with keys:
+	{
+		bubbles: true	//will event bubble or not
+		composed: true	//will the event leave shadow dom
+	}
+/////////////////////////////////////////////////////////////////////
+
+Dispatching event:
+	const customEvent = new Event('name', {});
+	e.target.dispatchEvent(customEvent);
+	or
+	this.dispatchEvent(customEvent);
+
+/////////////////////////////////////////////////////////////////////
+
 Common Events :
 
 load
