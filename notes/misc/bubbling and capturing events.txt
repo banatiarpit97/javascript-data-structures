@@ -79,3 +79,14 @@ If we are using capturing and put stopPropagation to top most element, then all 
 events will only be handled by the top most element only
 If we are using bubbling and put stopPropagation to element on which event occured,
 then all the events will only be handled by that element only
+
+///////////////////////////////////////////////
+We can provide a third arguement to addEventListener
+it can be a boolean and an object
+Object can have 3 properties:
+    {
+        capture: false,  //to use capture or bubbling phase
+        once: false, //if true, listener will only be called once and then deleted
+        passive: false,  //to tell browser that wil will not call preventDefault
+                    //but if we do, browser will only show a warning
+    }

@@ -73,3 +73,10 @@ key as name of attribute after 'data-' (like name of data-name) and value as val
 //document.querySelector('div').dataset is {name: 'arpit'}
 // or event.target.dataset is {name: 'arpit'}
 // value of this obj will always be string (Even if we set a number)
+
+/////////////////////////////////////////////////////////////////
+requestAnimationFrame
+For animations, instead of using setTimeout, setInterval, use native js
+requestAnimationFrame. This will execute animation code at the best time
+for the browser.This method choses appropriate frame rate for user's device
+so that mobile visitors will see different frame rate than desktop users.
