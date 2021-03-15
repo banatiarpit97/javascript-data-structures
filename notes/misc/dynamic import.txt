@@ -1,0 +1,8 @@
+Dynamically import a js file:
+
+const script = document.createElement('script');
+script.onload = function(){}
+script.defer = true;
+script.src = url;   //this will actually fetch the file
+
+document.head.appendChild(script);

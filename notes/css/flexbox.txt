@@ -36,7 +36,7 @@ align-items has 5 possible values:
     flex-start: align to the top of the container.
     flex-end: align to the bottom of the container.
     center: align at the vertical center of the container.
-    baseline: display at the baseline of the container.
+    baseline: display at the baseline of the container.(will align flex items along their content's baseline, useful when text size of boxes are diff)
     stretch: items are stretched to fit the container.
 
 flex-wrap
@@ -98,3 +98,8 @@ This property combines the above 3 properties:
     flex-grow
     flex-shrink
     flex-basis
+
+flex:1 is shorthand for: 
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0%;

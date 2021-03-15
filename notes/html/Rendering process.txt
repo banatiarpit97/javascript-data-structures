@@ -5,3 +5,13 @@
 5. Layout is made
 6. Paint
 7. JS is loaded
+
+Render blocking resources:
+css stylesheets
+js in head tag
+fonts from cdn or local server
+
+non blocking resources:
+images
+media files
+js at the end of body

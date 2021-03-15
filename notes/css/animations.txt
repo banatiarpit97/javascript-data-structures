@@ -3,6 +3,18 @@ different thread.
 Sometimes its not possible to use css animation like when we need to calculate value, then
 use requestAnimationFrame
 
+In most of the cases, we need ease-out timing for entering animation/transition and
+ease-in timing for exiting animation/transition
+
+We should prefer animations/transitions using transform rather than position or margin
+Transform animations does not trigger repaint and most probably carried out by
+compositor thread with the help of GPU.
+Opacity works in the same way as transform.
+
+Properties(any one) such as perspective, backface-visibility, transform: translateZ(0)
+will allow the browser to know that we need browser acceleration
+
+
 
 /* The animation code */
     @keyframes example {

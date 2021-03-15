@@ -113,4 +113,9 @@ word-break
 overflow-wrap
     like word-break but used for western languages
 
+    ellipses:
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
 

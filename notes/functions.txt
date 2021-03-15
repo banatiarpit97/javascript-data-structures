@@ -49,6 +49,8 @@ arrow function :
     arrow functions does not have a 'prototype' property
     const name = () => 'arpit'
     console.log(name.prototype)     //undefined
+    hence consume less memory(also does not have 'this' and 'arguments'),
+    so prefer arrow functions when 'this' not needed
 
 The Function Constructor
     The constructor Function() evaluates JavaScript code stored in strings.

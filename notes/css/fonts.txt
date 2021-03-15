@@ -62,5 +62,12 @@ font-family
 font-weight
 font-style
 font-stretch
+
+    @font-face {
+      font-family: "font11";
+      src: url("https://mdn.mozillademos.org/files/2468/VeraSeBd.ttf");
+    }
+
+    body { font-family: "font11", serif }
 ///////////////////////////////////////////////////////////////
 
