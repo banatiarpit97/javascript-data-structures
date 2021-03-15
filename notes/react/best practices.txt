@@ -73,6 +73,12 @@ by wrapping them in React.memo.
         /* only rerenders if props change */
     });
 
+React.PureComponent skip prop updated for whole component subtree so make sure that
+all children are also pure.
+
+React.memo only checks for prop updates, so if our component has useState
+or useContext then it will rerender it state or context changes
+
 ///////////////////////////////////////////////////////////////////
 If we want to add a functionality of functional components in class components without changing the 
 component itself, we can do so by wrapping the class with a function:

@@ -541,3 +541,20 @@ The default implementation calls toString(). Most engines don’t go beyond this
 support for this method. However, the ECMAScript Internationalization API 
 which is supported by many modern engines, overrides it for several built-in
 constructors.
+
+////////////////////////////////////////////////////////////////
+Proxy
+Proxy object is used to define custom behaviour for fundamental operations of a
+JavaScript object (remember, function and arrays are also object in JavaScript).
+It is a constructor method that can be used to create a Proxy object. It accepts
+a target object that is to be proxied and a handler object that will define the
+necessary customisation. The handler object allows for defining some trap
+functions like get, set, has, apply, etc. that are used to add custom behaviour
+attached to their usage. 
+
+
+//Reflect
+Reflect, on the other hand, is a built-in object that provides similar methods
+that are supported by the handler object of Proxy as static methods on itself.
+It is not a constructor; its static methods are used for intercept-able
+JavaScript operations.

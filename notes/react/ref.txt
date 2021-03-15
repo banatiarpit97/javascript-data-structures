@@ -35,3 +35,24 @@ Creating a div in react component:
     }
 
 //////////////////////////////////////////////////////////////////////////
+
+ref is not a prop, like 'key', its handled differently by react.
+If we add a ref to HOC, it will refer to the outermost component and not
+the wrapped one.
+
+To handle this, we have forwardRef:
+Wrap the component inside forwardRef function and we will receive ref
+as an arguemnt alongside props
+
+    const FancyButton = React.forwardRef((props, ref) => {
+        return (
+            <button ref={ref}>
+                {props.children}
+            </button>
+        )
+    });
+
+    const ref = React.createRef();
+    <FancyButton ref={ref}>Click Me</FancyButton>
+
+/////////////////////////////////////////////////////////////////

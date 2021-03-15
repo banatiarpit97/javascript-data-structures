@@ -140,3 +140,9 @@ ratechange
 if we need to stop or change behaviour of any default event use e.preventDefault()
 for eg if we want TAB to not work, just listen for key event and check if its a tab and
 then use preventDefault
+
+/////////////////////////////////////////////////
+'this' inside eventListener is same as e.currentTarget
+
+////////////////////////////////////////////
+scroll event can not be cancelled

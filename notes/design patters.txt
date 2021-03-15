@@ -1,0 +1,795 @@
+Design patterns are usually categorized into three major groups.
+
+    1. Creational Design Patterns
+        Patterns are for handling object creational mechanisms.
+        Controlling the creation process of an object.
+
+            a. Constructor Pattern
+                // traditional Function-based syntax
+                function Hero(name, specialAbility) {
+                    this.name = name;
+                    this.specialAbility = specialAbility;
+
+                    this.getDetails = function() {
+                        return this.name + ' can ' + this.specialAbility;
+                    };
+                }
+
+                // ES6 Class syntax
+                class Hero {
+                    constructor(name, specialAbility) {
+                        // setting property values
+                        this._name = name;
+                        this._specialAbility = specialAbility;
+
+                        // declaring a method on the object
+                        this.getDetails = function() {
+                            return `${this._name} can ${this._specialAbility}`;
+                        };
+                    }
+                }
+
+                // creating new instances of Hero
+                const IronMan = new Hero('Iron Man', 'fly');
+                console.log(IronMan.getDetails());
+
+            b. Factory Pattern
+                Factory pattern is another class-based creational pattern.
+                In this, we provide a generic interface that delegates the
+                responsibility of object instantiation to its subclasses.
+                This pattern is frequently used when we need to manage or
+                manipulate collections of objects that are different yet have
+                many similar characteristics.
+
+                class BallFactory {
+                    constructor() {
+                        this.createBall = function(type) {
+                            let ball;
+                            if (type === 'football' || type === 'soccer') ball = new Football();
+                            else if (type === 'basketball') ball = new Basketball();
+                            ball.roll = function() {
+                                return `The ${this._type} is rolling.`;
+                            };
+
+                            return ball;
+                        };
+                    }
+                }
+
+                class Football {
+                    constructor() {
+                        this._type = 'football';
+                        this.kick = function() {
+                            return 'You kicked the football.';
+                        };
+                    }
+                }
+
+                class Basketball {
+                    constructor() {
+                        this._type = 'basketball';
+                        this.bounce = function() {
+                            return 'You bounced the basketball.';
+                        };
+                    }
+                }
+
+                // creating objects
+                const factory = new BallFactory();
+
+                const myFootball = factory.createBall('football');
+                const myBasketball = factory.createBall('basketball');
+
+                console.log(myFootball.roll()); // The football is rolling.
+                console.log(myBasketball.roll()); // The basketball is rolling.
+                console.log(myFootball.kick()); // You kicked the football.
+                console.log(myBasketball.bounce()); // You bounced the basketball.
+
+            c. Prototype Pattern
+                This pattern is an object-based creational design pattern.
+                In this, we use a sort of a “skeleton” of an existing object to
+                create or instantiate new objects.
+
+                const car = {
+                    noOfWheels: 4,
+                    start() {
+                        return 'started';
+                    },
+                    stop() {
+                        return 'stopped';
+                    },
+                };
+                const myCar = Object.create(car, { owner: { value: 'John' } });
+
+            d. Singleton Pattern
+                Singleton is a special creational design pattern in which only
+                one instance of a class can exist. It works like this — if no
+                instance of the singleton class exists then a new instance is
+                created and returned, but if an instance already exists, then
+                the reference to the existing instance is returned. eg - mongoose
+
+                class Database {
+                    constructor(data) {
+                        if (Database.exists) {
+                            return Database.instance;
+                        }
+                        this._data = data;
+                        Database.instance = this;
+                        Database.exists = true;
+                        return this;
+                    }
+
+                    getData() {
+                        return this._data;
+                    }
+
+                    setData(data) {
+                        this._data = data;
+                    }
+                }
+
+                const mongo = new Database('mongo');
+                console.log(mongo.getData()); // mongo
+
+                const mysql = new Database('mysql');
+                console.log(mysql.getData()); // mongo
+
+
+    2. Structural Design Patterns
+        Patterns are concerned with class and object composition.
+        They help structure or restructure one or more parts without
+        affecting the entire system
+
+        a. Adapter Pattern
+            This is a structural pattern where the interface of one class is
+            translated into another. This pattern lets classes work together
+            that could not otherwise because of incompatible interfaces.
+
+            This pattern is often used to create wrappers for new refactored APIs
+            so that other existing old APIs can still work with them. This is
+            usually done when new implementations or code refactoring (done for
+            reasons like performance gains) result in a different public API,
+            while the other parts of the system are still using the old API and
+            need to be adapted to work together.
+
+            // old interface
+            class OldCalculator {
+                constructor() {
+                    this.operations = function(term1, term2, operation) {
+                        switch (operation) {
+                            case 'add':
+                                return term1 + term2;
+                            case 'sub':
+                                return term1 - term2;
+                            default:
+                                return NaN;
+                        }
+                    };
+                }
+            }
+
+            // new interface
+            class NewCalculator {
+                constructor() {
+                    this.add = function(term1, term2) {
+                        return term1 + term2;
+                    };
+                    this.sub = function(term1, term2) {
+                        return term1 - term2;
+                    };
+                }
+            }
+
+            // Adapter Class
+            class CalcAdapter {
+                constructor() {
+                    const newCalc = new NewCalculator();
+                    this.operations = function(term1, term2, operation) {
+                        switch (operation) {
+                            case 'add':
+                            // using the new implementation under the hood
+                                return newCalc.add(term1, term2);
+                            case 'sub':
+                                return newCalc.sub(term1, term2);
+                            default:
+                                return NaN;
+                        }
+                    };
+                }
+            }
+
+            // usage
+            const oldCalc = new OldCalculator();
+            console.log(oldCalc.operations(10, 5, 'add')); // 15
+
+            const newCalc = new NewCalculator();
+            console.log(newCalc.add(10, 5)); // 15
+
+            const adaptedCalc = new CalcAdapter();
+            console.log(adaptedCalc.operations(10, 5, 'add')); // 15;
+
+        b. Composite Pattern
+            composes objects into tree-like structures to represent whole-part
+            hierarchies.
+            Each node in the tree-like structure can be either an individual
+            object or a composed collection of objects. Regardless, each node
+            is treated uniformly.
+
+            class Component {
+                constructor(name) {
+                    this._name = name;
+                }
+
+                getNodeName() {
+                    return this._name;
+                }
+
+                // abstract methods that need to be overridden
+                getType() {}
+
+                addChild(component) {}
+
+                removeChildByName(componentName) {}
+
+                removeChildByIndex(index) {}
+
+                getChildByName(componentName) {}
+
+                getChildByIndex(index) {}
+
+                noOfChildren() {}
+
+                static logTreeStructure(root) {
+                    let treeStructure = '';
+                    function traverse(node, indent = 0) {
+                        treeStructure += `${'--'.repeat(indent)}${node.getNodeName()}\n`;
+                        indent++;
+                        for (let i = 0, length = node.noOfChildren(); i < length; i++) {
+                            traverse(node.getChildByIndex(i), indent);
+                        }
+                    }
+
+                    traverse(root);
+                    return treeStructure;
+                }
+            }
+
+            class Leaf extends Component {
+                constructor(name) {
+                    super(name);
+                    this._type = 'Leaf Node';
+                }
+
+                getType() {
+                    return this._type;
+                }
+
+                noOfChildren() {
+                    return 0;
+                }
+            }
+
+            class Composite extends Component {
+                constructor(name) {
+                    super(name);
+                    this._type = 'Composite Node';
+                    this._children = [];
+                }
+
+                getType() {
+                    return this._type;
+                }
+
+                addChild(component) {
+                    this._children = [...this._children, component];
+                }
+
+                removeChildByName(componentName) {
+                    this._children = [...this._children].filter(component => component.getNodeName() !== componentName);
+                }
+
+                removeChildByIndex(index) {
+                    this._children = [...this._children.slice(0, index), ...this._children.slice(index + 1)];
+                }
+
+                getChildByName(componentName) {
+                    return this._children.find(component => component.name === componentName);
+                }
+
+                getChildByIndex(index) {
+                    return this._children[index];
+                }
+
+                noOfChildren() {
+                    return this._children.length;
+                }
+            }
+
+            // usage
+            const tree = new Composite('root');
+            tree.addChild(new Leaf('left'));
+            const right = new Composite('right');
+            tree.addChild(right);
+            right.addChild(new Leaf('right-left'));
+            const rightMid = new Composite('right-middle');
+            right.addChild(rightMid);
+            right.addChild(new Leaf('right-right'));
+            rightMid.addChild(new Leaf('left-end'));
+            rightMid.addChild(new Leaf('right-end'));
+
+            // log
+            console.log(Component.logTreeStructure(tree));
+
+        c. Decorator Pattern
+            Ability to add behaviour or functionalities to existing classes
+            dynamically. It is another viable alternative to sub-classing.
+
+            class Book {
+                constructor(title, author, price) {
+                    this._title = title;
+                    this._author = author;
+                    this.price = price;
+                }
+
+                getDetails() {
+                    return `${this._title} by ${this._author}`;
+                }
+            }
+
+            // decorator 1
+            function giftWrap(book) {
+                book.isGiftWrapped = true;
+                book.unwrap = function() {
+                    return `Unwrapped ${book.getDetails()}`;
+                };
+
+                return book;
+            }
+
+            // decorator 2
+            function hardbindBook(book) {
+                book.isHardbound = true;
+                book.price += 5;
+                return book;
+            }
+
+            // usage
+            const alchemist = giftWrap(new Book('The Alchemist', 'Paulo Coelho', 10));
+
+            console.log(alchemist.isGiftWrapped); // true
+            console.log(alchemist.unwrap()); // 'Unwrapped The Alchemist by Paulo Coelho'
+
+            const inferno = hardbindBook(new Book('Inferno', 'Dan Brown', 15));
+
+            console.log(inferno.isHardbound); // true
+            console.log(inferno.price); // 20
+
+        d. Façade Pattern
+            It is used to provide a unified and simpler, public-facing interface
+            for ease of use that shields away from the complexities of its
+            consisting subsystems or subclasses.
+            In this example, we create a public facing API with the class
+            It exposes only one method to be used by the client.
+            It internally handles instantiating required objects based on the arguments.
+            It also handles all the other complex functionalities
+
+            let currentId = 0;
+
+            class ComplaintRegistry {
+                registerComplaint(customer, type, details) {
+                    const id = ComplaintRegistry._uniqueIdGenerator();
+                    let registry;
+                    if (type === 'service') {
+                    registry = new ServiceComplaints();
+                    } else {
+                    registry = new ProductComplaints();
+                    }
+                    return registry.addComplaint({ id, customer, details });
+                }
+
+                static _uniqueIdGenerator() {
+                    return ++currentId;
+                }
+            }
+
+            class Complaints {
+                constructor() {
+                    this.complaints = [];
+                }
+
+                addComplaint(complaint) {
+                    this.complaints.push(complaint);
+                    return this.replyMessage(complaint);
+                }
+
+                getComplaint(id) {
+                    return this.complaints.find(complaint => complaint.id === id);
+                }
+
+                replyMessage(complaint) {}
+            }
+
+            class ProductComplaints extends Complaints {
+                constructor() {
+                    super();
+                    if (ProductComplaints.exists) {
+                    return ProductComplaints.instance;
+                    }
+                    ProductComplaints.instance = this;
+                    ProductComplaints.exists = true;
+                    return this;
+                }
+
+                replyMessage({ id, customer, details }) {
+                    return `Complaint No. ${id} reported by ${customer} regarding ${details} have been filed with the Products Complaint Department. Replacement/Repairment of the product as per terms and conditions will be carried out soon.`;
+                }
+            }
+
+            class ServiceComplaints extends Complaints {
+                constructor() {
+                    super();
+                    if (ServiceComplaints.exists) {
+                    return ServiceComplaints.instance;
+                    }
+                    ServiceComplaints.instance = this;
+                    ServiceComplaints.exists = true;
+                    return this;
+                }
+
+                replyMessage({ id, customer, details }) {
+                    return `Complaint No. ${id} reported by ${customer} regarding ${details} have been filed with the Service Complaint Department. The issue will be resolved or the purchase will be refunded as per terms and conditions.`;
+                }
+            }
+
+            // usage
+            const registry = new ComplaintRegistry();
+
+            const reportService = registry.registerComplaint('Martha', 'service', 'availability');
+            // 'Complaint No. 1 reported by Martha regarding availability have been filed with the Service Complaint Department. The issue will be resolved or the purchase will be refunded as per terms and conditions.'
+
+            const reportProduct = registry.registerComplaint('Jane', 'product', 'faded color');
+            // 'Complaint No. 2 reported by Jane regarding faded color have been filed with the Products Complaint Department. Replacement/Repairment of the product as per terms and conditions will be carried out soon.'
+
+        e. Flyweight Pattern
+            focused on efficient data sharing through fine-grained objects.
+            It is used for efficiency and memory conservation purposes.
+
+            // flyweight class
+            class Icecream {
+                constructor(flavour, price) {
+                    this.flavour = flavour;
+                    this.price = price;
+                }
+            }
+
+            // factory for flyweight objects
+            class IcecreamFactory {
+                constructor() {
+                    this._icecreams = [];
+                }
+
+                createIcecream(flavour, price) {
+                    let icecream = this.getIcecream(flavour);
+                    if (icecream) {
+                        return icecream;
+                    } else {
+                        const newIcecream = new Icecream(flavour, price);
+                        this._icecreams.push(newIcecream);
+                        return newIcecream;
+                    }
+                }
+
+                getIcecream(flavour) {
+                    return this._icecreams.find(icecream => icecream.flavour === flavour);
+                }
+            }
+
+            // usage
+            const factory = new IcecreamFactory();
+
+            const chocoVanilla = factory.createIcecream('chocolate and vanilla', 15);
+            const vanillaChoco = factory.createIcecream('chocolate and vanilla', 15);
+
+            // reference to the same object
+            console.log(chocoVanilla === vanillaChoco); // true
+
+        f. Proxy Pattern
+            It acts as a surrogate or placeholder for another object to control
+            access to it.
+
+            // Target
+            function networkFetch(url) {
+                return `${url} - Response from network`;
+            }
+
+            // Proxy
+            // ES6 Proxy API = new Proxy(target, handler);
+            const cache = [];
+            const proxiedNetworkFetch = new Proxy(networkFetch, {
+                apply(target, thisArg, args) {
+                    const urlParam = args[0];
+                    if (cache.includes(urlParam)) {
+                    return `${urlParam} - Response from cache`;
+                    } else {
+                    cache.push(urlParam);
+                    return Reflect.apply(target, thisArg, args);
+                    }
+                },
+            });
+
+            // usage
+            console.log(proxiedNetworkFetch('dogPic.jpg')); // 'dogPic.jpg - Response from network'
+            console.log(proxiedNetworkFetch('dogPic.jpg')); // 'dogPic.jpg - Response from cache'
+
+    3. Behavioral Design Patterns
+        These patterns are concerned with improving communication between
+        dissimilar objects.
+
+        a. Chain of Responsibility Pattern
+            Provides a chain of loosely coupled objects.
+            Each of these objects can choose to act on or handle the request of the client.
+
+            class CumulativeSum {
+                constructor(intialValue = 0) {
+                    this.sum = intialValue;
+                }
+
+                add(value) {
+                    this.sum += value;
+                    return this;
+                }
+            }
+
+            // usage
+            const sum1 = new CumulativeSum();
+            console.log(sum1.add(10).add(2).add(50).sum); // 62
+
+        b. Command Pattern
+            This is a behavioural design pattern that aims to encapsulate
+            actions or operations as objects. This pattern allows loose coupling
+            of systems and classes by separating the objects that request an
+            operation or invoke a method from the ones that execute or process
+            the actual implementation.eg - time travelling in redux
+            
+            class SpecialMath {
+                constructor(num) {
+                    this._num = num;
+                }
+
+                square() {
+                    return this._num ** 2;
+                }
+
+                cube() {
+                    return this._num ** 3;
+                }
+            }
+
+            class Command {
+                constructor(subject) {
+                    this._subject = subject;
+                    this.commandsExecuted = [];
+                }
+                execute(command) {
+                    this.commandsExecuted.push(command);
+                    return this._subject[command]();
+                }
+            }
+
+            // usage
+            const x = new Command(new SpecialMath(5));
+            x.execute('square');
+            x.execute('cube');
+
+        c. Iterator Pattern
+            It is a behavioural design pattern that provides a way to access the
+            elements of an aggregate object sequentially without exposing its
+            underlying representation.
+
+            // using Iterator
+            class IteratorClass {
+                constructor(data) {
+                    this.index = 0;
+                    this.data = data;
+                }
+
+                [Symbol.iterator]() {
+                    return {
+                    next: () => {
+                        if (this.index < this.data.length) {
+                        return { value: this.data[this.index++], done: false };
+                        } else {
+                        this.index = 0; // to reset iteration status
+                        return { done: true };
+                        }
+                    },
+                    };
+                }
+            }
+
+            // using Generator
+            function* iteratorUsingGenerator(collection) {
+                var nextIndex = 0;
+
+                while (nextIndex < collection.length) {
+                    yield collection[nextIndex++];
+                }
+            }
+
+            // usage
+            const gen = iteratorUsingGenerator(['Hi', 'Hello', 'Bye']);
+
+        d. Mediator Pattern
+            It is a behavioural design pattern that encapsulates how a set of
+            objects interact with each other. It provides the central authority
+            over a group of objects by promoting loose coupling, keeping objects
+            from referring to each other explicitly.
+            
+            class TrafficTower {
+                constructor() {
+                    this._airplanes = [];
+                }
+
+                register(airplane) {
+                    this._airplanes.push(airplane);
+                    airplane.register(this);
+                }
+
+                requestCoordinates(airplane) {
+                    return this._airplanes.filter(plane => airplane !== plane).map(plane => plane.coordinates);
+                }
+            }
+
+            class Airplane {
+                constructor(coordinates) {
+                    this.coordinates = coordinates;
+                    this.trafficTower = null;
+                }
+
+                register(trafficTower) {
+                    this.trafficTower = trafficTower;
+                }
+
+                requestCoordinates() {
+                    if (this.trafficTower) return this.trafficTower.requestCoordinates(this);
+                    return null;
+                }
+            }
+
+            // usage
+            const tower = new TrafficTower();
+
+            const airplanes = [new Airplane(10), new Airplane(20), new Airplane(30)];
+            airplanes.forEach(airplane => {
+                tower.register(airplane);
+            });
+
+        e. Observer Pattern
+            It is a crucial behavioural design pattern that defines one-to-many 
+            dependencies between objects so that when one object (publisher) 
+            changes its state, all the other dependent objects (subscribers) 
+            are notified and updated automatically. This is also called PubSub
+            (publisher/subscribers) or event dispatcher/listeners pattern.
+            The publisher is sometimes called the subject, and the subscribers are
+            sometimes called observers.
+
+            class Subject {
+                constructor() {
+                    this._observers = [];
+                }
+
+                subscribe(observer) {
+                    this._observers.push(observer);
+                    return function(){
+                        this._observers = this._observers.filter(obs => observer !== obs);
+                    }
+                }
+
+                fire(change) {
+                    this._observers.forEach(observer => {
+                        observer.update(change);
+                    });
+                }
+            }
+
+            class Observer {
+                constructor(state) {
+                    this.state = state;
+                }
+
+                update(change) {
+                    this.state = change;
+                }
+             }
+
+            // usage
+            const sub = new Subject();
+
+            const obs1 = new Observer(1);
+            const obs2 = new Observer(19);
+
+            sub.subscribe(obs1);
+            sub.subscribe(obs2);
+
+            sub.fire('INC');
+
+        f. State Pattern
+            It is a behavioural design pattern that allows an object to alter its
+            behaviour based on changes to its internal state. The object returned
+            by a state pattern class seems to change its class. It provides
+            state-specific logic to a limited set of objects in which each object
+            type represents a particular state.
+
+            class TrafficLight {
+                constructor() {
+                    this.states = [new GreenLight(), new RedLight(), new YellowLight()];
+                    this.current = this.states[0];
+                }
+
+                change() {
+                    const totalStates = this.states.length;
+                    let currentIndex = this.states.findIndex(light => light === this.current);
+                    if (currentIndex + 1 < totalStates) this.current = this.states[currentIndex + 1];
+                    else this.current = this.states[0];
+                }
+
+                sign() {
+                    return this.current.sign();
+                }
+            }
+
+            class Light {
+                constructor(light) {
+                    this.light = light;
+                }
+            }
+
+            class RedLight extends Light {
+                constructor() {
+                    super('red');
+                }
+
+                sign() {
+                    return 'STOP';
+                }
+            }
+
+            class YellowLight extends Light {
+                constructor() {
+                    super('yellow');
+                }
+
+                sign() {
+                    return 'STEADY';
+                }
+            }
+
+            class GreenLight extends Light {
+                constructor() {
+                    super('green');
+                }
+
+                sign() {
+                    return 'GO';
+                }
+            }
+
+            // usage
+            const trafficLight = new TrafficLight();
+
+            console.log(trafficLight.sign()); // 'GO'
+            trafficLight.change();
+
+            console.log(trafficLight.sign()); // 'STOP'
+            trafficLight.change();
+
+            console.log(trafficLight.sign()); // 'STEADY'
+            trafficLight.change();
+
+            console.log(trafficLight.sign()); // 'GO'
+            trafficLight.change();
+
+            console.log(trafficLight.sign()); // 'STOP'
+
+        
+        g. Strategy Pattern

@@ -140,6 +140,13 @@ children are rendered and hence children need to rendered before.
 
 But constructor method of parent will always run before the child.and in children, constructor will run in sequential manner i.e. top to bottom
 
+componentWillUnmount of parent is run before child but order among siblings is
+not guranteed.
+
+useEffect does gurantee:
+    execution order of effects in single component(executed in serial order)
+    child effect is executed before parent's
+    parent effect is cleaned up before child's
 /////////////////////////////////////////////////////
 this.setState and set function of useState are asynchronous and hence we can not console the
 resulting state just after calling these function. These will be handeled by event loop and will
