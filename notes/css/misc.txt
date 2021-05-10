@@ -1,0 +1,50 @@
+make any element resizable like textarea:
+    .elem {
+        resize: both;
+    }
+
+/////////////////////////////////////////////
+create a triangle using css:
+ triangle {
+     width: 0;
+     height: 0;
+     border-left: 5pc solid transparent;
+     border-right: 5pc solid transparent;
+     border-right: 5pc solid black;
+ }
+
+if we give width and height as 0, and border 5px, then a square will be made with 4 triangles joined together.
+In the above example, we used bottom triangle of the 4, while keeping the left and right one transparent
+
+///////////////////////////////////////////
+Color scheme(Dark mode):
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --primary-color: grey;
+    }
+}
+
+///////////////////////////////////////////
+Dynamic css tooltips:
+<span class="tootlip" data-tooltip="my tooltip">
+    Hover Me
+</span>
+
+.tooltip::before {
+    content: attr(data-tooltip);
+}
+
+////////////////////////////////////////////
+Multiline ellipsis:
+line-clamp: 3;  //ellipsis at 3rd line
+
+////////////////////////////////////////////
+Shape outside:
+controls how content will wrap around a floated element's bounding box.
+shape-outside: circle(50%);
+
+//////////////////////////////////////////
+give stroke(width) to text
+text-stroke: 3px grey;
+text-fill-color: red;

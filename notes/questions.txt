@@ -751,3 +751,62 @@ let b = a()
 //ReferenceError
 
 /////////////////////////////////////////////////////////////////////////
+for(let i=0;i<5;i++){
+    (i==2) ? console.log(i) : continue;
+}
+Uncaught SyntaxError: Unexpected token 'continue'
+can not use continue in terniary operator.
+
+/////////////////////////////////////////////////////////////////////////
+function fn(){
+  var a = b = 5;
+}
+console.log(a)  // refence error since a is local variable
+console.log(b)  // 5, since b is a global variable(Defined without var keyword)
+
+/////////////////////////////////////////////////////////////////////////
+function createIncrement(){
+  let count = 0;
+  function increment(){
+    count++;
+  }
+  let message = `Count is ${count`;
+  function log(){
+    console.log(message);
+  }
+  return [increment, log];
+}
+const [increment, log] = createIncrement();
+increment();
+increment();
+increment();
+log();  //Count is 0
+
+/////////////////////////////////////////////////////////////////////////
+a = [null, 4, 0, 16, '']
+a.filter(Boolean) // [4,16]
+
+/////////////////////////////////////////////////////////////////////////
+parseInt(0.000005) //0
+parseInt(0.0000005) //5
+
+because parseInt first converts its arguemnt to string and then extracts first digit
+So in first case parseInt(0.000005) -> parseInt("0.000005") -> 0
+in second case parseInt(0.0000005) -> parseInt("5e-7") -> 5
+
+/////////////////////////////////////////////////////////////////////////
+const fn = () => 'Hello World';
+fn.length   //0
+
+const fn = (a) => a;
+fn.length   //1 as fn accepts 1 parameter
+
+const fn = (...args) => 'Hello World';
+fn.length   //0 rest params are not counted
+
+const fn = (a, b=1, c) => 'Hello World';
+fn.length   //1 only params before the first one with a default value is counted
+
+/////////////////////////////////////////////////////////////////////////
+
+

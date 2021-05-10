@@ -1,0 +1,87 @@
+There are 3 parallel threads, running in every React Native app.
+
+JS thread:
+Where all the js code is read and compiled, and where most of the business
+logic of the app happens. Metro generates the js bundle when the app is bundled
+for production, the JavascriptCore runs that bundle when the app starts.
+
+Native Thread:
+Handle the user interface.
+Communicates with the JS thread whenever there is a need to update the UI or access
+native functions. It can be split into native UI and native Modules. Native Modules
+are all armed at startup, meaning that a bluetooth module will always be bundled in
+case of use by React Native event if its not, it just wakes up when the app needs to 
+use it.
+
+Shadow Thread:
+Layout is calculated.
+Uses facebook's own layout engine called Yoga to calculate flexbox layouts and send
+them back to UI thread.
+
+
+To communicate between the JS thread and Native thread, we use the bridge. Under the hood
+this C++ module is mostly built around an asynchronous queue. Whenever it gets data from one
+of the either side, it serializes the data as a string and pass it through the queue, and
+deserializes it on arrival.
+
+What this means is that all threads rely on asynchronous JSON messages transmitted across the
+bridge, and these are sent to either side with the expectation(but not a gurantee) that they will
+elicit a response some time in the future.
+And there's also a risk of congestion.
+
+A popular example of why this creates performance issues is seen with scrolling huge lists:
+Whenever an onScroll event happen on the native world, information is sent asynchronously to
+JavaScript land, but the native world doesn't wait for Javascript to do its thing and send it
+back the other way. This creates a delay where there’s a blank space before the info appears on the screen.
+
+Similarly, calculating a layout needs to go through many hoops before it can be displayed on the screen,
+as it needs to go all the way to the Yoga engine before it can be calculated by the native world. And
+this implies, of course, going through the bridge too.
+
+We can see how sending JSON data back and forth through async serialization creates performance issues,
+but how else can we make our JavaScript communicate with the native world? This is where JSI comes into play.
+
+
+
+
+
+
+
+                                                                 Yoga
+                                                                   ^ 
+                                                                   |
+                                                                   |
+                                                                   |
+                                                                   |
+                                                                   |
+
+          Metro                   JSON                JSON
+React  ---------->  JS Bundle  <-------> Bridge  <---------->  Native UI
+                                                             Native Modules
+
+
+
+
+
+
+
+
+
+
+The new architecture
+The React Native re-architecture will progressively see the deprecation of the bridge in favor of a new element
+called the JavaScript Interface (JSI). An enabler for Fabric and TurboModules.
+
+The JSI allows for a few exciting improvements, the first one being that JS bundle is not bound to the JSC
+anymore, it can use any other JS engine. In other terms, the JSC engine can now easily be swapped with
+other — potentially more performant — JavaScript engines, like V8 for example.
+
+The second improvement is the foundation of this new architecture: "By using JSI, JavaScript can hold
+reference to C++ Host Objects and invoke methods on them. JavaScript and Native realms will be truly aware of each other."
+In other terms, JSI would allow for complete interoperability between all threads. With the concept of shared ownership,
+the JavaScript code could communicate with the native side directly from the JS thread, and there won’t be any need to
+serialize to JSON the messages to pass across, removing all congestion and asynchronous issues on the bridge.
+
+In addition to improving considerably the communication between the different threads, this new architecture also allows for direct
+control over our native modules. Meaning that we can use native modules when we need them, as opposed to loading them all once at startup.
+This results in massive performance improvements of startup times.

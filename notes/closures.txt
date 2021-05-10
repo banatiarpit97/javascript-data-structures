@@ -15,6 +15,9 @@ inner function does not have access to:
 the above problems can be solved by making a variable of outer function and assigning this/arguements to it
 
 outer function can not access local variables of inner function
+
+Thunk - Funtion that returns a function.
+This is not the same as closure, closure actually defines the scope of inner function
 ///////////////////////////////////////////////////////////////////////////
 
 function outer(){

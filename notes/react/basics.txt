@@ -224,4 +224,28 @@ Put state in lowest component that needs it, this will prevent the parent from r
 unnecessarily
 
 ///////////////////////////////////////////////////////////////////////////////
-React does not batch setStates present in async methods and event handlers
+For now, React only batches updates in event handlers.
+
+/////////////////////////////////////////////////////////////////////////////
+React uses event delegation i.e. attaches all the events to parent and executes them using bubbling 
+or capturing phase.
+In react 17, react will no longer attach event handlers to document(html), instead it
+will attach events to root node.
+before - document.addEventListener
+now - rootNode.addEventListener
+
+////////////////////////////////////////////////////////////////////////////
+React 17 removes the 'event pooling' optimisation. This doesn't improve performance
+in modern browsers but does confuse developers.
+
+function handleChange(e) {
+    setData(data => ({
+        ...data,
+        // will crash in react 16
+        text: e.target.value
+    }))
+}
+
+This is because react reused the event object between dirrent events and set all event fields
+to null in between them.
+In react 16, we can call e.persist() to properly use the event.

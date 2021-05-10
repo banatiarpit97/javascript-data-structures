@@ -214,6 +214,9 @@ Design patterns are usually categorized into three major groups.
             Each node in the tree-like structure can be either an individual
             object or a composed collection of objects. Regardless, each node
             is treated uniformly.
+            Assembling smaller units of functionality into new objects instead of 
+            inheriting from classes.
+            has-a or uses-a relationship rather than is-a
 
             class Component {
                 constructor(name) {
@@ -793,3 +796,22 @@ Design patterns are usually categorized into three major groups.
 
         
         g. Strategy Pattern
+
+
+// Creata private variables in js using IIFE
+
+let Editor = (
+    function() {
+        let state = {};
+        function Editor(text) {
+            state.text = text;
+        }
+        Editor.prototype.setText = function(text) {
+            state.text = text;
+        }
+        Editor.prototype.getText = function() {
+            return state.text;
+        }
+        return Editor;
+    }
+)()

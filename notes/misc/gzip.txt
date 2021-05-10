@@ -1,0 +1,11 @@
+we can compress our bundle using gzip so that the size of the resource is minimized and hence fetched earlier
+from the server.
+
+Dynamic Compression:
+    occures on the fly. User makes request, content is compressed and server to user.
+
+Static Compression
+    Assets are compressed ahead of request on the disk, pre compressed assets are served on request
+
+Problem with Dynamic Compression is that server can not reply to user until it has compressed the file
+hence Dynamic Compression requires more time to return the asset

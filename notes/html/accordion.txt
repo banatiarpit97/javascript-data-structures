@@ -1,0 +1,10 @@
+<div>
+    <details>
+        <summary>small text</summary>
+        <p>a big text, veri big</p>
+    </details>
+    <details open>
+        <summary>small text11</summary>
+        <p>a big text, veri big11</p>
+    </details>
+</div>

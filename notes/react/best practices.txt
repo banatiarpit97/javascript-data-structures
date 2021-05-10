@@ -91,3 +91,23 @@ component itself, we can do so by wrapping the class with a function:
     Now in 'default' functional component, we can use hooks, react.memo etc
 
     same can be done if we want to wrap a functional component in class component
+
+//////////////////////////////////////////////////////////////////
+We need a toggle state so many times, so create a custom hook for the same:
+    const useToggle = (initialValue = false) => 
+                            React.useReducer(prevValue => !prevValue, initialValue)
+
+    Usage:
+    const [value, toggleValue] = useToggle();
+    <button onClick={toggleValue} />
+
+//////////////////////////////////////////////////////////////////
+If we are passing a funcion to useState for initial value then be sure to DON't call
+this function, useState will call this function itself.
+If we call this function in useState like getInitialValue()), then getInitialValue
+will be called on every render(even though state variable will retain its value from last render)
+but the function will be called everytime.
+If we just pass the function, then useState will call it and getInitialValue will be called only
+once in the starting like useState(getInitialValue)
+
+//////////////////////////////////////////////////////////////////

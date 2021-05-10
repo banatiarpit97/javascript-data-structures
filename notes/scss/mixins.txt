@@ -52,3 +52,7 @@ variable arguements in mixins
 	box-shadow:$Shadows;
 }
 
+///////////////////////////////////////////////
+Hyphens and underscores are treated as same.
+So @mixin main-text{} is same as @mixin same_text{}
+

@@ -50,7 +50,12 @@ arrow function :
     const name = () => 'arpit'
     console.log(name.prototype)     //undefined
     hence consume less memory(also does not have 'this' and 'arguments'),
-    so prefer arrow functions when 'this' not needed
+    so prefer arrow functions when 'this' not needed.
+
+    We can not change 'this' inside arror functions using bind but we can assign values to its
+    params using bind.
+    Any reference to arguments, this, super, new.target must resolve to a binding in a lexically
+    enclosing environment.
 
 The Function Constructor
     The constructor Function() evaluates JavaScript code stored in strings.

@@ -23,3 +23,11 @@ parseInt(101, 2)    //converts binary to decimal(outputs 5)
 Creating numbers with exponentials:
     const a = 1e2   //100
     const b = 1.1e2   //110    
+
+////////////////////////////////////////////////////////////////////
+let a = 0.1, b = 0.2;
+a+b
+//0.30000000000000004
+
+To correct this:
+(a*10 + b*10) / 10

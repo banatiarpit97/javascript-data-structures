@@ -153,3 +153,11 @@ checking equality in switch:
         default:
             return 1;
     }
+
+    we can add curly braces for every case to create a new block scope:
+
+    case x<y: {
+        // new scope
+    }
+
+////////////////////////////////////////////////////////

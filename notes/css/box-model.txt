@@ -90,5 +90,9 @@ Top and bottom marginsof blocks collapse into single margin(whose size is the la
 This is called as margin collapsing.
 This does not happen with elements that are floated or have position: absolute
 
-
-
+Logical properties helps us replace absolute directions like margin-right and margin-left with
+relative directions like margin-block-started and margin-block-end. This will help us with langugaes
+that flow from RTL rather than LTR
+/////////////////////////////////
+By using property:
+    box-sizing: border-box // padding and border are included in height and width of element

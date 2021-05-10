@@ -1,0 +1,54 @@
+Batch redux updates:
+    Use 'batch' function from react-redux to batch adjacent react actions
+    batch(() => {
+        dispatch(a());
+        dispatch(b());
+        dispatch(c());
+    });
+    Without batch these actions would cause 3 re renders but with batch, only 1
+    re render will happen and all these 3 updates would reflect together
+
+Extract only required state from redux:
+    if we extract out a complete object then whenever any property of that
+    object changes(since we don't mutate, we replace), a re render would happen,
+    instead extract specific properties needed by that component
+    This is the case with useSelector and not connect which shallow checks
+
+Lazy load components:
+    we can use React.lazy to lazy load a component but this does not allow us
+    to prefetch that component programatically before hand. So use package
+    react-lazy-with-preload and preload the component either on link hover or
+    mouse down on button.
+
+Screen animations:
+    We can have animations/transitions for page enter and exit using react 
+    transition group library, hence a new page will not suddenly appear and we
+    can have nice transitions as in mobile app.
+
+Preload home page:
+    We can preload our home page and have it ready till our router re renders it
+    in case of lazy loading, We can use package preload-webpack-plugin
+
+Remove files from prod build
+    We can remove files that are required only in development from prod build
+    using webpack.NormalModuleReplacementPlugin and replace the original file
+    with a dummy/empty file
+
+Initial Loader
+    Put a loader inside index.html in id="root" tag.
+    Until react figures out what to render initially, this loader will be shown
+    and then will be automatically replaced by react content.(No initial white screen)
+
+Carefully use base64 images:
+    CRA comes with url-loader webpack plugin which converts small images to base64
+    and embed them in bundle itself.
+    This has following disadvantages:
+        bindle size gets bigger.
+        when image changes, base64 changes and hence cached bundle in nullified
+    This has following advantages:
+        Less http calls
+	image available instantly
+    
+Cache files
+    Use service worker to cache bundles
+

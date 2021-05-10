@@ -95,6 +95,46 @@ Generators(yield) :(making our synchronus looking code async)
  automatically restarting the Generator.
  No need to use this as async-await functions are implementation of this and promises
  which is very easy to use 
+
+ Working of Generators:
+ Each time a Generator yields, its stack frame(local varuables, arguments, current pos of execution within
+ Generator body) is removed from the stack. However Generator object keeps refernce to this stack frame
+ so that a later .next() call can reactivate it and continue execution.
+ Generators are iterators, we can create our own iterators by implementing [Symbol.iterator]() and .next()
+
+ class RangeIterator {
+     constructor(start, stop) {
+         this.value = start;
+         this.stop = stop;
+     }
+
+     [Symbol.iterator](){
+         return this;
+     }
+     next(){
+         let value = this.value;
+         if(value < this.stop) {
+             this.value++;
+             return {done: false, value}
+         } else {
+             return {done: true, value: undefined}
+         }
+     }
+ }
+ function range(start, stop) {
+     return new RangeIterator(start, stop)
+ }
+
+ is same as --------------------
+
+ function* range(start, stop) {
+     for(let i=start;i<stop;i++){
+         yield i;
+     }
+ }
+ 
+ This is possible because Generators are iterators. All Generators have a built in implementation of
+ [Symbol.iterator]() and .next()
 ////////////////////////////////////////////////////////////////////////////
 
 PROMISES :

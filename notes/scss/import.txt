@@ -1,0 +1,5 @@
+@import
+used to import file
+Unlike css import, this will not crate a HTTp request the file, while transpiling scss to css, the code
+of imported file will be pasted in the resultant file.
+No need to specify extension, it assumes we mean .scss, .sass, .css

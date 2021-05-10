@@ -1,0 +1,83 @@
+Webpack is a module bundler that takes our source code and converts it into a deployable code.
+
+It takes a entry point, and from that file, it creates a graph of files linked to each other.
+like how entry file imports some files, and then those files include other files.
+and then create a bundle from that.
+
+Loaders - these are used to process a file. They take input a file and then converts/processes it in such a way
+that it can be included in our final bundle.
+eg - url-loader to use images in our project,
+style-loader - for css
+We don't need to import these in our webpack config, we just need to install it using npm
+
+Plugins - Used for additional configurations to be done on files.
+eg - HTMLWebpackPlugin - used to create a final index.html file from a template such that the final file
+includes the js and css files created by webpack. Since the name of these files contain hash like main.123.js
+we need thisplugin to create index.html after ourr bundle is created.
+We  need to import these in our webpack config, after installing it using npm
+
+optimization - Used to optimize our bundle like minifying, uglifying it.
+If we don't mention this in our config, webpack automatically used terser plugin to minify and ugligy or js.
+but if specify any plugin it minimizer, then we need to put terser plugin also manually
+
+Webpack merge - plugin used to merge configurations
+    module.exports = merge(commonConfig, {// new config})
+
+MiniCssExtractPlugin - used to extract css to its own file rather than adding it to style tag
+
+    plugins: [new MiniCssExtractPlugin({ filename: '[name].[contentHash].css'})],
+    module: {rules: [{
+        test: /\.scss$/,
+        use: [
+            MiniCssExtractPlugin.loader
+            'css-loader'
+            'sass-loader'
+        ]
+    }]}
+
+Multiple entry points:
+    module.exports = {
+        entry: {
+            main: './src/main.js',
+            vendor: './src/vendor.js',
+        },
+        output: {
+            filename: '[name].[contentHash].js',
+            path: path.resolve(__dirname, 'dist')
+        },
+    }
+
+Clean-Webpack plugin to clean the dist directory before creating a new build
+
+File-loader plugin used to convert image files and turn them into importable js modules.
+url-loader plugin is to convert these image files to base64 and include then html itself
+
+eg file: 
+
+module.exports = {
+    mode: 'production',
+    entry: './src/index.js',
+    output: {
+        filename: 'main.[contentHash].js',
+        path: path.resolve(__dirname, 'dist')
+    },
+    optimization: {
+        minimizer: [new OptimizeCssAssetsPlugin(), new TerserPlugin()]
+    }
+    plugins: [new HTMLWebpackPlugin({
+        template: './src/template.html'
+    })],
+    module: {
+        rules: [
+            {
+                test: /\.scss$/,
+                use: [
+                    'style-loader'  //inject styles to DOM(in style tag in head)
+                    'css-loader'    // converts css to js module
+                    'sass-loader'   // converts scss to css
+                ]   // loaders are executed from last to first i.e sass-loader -> css-loader -> style-loader
+            }
+        ]
+    }
+
+}

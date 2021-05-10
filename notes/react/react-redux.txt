@@ -91,6 +91,18 @@ useSelector:
         //store is the complete store passed to Provider, this is the same store passed to mapStateToProps
     }
     useSelector can be called multiple times to get diff state from store
+    
+    When an action is dispatched, useSelector() will do a reference comparison of the previous selector result value
+    and the current result value. If they are different, the component will be forced to re-render. If they are the same,
+    the component will not re-render.
+    
+    The default comparison is a strict === reference comparison. This is different than connect(), which uses shallow equality
+    checks on the results of mapState calls to determine if re-rendering is needed. 
+
+    With mapState, all individual fields were returned in a combined object. It didn't matter if the return object was a new
+    reference or not - connect() just compared the individual fields. With useSelector(), returning a new object every time
+    will always force a re-render by default. If you want to retrieve multiple values from the store, you can 
+    Call useSelector() multiple times, with each call returning a single field value
 
 useDispatch:
     to replace mapDispatchToProps

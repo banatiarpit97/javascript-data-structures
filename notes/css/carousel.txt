@@ -1,0 +1,25 @@
+container properties:
+    scroll-snap-type
+    scroll-padding
+        By default, content will snap to the very edges of the container. You can change that
+        by setting the scroll-padding property on the container. It follows the same
+        syntax as the regular padding property.
+
+child properties:
+    scroll-snap-align
+
+When container element is scrolled, it will snap to the child elements
+
+<div class="container">
+    <section class="child"></section>
+    <section class="child"></section>
+    <section class="child"></section>
+</div>
+
+.container {
+    scroll-snap-type: y mandatory;  //mandatory or proximity
+    //vertical list, for horizontal, use x mandatory
+}
+.child {
+    scroll-snap-align: start;   //start, center, end
+}

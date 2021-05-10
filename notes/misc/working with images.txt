@@ -38,3 +38,8 @@ Download remote image to local:
             a.click();
             window.URL.revokeObjectURL(url);
         });
+
+///////////////////////////
+We must state image dimensions in the image tag itself.
+Browser will calculate the space needed for the image before it loads the image, hence reducing CLS(
+commullative layout shift)

@@ -1,0 +1,41 @@
+Intersection Obeserver:
+The Intersection Observer API provides a way to asynchronously observe changes in the intersection of a target
+element with an ancestor element or with a top-level document's viewport.
+Basically, with this browser would let us know whenever an element comes into viewport.
+Before this api, we would have to add listener to scroll event and check manually
+    let options = {
+        root: document.querySelector('#scrollArea'),
+        rootMargin: '0px',
+        threshold: 1.0
+    }
+    let observer = new IntersectionObserver(callback, options);
+    
+    let target = document.querySelector('#listItem');
+    observer.observe(target);
+
+    root
+        The element that is used as the viewport for checking visibility of the target. Must be the ancestor of the
+        target. Defaults to the browser viewport if not specified or if null.
+    rootMargin
+        Margin around the root.
+    A threshold of 1.0 means that when 100% of the target is visible within the element specified by the root
+    option, the callback is invoked.
+
+///////////////////////////////////////////////////////////////
+Fetch
+    const json = fetch(URL)
+                    .then(res => res.json)
+                    .then(json => console.log(json))
+
+    can also be wqitten as:
+
+    const json = await(await fetch(URL)).json();
+
+    //res.json, res.text() returns a promise.
+
+    Fetch does not throw an exception on 4xx or 5xx errors, it only throws on network failure
+    or something prevented the req from completing.
+    To check whether the response was successful, check res.ok
+
+///////////////////////////////////////////////////////////////
+

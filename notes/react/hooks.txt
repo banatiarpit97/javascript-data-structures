@@ -34,6 +34,11 @@ subsequent re-render/update. React first updates the DOM, then calls
 any function passed to useEffect(). All without blocking the UI rendering 
 even on blocking code, unlike the old componentDidMount and componentDidUpdate, 
 which makes our apps feel faster.
+useEffect is called after paint, hence DOM has been updated by the time it runs.
+But react makes sure that effect is ran before nect rerender.
+componentDidMount/componentDidUpdate used to run synchronously and hence block browser paint.
+So if we update state synchronously in these methods, we will see those updates in next paint but this is not case 
+in useEffect
 
 const { useEffect } = React
 
@@ -64,6 +69,8 @@ If any of the variable in the array changes, function inside useEffect will be c
 
 Take care while changing state inside useEffect, that might create a cycle if we are listening for
 the same state variable in that useEffect
+
+If there are more than 1 useEffect calls within a component, order of these calls will be maintained.
 
 Implementing componentWillUnmount:
 
@@ -248,3 +255,12 @@ But there are some disadvantages:
   3. Redux optimises our components for re rendering. It basically does what react.memo does
 
 All the above can be made available in context but for that code has to be written by the user.
+
+///////////////////////////////////////////////////////////////////////////
+useLayoutEffect:
+We need to use this instead of useEffect in the case if we aremutating the DOM in effect and these mutations will
+affect the appearance of the DOM since we don't want to see the intermediate state on browser.
+This is ran just after react has performed all the DOM mutation but before it has painted these mutations
+on the browser.
+This is usefull to make DOM measurements like getting scroll position and then make DOM mutations.
+As fas as scheduling, this works exactly as componentDidMount/componentDidUpdate.

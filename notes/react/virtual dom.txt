@@ -14,3 +14,6 @@ need to be changed at the same time and hence changes are rendered just once.
 reflow and repaint are expensive that's why updates are batched.
 
 React uses unidirectional data flow, from parent to child only
+
+Reconcillation - VDOM is a virtaul representation of a UI kept in memory and is synced
+with the real DOM by a library ReactDOM.

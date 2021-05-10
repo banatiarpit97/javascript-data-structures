@@ -1,0 +1,7 @@
+Any tabindex greater than 0 jumps the element to the front of the natural tab order.
+If there are multiple elements with a tabindex greater than 0, tab order starts
+from lowest valute that is grater than 0 and works its way up. Using a tabindex
+greater than 0 is considered as anti pattern
+setting tabindex lower than 0 will remove the element from tab flow.
+
+tabindex="2"
