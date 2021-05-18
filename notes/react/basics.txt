@@ -143,6 +143,16 @@ But constructor method of parent will always run before the child.and in childre
 componentWillUnmount of parent is run before child but order among siblings is
 not guranteed.
 
+A
+    A.0
+        A.0.0
+        A.0.1
+    A.1
+    A.2
+
+render() order ->  A -> A.0 -> A.0.0 -> A.0.1 -> A.1 -> A.2
+componentDidMount() order ->  A.2 -> A.1 -> A.0.1 -> A.0.0 -> A.0 -> A
+
 useEffect does gurantee:
     execution order of effects in single component(executed in serial order)
     child effect is executed before parent's

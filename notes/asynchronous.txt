@@ -181,6 +181,9 @@ Methods on Promise:
 If we are certain about the result of promise and we don't need to do any processing, we can directly use
 function like Promise.reject() or Promise.resolve() without creating function like new Promise...
 
+Promise.resolve() is synchronous and will be executed right away.
+Promise.resolve().then(), then part is async
+
 Create a function that returns a promise(i.e. a function that executed async code):
 getUser(){
     return new Promise((resolve, reject) => {   

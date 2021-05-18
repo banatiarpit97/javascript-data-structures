@@ -1,0 +1,84 @@
+React used composition architecture and not inheritence architecture.
+
+Parent and child component are not connected to each other by inheritence i.e. one doesn't inherit/extend the other.
+They are connected through composition i.e. parent is composed of children or parent has children.
+    <Parent>
+        <Child1 />
+        <Child2 />
+    </Parent>
+
+//////////////////////////////////////////////////////////////
+
+Advantages of composition:
+
+    Skipping unnecessary re-renders:
+        function Parent() {
+            return <Child />
+        }
+        function Sibling() {
+            return <p>Sibling</p>
+        }
+        function Child() {
+            const [counter, setCounter] = useState(1)
+            return (
+                <p>{counter}</p>
+                <button onClick={() => setCount(count + 1)}>Click</button>
+                <Sibling />
+            )
+        }
+
+        Now every time counter is updated in child component, Sibling component is re-rendered, even though sibling component
+        doesn't even need counter state or doesn’t change when counter changes.
+        To solve this, we use composition
+
+        function Parent() {
+            return (
+                <Child>
+                    <Sibling />     //composition
+                </Child>
+            )
+        }
+        function Sibling() {
+            return <p>Sibling</p>
+        }
+        function Child({children}) {
+            const [counter, setCounter] = useState(1)
+            return (
+                <p>{counter}</p>
+                <button onClick={() => setCount(count + 1)}>Click</button>
+                {children}
+            )
+        }
+
+        now sibling component will only re-render when parent component is re-rendered.
+
+//////////////////////
+
+    To solve prop drilling without using context or redux
+
+    Suppose sibling component needs to access state of parent, traditionally we would have to pass this state through child
+    component i.e. parent will pass to child and then child will pass to sibling(prop drilling).
+    We can solve this using composition
+
+        function Parent() {
+                const [user, setUser] = useState({name: 'Arpit'})l
+
+                return (
+                    <Child>
+                        <Sibling user={user} />     //composition
+                    </Child>
+                )
+            }
+            function Sibling({user}) {
+                return <p>Hi {user.name}</p>
+            }
+            function Child({children}) {
+                const [counter, setCounter] = useState(1)
+                return (
+                    <p>{counter}</p>
+                    <button onClick={() => setCount(count + 1)}>Click</button>
+                    {children}
+                )
+            }
+
+////////////////////////////////////////////////////////////////////////////////////

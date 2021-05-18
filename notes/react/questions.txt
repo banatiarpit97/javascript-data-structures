@@ -1,0 +1,33 @@
+Create directory structure using recursion:
+a
+    a1
+    a1
+b
+    b1
+        b11
+
+const dir = [
+  { label: "a", children: [{ label: "a1" }, { label: "a2" }] },
+  { label: "b", children: [{ label: "b1", children: [{ label: "b11" }] }] }
+];
+
+export default function App() {
+  return (
+    {dir.map((d) => (
+        <Print dir={d} />
+    ))}
+  );
+}
+
+function Print({ dir, margin = 0 }) {
+  return (
+    <>
+      <p style={{ marginLeft: margin }}>{dir.label}</p>
+      {dir.children?.map((d) => (
+        <Print dir={d} margin={margin + 20} />
+      ))}
+    </>
+  );
+}
+
+/////////////////////////////////////////////////////////////////////

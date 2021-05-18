@@ -26,6 +26,7 @@ not deleted even when browser is closed
 session storage:
 same as local storage except that it stores data for only 1 session
 data is deleted when browser is closed(or even when TAB is closed)
+Session storage is not deleted when tab is reloaded
 
     sessionStorage.setItem("key", "value");
     var lastname = sessionStorage.getItem("key");
@@ -78,3 +79,10 @@ again, you can only see the name-value pair of it.
 
 If you set a new cookie, older cookies are not overwritten. The new cookie is 
 added to document.cookie,
+
+Cookie attributes:
+    Secure - Cookie will be sent in HTTPS transmission only.
+    HttpOnly- Don't allow scripts to access cookie. You can set both of the Secure and HttpOnly.
+    Domain- specify the hosts to which the cookie will be sent.
+    Path - create scopes, cookie will be sent only if the path matches.
+    Expires - indicates the maximum lifetime of the cookie.

@@ -1,0 +1,498 @@
+When we click on the button, the click event is triggered and React executes the callback that we pass in the button props.
+In our application it simply increments the counter and updates the state:
+
+    class ClickCounter extends React.Component {
+        ...
+        handleClick() {
+            this.setState((state) => {
+                return {count: state.count + 1};
+            });
+        }
+    }   
+
+Every React component has an associated updater which acts as a bridge between the components and the React core.
+This allows setState to be implemented differently by ReactDOM, React Native, server side rendering, and testing utilities.
+
+In this article we’ll be looking at the implementation of the updater object in ReactDOM, which uses the Fiber reconciler.
+For the ClickCounter component it’s a classComponentUpdater. It’s responsible for retrieving an instance of Fiber,
+queuing updates, and scheduling the work.
+
+When updates are queued, they are basically just added to the queue of updates to process on a Fiber node. In our case,
+the Fiber node corresponding to the ClickCounter component will have the following structure:
+    {
+        stateNode: new ClickCounter,
+        type: ClickCounter,
+        updateQueue: {
+            baseState: {count: 0}
+            firstUpdate: {
+                next: {
+                    payload: (state) => { return {count: state.count + 1} }
+                }
+            },
+            ...
+        },
+        ...
+    }
+
+As you can see, the function in the updateQueue.firstUpdate.next.payload is the callback we passed to setState in the
+ClickCounter component.It represents the first update that needs to be processed during the render phase.
+
+Processing updates for the ClickCounter Fiber node
+The chapter on the work loop in my previous article explains the role of the nextUnitOfWork global variable.
+Particularly, it states that this variable holds a reference to the Fiber node from the workInProgress tree that
+has some work to do. As React traverses the tree of Fibers, it uses this variable to know if there’s any other
+Fiber node with unfinished work.
+
+Let’s start with the assumption that the setState method has been called. React adds the callback from setState to
+the updateQueue on the ClickCounter fiber node and and schedules work. React enters the render phase. It starts
+traversing from the topmost HostRoot Fiber node using the renderRoot function. However, it bails out of (skips)
+the already processed Fiber nodes until it finds a node with unfinished work. At this point there’s only one
+Fiber node with some work to do. It’s the ClickCounter Fiber node.
+
+All work is performed on the cloned copy of this Fiber node is stored in the alternate field. If the alternate node is
+not yet created, React creates the copy in the function createWorkInProgress before processing updates. Let’s assume
+that the variable nextUnitOfWork holds a reference to the alternate ClickCounter Fiber node.
+
+beginWork
+First, our Fiber gets into the beginWork function.
+
+Since this function is executed for every Fiber node in a tree it’s a good place to put a breakpoint if you want to
+debug the render phase. I do that often and check the type of a Fiber node to pin down the one I need.
+The beginWork function is basically a big switch statement that determines the type of work that needs to be done for
+a Fiber node by the tag and then executes the respective function to perform the work. In the case of CountClicks
+it’s a class component, so this branch will be taken:
+    function beginWork(current$$1, workInProgress, ...) {
+        ...
+        switch (workInProgress.tag) {
+            ...
+            case FunctionalComponent: {...}
+            case ClassComponent:
+            {
+                ...
+                return updateClassComponent(current$$1, workInProgress, ...);
+            }
+            case HostComponent: {...}
+            case ...
+    }
+
+and we get into the updateClassComponent function. Depending on whether it’s the first rendering of a component,
+work being resumed, or a React update, React either creates an instance and mounts the component or just updates it:
+    function updateClassComponent(current, workInProgress, Component, ...) {
+        ...
+        const instance = workInProgress.stateNode;
+        let shouldUpdate;
+        if (instance === null) {
+            ...
+            // In the initial pass we might need to construct the instance.
+            constructClassInstance(workInProgress, Component, ...);
+            mountClassInstance(workInProgress, Component, ...);
+            shouldUpdate = true;
+        } else if (current === null) {
+            // In a resume, we'll already have an instance we can reuse.
+            shouldUpdate = resumeMountClassInstance(workInProgress, Component, ...);
+        } else {
+            shouldUpdate = updateClassInstance(current, workInProgress, ...);
+        }
+        return finishClassComponent(current, workInProgress, Component, shouldUpdate, ...);
+    }
+
+
+Processing updates for the ClickCounter Fiber
+We already have an instance of the ClickCounter component, so we get into the updateClassInstance. That’s where
+React performs most of the work for class components. Here are the most important operations performed in the
+function in the order of execution:
+
+    call UNSAFE_componentWillReceiveProps() hook (deprecated)
+    process updates in the updateQueue and generate new state
+    call getDerivedStateFromProps with this new state and get the result
+    call the shouldComponentUpdate to ensure a component wants to update;
+    if false, skip the whole rendering process, including calling render on this component and its children; 
+    otherwise proceed with the update
+    call UNSAFE_componentWillUpdate(deprecated)
+    add an effect to trigger componentDidUpdate lifecycle hook
+    Although the effect to call componentDidUpdate is added in the render phase, the method will be executed in
+    the following commit phase.
+    update state and props on the component instance
+
+state and props should be updated on the component instance before the render method is called, since the render
+method output usually depends on the state and props. If we don’t do that, it will be returning the same output every time.
+
+Here’s the simplified version of the function:
+    function updateClassInstance(current, workInProgress, ctor, newProps, ...) {
+        const instance = workInProgress.stateNode;
+
+        const oldProps = workInProgress.memoizedProps;
+        instance.props = oldProps;
+        if (oldProps !== newProps) {
+            callComponentWillReceiveProps(workInProgress, instance, newProps, ...);
+        }
+
+        let updateQueue = workInProgress.updateQueue;
+        if (updateQueue !== null) {
+            processUpdateQueue(workInProgress, updateQueue, ...);
+            newState = workInProgress.memoizedState;
+        }
+
+        applyDerivedStateFromProps(workInProgress, ...);
+        newState = workInProgress.memoizedState;
+
+        const shouldUpdate = checkShouldComponentUpdate(workInProgress, ctor, ...);
+        if (shouldUpdate) {
+            instance.componentWillUpdate(newProps, newState, nextContext);
+            if (typeof instance.componentDidUpdate === 'function') {
+                workInProgress.effectTag |= Update;
+            }
+            if (typeof instance.getSnapshotBeforeUpdate === 'function') {
+                workInProgress.effectTag |= Snapshot;
+            }
+        }
+
+        instance.props = newProps;
+        instance.state = newState;
+
+        return shouldUpdate;
+    }
+
+Okay, so now we know what operations are performed for the ClickCounter Fiber node during the render phase.
+Let’s now see how these operations change values on the Fiber nodes.When React begins work, the Fiber node
+for the ClickCounter component looks like this:
+
+    {
+        effectTag: 0,
+        elementType: class ClickCounter,
+        firstEffect: null,
+        memoizedState: {count: 0},
+        type: class ClickCounter,
+        stateNode: {
+            state: {count: 0}
+        },
+        updateQueue: {
+            baseState: {count: 0},
+            firstUpdate: {
+                next: {
+                    payload: (state, props) => {…}
+                }
+            },
+            ...
+        }
+    }
+
+After the work is completed, we end up with a Fiber node that looks like this:
+    {
+        effectTag: 4,
+        elementType: class ClickCounter,
+        firstEffect: null,
+        memoizedState: {count: 1},
+        type: class ClickCounter,
+        stateNode: {
+            state: {count: 1}
+        },
+        updateQueue: {
+            baseState: {count: 1},
+            firstUpdate: null,
+            ...
+        }
+    }
+
+After the update is applied, the value of the property count is changed to 1 in the memoizedState and the baseState
+in updateQueue. React has also updated the state in the ClickCounter component instance.
+
+At this point, we no longer have updates in the queue, so firstUpdate is null.And importantly, we have changes in the
+effectTag property. It’s no longer 0, it’s value is 4. In binary this is 100, which means that the third bit is set,
+which is exactly the bit for the Update side-effect tag:
+    export const Update = 0b00000000100;
+
+So to conclude, when working on the parent ClickCounter Fiber node, React calls the pre-mutation lifecycle methods,
+updates the state and defines relevant side-effects.
+
+
+
+Reconciling children for the ClickCounter Fiber
+Once that’s done, React gets into the finishClassComponent. This is where React calls the render method on a
+component instance and applies its diffing algorithm to the children returned by the component. The high-level
+overview is described in the docs. Here’s the relevant part:
+
+When comparing two React DOM elements of the same type, React looks at the attributes of both, keeps the same
+underlying DOM node, and only updates the changed attributes.
+If we dig deeper, however, we can learn that it actually compares Fiber nodes with React elements.
+
+At this point there are two things that are important to understand. First, as React goes through the child
+reconciliation process, it creates or updates Fiber nodes for the child React elements returned from the render
+method. The finishClassComponent function returns the reference to the first child of the current Fiber node.
+It will be assigned to the nextUnitOfWork and processed later in the work loop. Second, React updates the props
+on the children as part of work performed for the parent. To do that it uses data from the React elements returned
+from render method.
+
+For example, here’s what the Fiber node corresponding to the span element looks like before React reconciles the
+children for the ClickCounter fiber:
+    {
+        stateNode: new HTMLSpanElement,
+        type: "span",
+        key: "2",
+        memoizedProps: {children: 0},
+        pendingProps: {children: 0},
+        ...
+    }
+
+As you can see, the children property in both memoizedProps and pendingProps is 0. Here’s the structure of the
+React element returned from the render for the span element:
+    {
+        $$typeof: Symbol(react.element)
+        key: "2"
+        props: {children: 1}
+        ref: null
+        type: "span"
+    }
+
+As you can see, there’s a difference between the props in the Fiber node and the returned React element.
+Inside the createWorkInProgress function that is used to create alternate Fiber nodes, React will copy the
+updated properties from the React element to the Fiber node.
+
+So, after React has finished reconciling the children for the ClickCounter component, the span Fiber node will have
+the pendingProps updated. They will match the value in the span React element:
+    {
+        stateNode: new HTMLSpanElement,
+        type: "span",
+        key: "2",
+        memoizedProps: {children: 0},
+        pendingProps: {children: 1},
+        ...
+    }
+
+Later, when React will be performing work for the span Fiber node, it will copy them to the memoizedProps and add
+effects to update DOM.
+
+Well, that’s all the work that React performs for the ClickCounter fiber node during the render phase.
+Since the button is the first child of the ClickCounter component, it will be assigned to the nextUnitOfWork variable.
+There’s nothing to be done with it, so React will move to its sibling, which is span Fiber node. According to the
+algorithm described here, it happens in the completeUnitOfWork function.
+
+
+Processing updates for the Span fiber
+So, the variable nextUnitOfWork now points to the alternate of the span fiber and React starts working on it.
+Similar to the steps performed for the ClickCounter, we start with the beginWork function.
+
+Since our span node is of HostComponent type, this time in the switch statement React takes this branch:
+    function beginWork(current$$1, workInProgress, ...) {
+        ...
+        switch (workInProgress.tag) {
+            case FunctionalComponent: {...}
+            case ClassComponent: {...}
+            case HostComponent:
+            return updateHostComponent(current, workInProgress, ...);
+            case ...
+    }
+and ends up in the updateHostComponent function. You can see a parallel with the updateClassComponent function
+called for class components. For a functional component it’ll be updateFunctionComponent and so on.
+
+Reconciling children for the span fiber
+In our case there nothing important happening for the span node in the updateHostComponent.
+
+Completing work for the Span Fiber node
+Once beginWork is finished, the node gets into the completeWork function. But before that, React needs to update
+the memoizedProps on the span fiber. You may remember that when reconciling children for the ClickCounter component,
+React updated the pendingProps on the span Fiber node:
+    {
+        stateNode: new HTMLSpanElement,
+        type: "span",
+        key: "2",
+        memoizedProps: {children: 0},
+        pendingProps: {children: 1},
+        ...
+    }
+
+So once beginWork is finished for the span fiber, React updates pendingProps to match memoizedProps:
+    function performUnitOfWork(workInProgress) {
+        ...
+        next = beginWork(current$$1, workInProgress, nextRenderExpirationTime);
+        workInProgress.memoizedProps = workInProgress.pendingProps;
+        ...
+    }
+
+It then calls the completeWork function which is basically a big switch statement similar to the one we saw in beginWork:
+    function completeWork(current, workInProgress, ...) {
+        ...
+        switch (workInProgress.tag) {
+            case FunctionComponent: {...}
+            case ClassComponent: {...}
+            case HostComponent: {
+                ...
+                updateHostComponent(current, workInProgress, ...);
+            }
+            case ...
+        }
+    }
+
+Since our span Fiber node is HostComponent, it runs the updateHostComponent function. In this function React
+basically does the following:
+    prepares the DOM updates
+    adds them to updateQueue of the span fiber
+    adds the effect to update the DOM
+    Before these operations are performed, the span Fiber node looks like this:
+
+    {
+        stateNode: new HTMLSpanElement,
+        type: "span",
+        effectTag: 0
+        updateQueue: null
+        ...
+    }
+and when the work is completed it looks like this:
+    {
+        stateNode: new HTMLSpanElement,
+        type: "span",
+        effectTag: 4,
+        updateQueue: ["children", "1"],
+        ...
+    }
+
+Notice the difference in the effectTag and updateQueue fields. It’s no longer 0, it’s value is 4. In binary this is
+100, which means that the third bit is set,which is exactly the bit for the Update side-effect tag. That’s the only
+job React needs to do for this node during the following commit phase. The updateQueue field holds the payload that
+will be used for the update.
+
+Once React has processed ClickCounter and its children, it’s done with the render phase. It can now assign the
+completed alternate tree to the finishedWork property on FiberRoot. This is the new tree that needs to be flushed
+to the screen. It can be processed immediately after the render phase or picked up later when React is given time
+by the browser.
+
+Effects list
+In our case, since the span node and the ClickCounter component have side effects, React will add a link to the span
+Fiber node to the firstEffect property of HostFiber.
+
+React builds the effects list in the compliteUnitOfWork function. Here’s what a Fiber tree with effects to update text
+of the span node and calls hooks on ClickCounter looks like:
+
+
+And here’s the linear list of nodes with effects:
+    root -----firstEffect -----> span ---- nextEffect ------> ClickCounter
+
+
+
+
+Commit phase
+This phase begins with the function completeRoot. Before it gets to do any work, it sets the finishedWork property on the
+FiberRoot to null:
+    root.finishedWork = null;
+
+Unlike the first render phase, the commit phase is always synchronous so it can safely update HostRoot to indicate
+that the commit work has started.
+
+The commit phase is where React updates the DOM and calls the post mutation lifecycle method componentDidUpdate.
+To do that, it goes over the list of effects it constructed during the previous render phase and applies them.
+
+We have the following effects defined in the render phase for our span and ClickCounter nodes:
+    { type: ClickCounter, effectTag: 5 }
+    { type: 'span', effectTag: 4 }
+
+The value of the effect tag for ClickCounter is 5 or 101 in binary and defines the Update work which basically
+translates into the componentDidUpdate lifecycle method for class components. The least significant bit is also
+set to signal that all work has been completed for this Fiber node in the render phase.
+
+The value of the effect tag for span is 4 or 100 in binary and defines the update work for the host component
+DOM update. In the case of the span element, React will need to update textContent for the element.
+
+
+Applying effects
+Let’s see how React applies those effects. The function commitRoot, which is used to apply the effects, consists of
+3 sub-functions:
+    function commitRoot(root, finishedWork) {
+        commitBeforeMutationLifecycles()
+        commitAllHostEffects();
+        root.current = finishedWork;
+        commitAllLifeCycles();
+    }
+
+Each of those sub-functions implements a loop that iterates over the list of effects and checks the types of the effects.
+When it finds the effect pertaining to the function’s purpose, it applies it. In our case, it will call the
+componentDidUpdate lifecycle method on the ClickCounter component and update the text of the span element.
+
+commitBeforeMutationLifeCycles
+The first function commitBeforeMutationLifeCycles looks for the Snapshot effect and calls the getSnapshotBeforeUpdate
+method. But, since we didn’t implement the method on the ClickCounter component, React didn’t add the effect during
+the render stage. So in our case, this function does nothing.
+
+DOM updates
+Next React moves to the commitAllHostEffects function. This is where React will change the text on the span element
+from 0 to 1. There’s nothing to do for the ClickCounter fiber because nodes corresponding to class components don’t
+have any DOM updates.
+
+The gist of the function is that it selects the correct type of effect and applies the corresponding operations.
+In our case we need to update the text on the span element, so we take the Update branch here:
+    function updateHostEffects() {
+        switch (primaryEffectTag) {
+        case Placement: {...}
+        case PlacementAndUpdate: {...}
+        case Update:
+            {
+            var current = nextEffect.alternate;
+            commitWork(current, nextEffect);
+            break;
+            }
+        case Deletion: {...}
+        }
+    }
+
+
+By going down to commitWork, we will eventually get into the updateDOMProperties function. It takes the updateQueue
+payload that was added during the render stage to the Fiber node, and updates the textContent property on the span element:
+    function updateDOMProperties(domElement, updatePayload, ...) {
+        for (let i = 0; i < updatePayload.length; i += 2) {
+            const propKey = updatePayload[i];
+            const propValue = updatePayload[i + 1];
+            if (propKey === STYLE) { ...} 
+            else if (propKey === DANGEROUSLY_SET_INNER_HTML) {...} 
+            else if (propKey === CHILDREN) {
+            setTextContent(domElement, propValue);
+            } else {...}
+        }
+    }
+
+After the DOM updates have been applied, React assigns the finishedWork tree to the HostRoot. It sets an alternate
+tree as current:
+    root.current = finishedWork;
+
+Calling post mutation lifecycle hooks
+The last remaining function is commitAllLifecycles. This where React calls the post mutational lifecycle methods.
+During the render phase, React added the Update effect to the ClickCounter component. This is one of the effects that
+the function commitAllLifecycles looks for and calls componentDidUpdate method:
+    function commitAllLifeCycles(finishedRoot, ...) {
+        while (nextEffect !== null) {
+            const effectTag = nextEffect.effectTag;
+
+            if (effectTag & (Update | Callback)) {
+                const current = nextEffect.alternate;
+                commitLifeCycles(finishedRoot, current, nextEffect, ...);
+            }
+            
+            if (effectTag & Ref) {
+                commitAttachRef(nextEffect);
+            }
+            
+            nextEffect = nextEffect.nextEffect;
+        }
+    }
+
+The function also updates refs, but since we don’t have any this functionality won’t be used. The method is called in
+the commitLifeCycles function:
+    function commitLifeCycles(finishedRoot, current, ...) {
+        ...
+        switch (finishedWork.tag) {
+            case FunctionComponent: {...}
+            case ClassComponent: {
+            const instance = finishedWork.stateNode;
+            if (finishedWork.effectTag & Update) {
+                if (current === null) {
+                instance.componentDidMount();
+                } else {
+                ...
+                instance.componentDidUpdate(prevProps, prevState, ...);
+                }
+            }
+            }
+            case HostComponent: {...}
+            case ...
+    }
+
+You can also see that this is the function where React calls the componentDidMount method for components that have
+been rendered for the first time.
